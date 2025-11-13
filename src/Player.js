@@ -1,0 +1,26 @@
+class Player {
+    constructor(id) {
+        this.id = id;
+        this.color = '';
+        
+        //resources
+        this.coins = 0;
+        this.daimyo = 0;
+        this.food = 0;
+        this.iron = 0;
+        this.pearl = 0;
+        // this.chasen = 0;
+        
+        //states/position
+        this.active_player = false;
+        this.influence = [0, 0];
+        this.domain_courtier = -1;
+        this.domain_gardener = -1;
+        this.domain_warrior = -1;
+        // this.domain_geysha = -1;
+        
+        this.lantern = null; //TODO: lantern obj?
+    }
+}
+
+module.exports = Player;
