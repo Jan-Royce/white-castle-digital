@@ -7,6 +7,12 @@ export class Game extends Phaser.Scene
     
     create() {
         const socket = io();
+        socket.on('lobby_full', () =>{
+            this.add.text(20,50, "Server is Full\nTry Again Later", {
+            fontSize: "30px",
+            color: "#ff0000",
+            });
+        });
 
         let textConfig = {
             x: 20,
