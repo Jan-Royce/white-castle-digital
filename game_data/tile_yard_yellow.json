@@ -1,0 +1,47 @@
+[
+    {
+        "type": "resource",
+        "resources": {
+            "pearl": 3
+        },
+        "image": ""
+    },
+    {
+        "type": "action",
+        "name": "well",
+        "image": ""
+    },
+    {
+        "type": "action",
+        "name": "white_scroll",
+        "image": ""
+    },
+    {
+        "type": "resource",
+        "resources": {
+            "daimyo": 2
+        },
+        "image": ""
+    },
+    {
+        "type": "resource",
+        "resources": {
+            "food": 3
+        },
+        "image": ""
+    },
+    {
+        "type": "resource",
+        "resources": {
+            "influence": 2
+        },
+        "image": ""
+    },
+    {
+        "type": "resource",
+        "resources": {
+            "clan_point": 2
+        },
+        "image": ""
+    }
+]
