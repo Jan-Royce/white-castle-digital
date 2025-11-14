@@ -1,0 +1,68 @@
+[
+    {
+        "cost": 2,
+        "clan_point": 3,
+        "actions": [
+            {
+                "type": "action",
+                "name": "lantern"
+            }
+        ],
+        "image": ""
+    },
+    {
+        "cost": 1,
+        "clan_point": 1,
+        "actions": [
+            {
+                "type": "resource",
+                "resources": { "coin": 3 }
+            }
+        ],
+        "image": ""
+    },
+    {
+        "cost": 2,
+        "clan_point": 3,
+        "actions": [
+            {
+                "type": "action",
+                "name": "white_scroll"
+            }
+        ],
+        "image": ""
+    },
+    {
+        "cost": 1,
+        "clan_point": 1,
+        "actions": [
+            {
+                "type": "action",
+                "name": "iron_or_food_or_pearl_2"
+            }
+        ],
+        "image": ""
+    },
+    {
+        "cost": 3,
+        "clan_point": 5,
+        "actions": [
+            {
+                "type": "action",
+                "name": "well"
+            }
+        ],
+        "image": ""
+    },
+    {
+        "cost": 2,
+        "clan_point": 3,
+        "actions": [
+            {
+                "type": "resource",
+                "resources": { "daimyo": 2 }
+            }
+        ],
+        "image": ""
+    }
+]

@@ -1,0 +1,170 @@
+[
+    {
+        "actions": [
+            {
+                "type": "resource",
+                "resources": {
+                    "food": 2,
+                    "iron": 1,
+                    "coin": 2,
+                    "daimyo": 1
+                }
+            }
+        ],
+        "lantern": [ "pearl", "coin" ],
+        "image": "",
+        "decree": true,
+        "decree_image": ""
+    },
+    {
+        "type": "resource",
+        "actions": [
+            {
+                "type": "action",
+                "name": "iron_or_food_or_pearl_2"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "coin": 4,
+                    "daimyo": 2
+                }
+            }
+        ],
+        "lantern": [ "pearl" ],
+        "image": "",
+        "decree": false,
+        "decree_image": ""
+    },
+    {
+        "type": "resource",
+        "actions": [
+            {
+                "type": "resource",
+                "resources": {
+                    "iron": 2,
+                    "pearl": 1,
+                    "coin": 5,
+                    "daimyo": 1
+                }
+            }
+        ],
+        "lantern": [ "pearl" ],
+        "image": "",
+        "decree": false,
+        "decree_image": ""
+    },
+    {
+        "type": "resource",
+        "actions": [
+            {
+                "type": "action",
+                "name": "iron_or_food_or_pearl_1"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "coin": 2,
+                    "daimyo": 2
+                }
+            }
+        ],
+        "lantern": [ "food", "clan_point" ],
+        "image": "",
+        "decree": true,
+        "decree_image": ""
+    },
+    {
+        "type": "resource",
+        "actions": [
+            {
+                "type": "resource",
+                "resources": {
+                    "food": 2,
+                    "iron": 2,
+                    "pearl": 1,
+                    "coin": 4,
+                    "daimyo": 1
+                }
+            }
+        ],
+        "lantern": [ "food" ],
+        "image": "",
+        "decree": false,
+        "decree_image": ""
+    },
+    {
+        "type": "resource",
+        "actions": [
+            {
+                "type": "resource",
+                "resources": {
+                    "food": 4,
+                    "iron": 2,
+                    "coin": 3,
+                    "daimyo": 2
+                }
+            }
+        ],
+        "lantern": [ "food" ],
+        "image": "",
+        "decree": false,
+        "decree_image": ""
+    },
+    {
+        "type": "resource",
+        "actions": [
+            {
+                "type": "resource",
+                "resources": {
+                    "pearl": 2,
+                    "iron": 1,
+                    "coin": 4
+                }
+            }
+        ],
+        "lantern": [ "iron", "daimyo" ],
+        "image": "",
+        "decree": true,
+        "decree_image": ""
+    },
+    {
+        "type": "resource",
+        "actions": [
+            {
+                "type": "action",
+                "name": "iron_or_food_or_pearl_3"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "coin": 4,
+                    "daimyo": 1
+                }
+            }
+        ],
+        "lantern": [ "iron" ],
+        "image": "",
+        "decree": false,
+        "decree_image": ""
+    },
+    {
+        "type": "resource",
+        "actions": [
+            {
+                "type": "resource",
+                "resources": {
+                    "food": 1,
+                    "iron": 2,
+                    "pearl": 1,
+                    "coin": 3,
+                    "daimyo": 1
+                }
+            }
+        ],
+        "lantern": [ "iron" ],
+        "image": "",
+        "decree": false,
+        "decree_image": ""
+    }
+]

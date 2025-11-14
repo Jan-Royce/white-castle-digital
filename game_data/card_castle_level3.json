@@ -1,0 +1,208 @@
+[
+    {
+        "actions": [
+            {
+                "type": "action",
+                "name": "well"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "food": 2
+                }
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "influence": 2
+                }
+            }
+        ],
+        "image": ""
+    },
+    {
+        "actions": [
+            {
+                "type": "action",
+                "name": "white_scroll"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "pearl": 2
+                }
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "clan_point": 2
+                }
+            }
+        ],
+        "image": ""
+    },
+    {
+        "actions": [
+            {
+                "type": "action",
+                "name": "well"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "clan_point": 2
+                }
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "daimyo": 2
+                }
+            }
+        ],
+        "image": ""
+    },
+    {
+        "actions": [
+            {
+                "type": "action",
+                "name": "well"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "pearl": 2
+                }
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "coin": 3
+                }
+            }
+        ],
+        "image": ""
+    },
+    {
+        "actions": [
+            {
+                "type": "action",
+                "name": "lantern"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "iron": 2
+                }
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "daimyo": 2
+                }
+            }
+        ],
+        "image": ""
+    },
+    {
+        "actions": [
+            {
+                "type": "action",
+                "name": "white_scroll"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "iron": 2
+                }
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "coin": 3
+                }
+            }
+        ],
+        "image": ""
+    },
+    {
+        "actions": [
+            {
+                "type": "action",
+                "name": "white_scroll"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "influence": 2
+                }
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "daimyo": 2
+                }
+            }
+        ],
+        "image": ""
+    },
+    {
+        "actions": [
+            {
+                "type": "action",
+                "name": "lantern"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "food": 2
+                }
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "clan_point": 2
+                }
+            }
+        ],
+        "image": ""
+    },
+    {
+        "actions": [
+            {
+                "type": "action",
+                "name": "lantern"
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "influence": 2
+                }
+            },
+            {
+                "type": "resource",
+                "resources": {
+                    "coin": 3
+                }
+            }
+        ],
+        "image": ""
+    },
+    {
+        "actions": [
+            {
+                "type": "action",
+                "name": "red_die_tile"
+            },
+            {
+                "type": "action",
+                "name": "black_die_tile"
+            },
+            {
+                "type": "action",
+                "name": "white_die_tile"
+            }
+        ],
+        "image": ""
+    }
+]

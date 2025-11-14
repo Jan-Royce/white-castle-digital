@@ -1,0 +1,92 @@
+[
+    {
+        "cost": 4,
+        "clan_point": 7,
+        "actions": [
+            {
+                "type": "resource",
+                "resources": { "coin": -3 }
+            },
+            {
+                "type": "action",
+                "name": "yard"
+            }
+        ],
+        "image": ""
+    },
+    {
+        "cost": 3,
+        "clan_point": 5,
+        "actions": [
+            {
+                "type": "resource",
+                "resources": { "coin": -4 }
+            },
+            {
+                "type": "action",
+                "name": "domain_select"
+            }
+        ],
+        "image": ""
+    },
+    {
+        "cost": 3,
+        "clan_point": 5,
+        "actions": [
+            {
+                "type": "resource",
+                "resources": { "coin": -4 }
+            },
+            {
+                "type": "action",
+                "name": "castle_or_yard_or_garden"
+            }
+        ],
+        "image": ""
+    },
+    {
+        "cost": 4,
+        "clan_point": 7,
+        "actions": [
+            {
+                "type": "resource",
+                "resources": { "coin": -3 }
+            },
+            {
+                "type": "action",
+                "name": "castle"
+            }
+        ],
+        "image": ""
+    },
+    {
+        "cost": 5,
+        "clan_point": 9,
+        "actions": [
+            {
+                "type": "resource",
+                "resources": { "coin": -4 }
+            },
+            {
+                "type": "action",
+                "name": "wild_die_tile"
+            }
+        ],
+        "image": ""
+    },
+    {
+        "cost": 4,
+        "clan_point": 7,
+        "actions": [
+            {
+                "type": "resource",
+                "resources": { "coin": -3 }
+            },
+            {
+                "type": "action",
+                "name": "garden"
+            }
+        ],
+        "image": ""
+    }
+]
