@@ -4,7 +4,7 @@ class Player {
         this.color = '';
         
         //resources
-        this.coins = 0;
+        this.coin = 0;
         this.daimyo = 0;
         this.food = 0;
         this.iron = 0;
@@ -12,6 +12,7 @@ class Player {
         // this.chasen = 0;
         
         //states/position
+        this.clan_points = 0;
         this.active_player = false;
         this.influence = [0, 0];
         this.domain_courtier = -1;
@@ -19,7 +20,10 @@ class Player {
         this.domain_warrior = -1;
         // this.domain_geysha = -1;
         
-        this.lantern = null; //TODO: lantern obj?
+        this.lantern = {
+            type: 'resource',
+            resources: {}
+        }
     }
 }
 

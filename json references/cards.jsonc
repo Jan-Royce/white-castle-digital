@@ -1,0 +1,50 @@
+// card
+[
+    {
+        "player_min_count": 2, //min count 3 for cards that are only for 3+ players
+        "sizes": [1, 1, 1],
+        "sections": [
+            [
+                {
+                    "type": "resource",
+                    "resources": { "influence": 1 }
+                }
+            ],
+            [
+                {
+                    "type": "resource",
+                    "resources": { "pearl": 2 }
+                }
+            ],
+            [
+                {
+                    "type": "resource",
+                    "resources": { "daimyo": -1 }
+                },
+                {
+                    "type": "action",
+                    "name": "yard"
+                }
+            ]
+        ]
+    },
+
+    {
+        "player_min_count": 2,
+        "sizes": [1, 2],
+        "sections": [
+            [
+                {
+                    "type": "action",
+                    "name": "castle"
+                }
+            ],
+            [
+                {
+                    "type": "resource",
+                    "resources": { "influence": 2 }
+                }
+            ]
+        ]
+    }
+]

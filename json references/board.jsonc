@@ -1,0 +1,220 @@
+[
+    {
+        "bridges": [
+            {
+                "color": "red",
+                "dice": [2, 4, 6]
+            },
+            {
+                "color": "black",
+                "dice": [1, 2, 6]
+            },
+            {
+                "color": "white",
+                "dice": [2, 2, 6]
+            }
+        ],
+        "castle": [
+            {
+                "level": 3,
+                "clan_point": 10,
+                "image": "level3_card_image", 
+                "courtiers": { //dynamiic player id
+                    "player1": 0,
+                    "player2": 0
+                },
+                "bonus": [
+                    {
+                        "type": "resource",
+                        "resources": { "lantern":"lantern" }, //lantern object?
+                        "occupied": false
+                    },
+                    {
+                        "type": "resource",
+                        "resources": { "food": 2 },
+                        "occupied": false
+                    },
+                    {
+                        "type": "resource",
+                        "resources": { "clan_point": 2 },
+                        "occupied": false
+                    }
+                ]
+            },
+            {
+                "level": 2,
+                "clan_point": 6,
+                "courtiers": { //dynamiic player id
+                    "player1": 0,
+                    "player2": 0
+                },
+                "rooms": [
+                    {
+                        "die_value": 4,
+                        "initial_die_value": 4,
+                        "card": "card", //card object
+                        "colors": ["black", "red"],
+                        "actions": {
+                            "black": [
+                                {
+                                    "type": "action",
+                                    "name": "castle"
+                                }
+                            ],
+                            "red": [
+                                {
+                                    "type": "resource",
+                                    "resources": { "influence": 2 }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "level": 1,
+                "clan_point": 3,
+                "courtiers": {
+                    "player1": 0,
+                    "player2": 0
+                },
+                "rooms": [
+                    {
+                        "die_value": 3,
+                        "initial_die_value": 3,
+                        "card": "card",
+                        "colors": ["red", "red", "white"],
+                        "actions": {
+                            "red": [
+                                {
+                                    "type": "resource",
+                                    "resources": { "influence": 1 }
+                                },
+                                {
+                                    "type": "resource",
+                                    "resources": { "pearl": 2 }
+                                }
+                            ],
+                            "white": [
+                                {
+                                    "type": "resource",
+                                    "resources": { "daimyo": -1 }
+                                },
+                                {
+                                    "type": "action",
+                                    "name": "yard"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "level": 0,
+                "clan_point": 1,
+                "courtiers": {
+                    "player1": 0,
+                    "player2": 0
+                }
+            }
+        ],
+        "yard": [
+            {
+                "size": 3,
+                "cost": 5,
+                "multiplier": 2,
+                "warriors": { //dynamiic player id
+                    "player1": 0,
+                    "player2": 0
+                },
+                "actions": [
+                    {
+                        "type": "action",
+                        "name": "black_die_tile",
+                        "image": "black_die_tile"
+                    },
+                    {
+                        "type": "resource",
+                        "resources": {
+                            "pearl": 3
+                        },
+                        "image": "pearl3_tile"
+                    }
+                ]
+            },
+            {
+                "size": 2,
+                "cost": 3,
+                "multiplier": 1,
+                "warriors": { //dynamiic player id
+                    "player1": 0,
+                    "player2": 0
+                },
+                "actions": [
+                    {
+                        "type": "action",
+                        "name": "castle_or_yard_or_garden",
+                        "image": "castle_or_yard_or_garden_tile"
+                    }
+                ]
+            },
+            {
+                "size": 1,
+                "cost": 1,
+                "multiplier": 1,
+                "warriors": { //dynamiic player id
+                    "player1": 0,
+                    "player2": 0
+                },
+                "actions": [
+                    {
+                        "type": "action",
+                        "name": "white_scroll",
+                        "image": "white_scroll_tile"
+                    }
+                ]
+            },
+        ],
+        "garden": {
+            "red": [
+                {   
+                    "cost": 3,
+                    "clan_point": 5,
+                    "bridge": "red",
+                    "gardeners": ["player1", "player2"], //to limit 1 per player
+                    "actions": [
+                        {
+                            "type": "action",
+                            "name": "well"
+                        }
+                    ]
+                },
+                {
+                    "cost": 3,
+                    "clan_point": 5,
+                    "bridge": "red",
+                    "gardeners": ["player1", "player2"], //to limit 1 per player
+                    "actions":[
+                        {
+                            "type": "resource",
+                            "resources": {
+                                "coin": -4
+                            }
+                        },
+                        {
+                            "type": "action",
+                            "name": "castle_or_yard_or_garden"
+                        }
+                    ]
+                }
+            ],
+        },
+        "well": {
+            "type": "resource",
+            "resources": {
+                "daimyo": 1,
+                "food": 2
+            }
+        }
+    }
+]

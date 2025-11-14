@@ -1,0 +1,41 @@
+[
+    {
+        "type": "dice",
+        "color": "red",
+        "value": 5
+    },
+    {
+        "type": "resource",
+        "resources": {
+            "coin": 2
+        }
+    },
+    //lantern if any
+    {
+        "type": "resource",
+        "resources": {
+            "food": 2
+        }
+    },
+    {
+        "type": "resource",
+        "resources": {
+            "daimyo": 1,
+            "coin": 3
+        }
+    }
+]
+
+
+// player.lantern
+// Lantern
+[
+    {
+        "type": "resource",
+        "resources": {
+            "pearl": 1,
+            "influence": 1,
+            "coin": 1
+        }
+    }
+]
