@@ -1,0 +1,254 @@
+[
+    {
+        "player_min_count": 2,
+        "sizes": [1, 2],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "resource",
+                    "resources": { "influence": 2 }
+                }
+            ],
+            [
+                {
+                    "type": "action",
+                    "name": "garden"
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 2,
+        "sizes": [1, 2],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "action",
+                    "name": "castle"
+                }
+            ],
+            [
+                {
+                    "type": "resource",
+                    "resources": { "daimyo": 1 }
+                },
+                {
+                    "type": "action",
+                    "name": "lantern"
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 2,
+        "sizes": [2, 1],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "resource",
+                    "resources": {"coin": 2}
+                },
+                {
+                    "type": "action",
+                    "name": "lantern"
+                }
+            ],
+            [
+                {
+                    "type": "action",
+                    "name": "yard"
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 2,
+        "sizes": [2, 1],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "resource",
+                    "resources": {"influence": 1}
+                },
+                {
+                    "type": "action",
+                    "name": "lantern"
+                }
+            ],
+            [
+                {
+                    "type": "action",
+                    "name": "garden"
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 2,
+        "sizes": [1, 2],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "action",
+                    "name": "yard"
+                }
+            ],
+            [
+                {
+                    "type": "resource",
+                    "resources": {"influence": 2}
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 2,
+        "sizes": [1, 2],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "action",
+                    "name": "castle"
+                }
+            ],
+            [
+                {
+                    "type": "resource",
+                    "resources": {"influence": 2}
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 2,
+        "sizes": [1, 2],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "resource",
+                    "resources": {"clan_points": 2}
+                },
+                {
+                    "type": "action",
+                    "name": "well"
+                }
+            ],
+            [
+                {
+                    "type": "action",
+                    "name": "garden"
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 2,
+        "sizes": [1, 2],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "action",
+                    "name": "yard"
+                }
+            ],
+            [
+                {
+                    "type": "action",
+                    "name": "iron_or_food_or_pearl_3"
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 2,
+        "sizes": [1, 2],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "action",
+                    "name": "castle"
+                }
+            ],
+            [
+                {
+                    "type": "resource",
+                    "resources": {"clan_points":2}
+                },
+                {
+                    "type": "action",
+                    "name": "well"
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 3,
+        "sizes": [2, 1],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "resource",
+                    "resources": {"clan_points":2}
+                },
+                {
+                    "type": "action",
+                    "name": "well"
+                }
+            ],
+            [
+                {
+                    "type": "action",
+                    "name": "yard"
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 3,
+        "sizes": [1, 2],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "action",
+                    "name": "castle"
+                }
+            ],
+            [
+                {
+                    "type": "action",
+                    "name": "iron_or_food_or_pearl_3"
+                }
+            ]
+        ]
+    },
+    {
+        "player_min_count": 3,
+        "sizes": [2, 1],
+        "image": "",
+        "sections": [
+            [
+                {
+                    "type": "action",
+                    "name": "iron_or_food_or_pearl_3"
+                }
+            ],
+            [
+                {
+                    "type": "action",
+                    "name": "garden"
+                }
+            ]
+        ]
+    }
+]
