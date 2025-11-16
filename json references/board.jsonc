@@ -1,19 +1,10 @@
 [
     {
-        "bridges": [
-            {
-                "color": "red",
-                "dice": [2, 4, 6]
-            },
-            {
-                "color": "black",
-                "dice": [1, 2, 6]
-            },
-            {
-                "color": "white",
-                "dice": [2, 2, 6]
-            }
-        ],
+        "bridges": {
+            "red": [2, 4, 6],
+            "black": [1, 2, 6],
+            "white": [2, 2, 6]
+        },
         "castle": [
             {
                 "level": 3,

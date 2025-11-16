@@ -1,6 +1,7 @@
 class Game {
     constructor() {
        this.players = {};
+       this.game_started = false;
        this.colors = this.getGameColors();
        this.turn_order = [];
        this.active_player_index = 0;
@@ -10,7 +11,6 @@ class Game {
        this.max_turn_per_player = this.matcha_expansion ? 4 : 3;
        this.max_total_turns = Object.entries(this.players).length * this.max_turn_per_player;
        this.garden_phase = false;
-
     }
     
     getGameColors() {
@@ -21,6 +21,11 @@ class Game {
     addPlayer(socketId, playerData) {
         playerData.color = this.assignColor();
         this.players[socketId] = playerData;
+    }
+    
+    getPlayerCount()
+    {
+        return Object.entries(this.players).length;
     }
     
     assignColor()
@@ -38,7 +43,14 @@ class Game {
         delete(this.players[socketId]);
     }
     
-
+    startBoard() {
+        const Board = require('./Board');
+        this.board = new Board({
+            playerCount: Object.entries(this.players).length,
+            matchaExpansion: this.matcha_expansion
+        });
+    }
+    
     passTurn() {
         //TODO check dice count
         
