@@ -8,6 +8,7 @@ class Game {
        this.round = 1;
        this.turn = 1;
        this.matcha_expansion = false;
+       this.die_tile_promo = false;
        this.max_turn_per_player = this.matcha_expansion ? 4 : 3;
        this.max_total_turns = Object.entries(this.players).length * this.max_turn_per_player;
        this.garden_phase = false;
@@ -47,7 +48,8 @@ class Game {
         const Board = require('./Board');
         this.board = new Board({
             playerCount: Object.entries(this.players).length,
-            matchaExpansion: this.matcha_expansion
+            matchaExpansion: this.matcha_expansion,
+            dieTilePromo: this.die_tile_promo
         });
     }
     

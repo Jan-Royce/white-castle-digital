@@ -20,6 +20,7 @@ export class Board extends Phaser.GameObjects.Container {
         this.scene.add.existing(this);
         
         this.createBridges(boardData.bridges);
+        this.setUpCastle(boardData.castle);
     }
     
     createBridges(bridgeData) {
@@ -38,5 +39,12 @@ export class Board extends Phaser.GameObjects.Container {
             
             yPos += 200;
         }
+    }
+    
+    setUpCastle(castleData) {
+        // console.log(castleData.well_tiles)
+        // console.log(castleData.die_tile_map)
+        console.log(castleData)
+        
     }
 }

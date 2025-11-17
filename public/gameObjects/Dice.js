@@ -10,7 +10,7 @@ export class Dice extends Phaser.GameObjects.Sprite {
         const colors = {
             "red": 0xd47878,
             "black": 0x6e706b,
-            "white": 0xece9e9,
+            "white": 0xfcf9f9,
             "green": 0xb7dda2
         };
         

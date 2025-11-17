@@ -18,17 +18,20 @@ export class Bridge extends Phaser.GameObjects.Container {
         };
         
         this.x = 20;
-        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, 280, 80, colors[color]);
+        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, 290, 80, colors[color]);
         background.setOrigin(0);
         this.add(background);
         
         let xPos = 0;
+        let dieSize = 50;
+        let dieSpace = Math.ceil(290 / dice.length / 10) * 10;
+        
         for(let val of dice) {
             let die = new Dice({
                 scene: this.scene,
                 x: xPos,
-                y: 0,
-                size: 60,
+                y: 16,
+                size: dieSize,
                 value: val,
                 color: color
             });
@@ -36,7 +39,8 @@ export class Bridge extends Phaser.GameObjects.Container {
             this.dice.push(die);
             this.add(die);
             
-            xPos += 70;
+            //dynamic spacing based on die count
+            xPos += dieSpace;
         }
     }
 }

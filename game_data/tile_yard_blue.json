@@ -43,5 +43,10 @@
         "type": "action",
         "name": "domain_select",
         "image": ""
+    },
+    {
+        "type": "action",
+        "name": "black_scroll",
+        "image": ""
     }
 ]
