@@ -1,3 +1,4 @@
+// TODO: ADD Max Limit PLAYER Daimyo, food, iron and pearl
 class Player {
     constructor(id) {
         this.id = id;
@@ -20,20 +21,17 @@ class Player {
         this.domain_warrior = 0;
         // this.domain_geysha = -1;
         
-        this.castle_card = null;
-
+        this.domain_card_section = {};
         this.lantern = {
             type: 'resource',
-            resources: {}
+            resources: []
         }
     }
 
     countResourceClanPoints(){
         const RESOUREVALUES = [this.food, this.iron, this.pearl];
 
-        if(this.coins > 0) {
-            this.clan_points += Math.floor((this.coin + this.daimyo) / 5);
-        }
+        this.clan_points += Math.floor((this.coin + this.daimyo) / 5);
 
         RESOUREVALUES.forEach(value =>{
             if(value >= 3) this.clan_points++;
@@ -41,73 +39,105 @@ class Player {
         });
     }
 
-    // Setting the castle Card
-    setCastleCard(castleCard){
-        this.castle_card = castleCard;
+    addLanternReward(resourceReward){
+        this.lantern.resources.push({[resourceReward]: 1});
     }
-    
+
+    setDomainCard(sizes,sections){
+        const colors = ['red', 'black', 'white'];
+        let colorIndex = 0;
+        let sectionIndex = 0;
+
+        sizes.forEach(size =>{
+            for(let i = 0; i < size;i++){
+                this.domain_card_section[colors[colorIndex]] = sections[sectionIndex];
+                colorIndex++;
+            }
+            sectionIndex++;
+        })
+        if(sizes.length != 2){
+            this.addLanternReward('coin');
+        }else this.addLanternReward('clan_points');
+    }
+
     // Check if matcha Expansion enable
     domainBoardRewardRow(matcha_expansion,dieColor){
         if(matcha_expansion){matchaBoardReward(dieColor);}
         else{this.baseBoardReward(dieColor);}
     }
 
-    lanternReward()
-    {
-        //TODO: Reward card trigger
-    }
-
     baseBoardReward(dieColor){
-        console.log(dieColor);
         const REWARD = {
             red:{
-                0:{food:1, coin:0, daimyo:0},
-                1:{food:2, coin:0, daimyo:0},
-                2:{food:3, coin:0, daimyo:0},
-                3:{food:3, coin:2, daimyo:0},
-                4:{food:4, coin:2, daimyo:0},
+                0:{food:1},
+                1:{food:2},
+                2:{food:3},
+                3:{food:3, coin:2},
+                4:{food:4, coin:2},
                 5:{food:4, coin:2, daimyo:1},
             },
             black:{
-                0:{iron:1, lantern: false, coin:0},
-                1:{iron:2, lantern: false, coin:0},
-                2:{iron:3, lantern: false, coin:0},
-                3:{iron:3, lantern: true, coin:0},
-                4:{iron:4, lantern: true, coin:0},
+                0:{iron:1},
+                1:{iron:2},
+                2:{iron:3},
+                3:{iron:3, lantern: true},
+                4:{iron:4, lantern: true},
                 5:{iron:4, lantern: true, coin:2},
             },
             white:{
-                0:{pearl:1, daimyo:0, lanter: false},
-                1:{pearl:2, daimyo:0, lanter: false},
-                2:{pearl:3, daimyo:0, lanter: false},
-                3:{pearl:3, daimyo:1, lanter: false},
-                4:{pearl:4, daimyo:1, lanter: false},
+                0:{pearl:1},
+                1:{pearl:2},
+                2:{pearl:3},
+                3:{pearl:3, daimyo:1},
+                4:{pearl:4, daimyo:1},
                 5:{pearl:4, daimyo:1, lantern: true},
             }
         };
         switch(dieColor){
             case 'red':
-                this.food += REWARD.red[this.domain_courtier].food;
-                this.coin += REWARD.red[this.domain_courtier].coin;
-                this.daimyo += REWARD.red[this.domain_courtier].daimyo;
-                //TODO: Castle Card row Trigger
+                this.sectionRewardTrigger(REWARD.red[this.domain_courtier]);
                 break;
-            case 'black':
-                this.iron += REWARD.black[this.domain_gardener].iron;
-                this.coin += REWARD.black[this.domain_gardener].coin;
-                if(REWARD.black[this.domain_gardener].lantern) {lanternReward()};
-                //TODO: Castle Card row Trigger
+                case 'black':
+                this.sectionRewardTrigger(REWARD.black[this.domain_courtier]);
                 break;
             case 'white':
-                this.iron += baseRewar.white[this.domain_gardener].pearl;
-                this.coin += REWARD.white[this.domain_gardener].coin;
-                //TODO: Castle Card row Trigger
-                if(REWARD.white[this.domain_gardener].lantern) {lanternReward()};
+                this.sectionRewardTrigger(REWARD.white[this.domain_warrior]);
                 break;
         }
+        this.domainCardSectionTrigger(dieColor)
     }
-    matchaBoardReward(dieColor){
-        //TODO: Matcha Reward
+
+    sectionRewardTrigger(rewards){
+        for(const type in rewards){
+            if(type === "lantern" && rewards[type] === true){
+                this.lanternTrigger();
+            }else{
+                this[type] += rewards[type];
+            }
+        }
+    }
+    
+    domainCardSectionTrigger(dieColor){
+        this.domain_card_section[dieColor].forEach(node =>{
+            if(node.type === 'resource'){
+                for(const type in node.resources){
+                    this[type] += node.resources[type];
+                }
+            }else{
+                // Type : Action
+            }
+        });
+    }
+
+    lanternTrigger()
+    {
+        this.lantern.resources.forEach(resource => {
+            for(const type in resource){
+                if(this[type] !== undefined){
+                    this[type] += resource[type];
+                }
+            }
+        });
     }
 }
 
