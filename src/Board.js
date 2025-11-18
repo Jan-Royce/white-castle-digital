@@ -1,8 +1,9 @@
 class Board {
     constructor(config) {
-        const { playerCount, matchaExpansion, dieTilePromo } = config;
+        const { playerCount, matchaExpansion, dieTilePromo, colorMap } = config;
         
         this.player_count = playerCount;
+        this.color_map = colorMap;
         this.matcha_expansion = matchaExpansion;
         this.die_tile_promo = dieTilePromo;
         this.bridges = {};
@@ -52,36 +53,23 @@ class Board {
     }
     
     setCastle(dieTiles) {
-        const level3Cards = require('.././game_data/card_castle_level3.json');
-        const level3Card = level3Cards[Math.floor(Math.random() * (level3Cards.length-1))];
+        this.castle.levels = [];
         
-        let bonuses = [];
+        this.castle.levels.push({
+            level: 0,
+            clan_point: 1,
+            courtiers: {}
+        });
         
-        for(let action of level3Card.actions) {
-            let bonus = action;
-            bonus.occupied = false;
-            bonuses.push(bonus);
+        /* for testing courtiers in gate
+        for (const id of Object.keys(this.color_map)) {
+            this.castle.levels[0].courtiers[id] = Math.floor(Math.random() * 3 + 1);
         }
+            
+        // would need to call gate.updateUnitDisplay() on Castle.js on the frontend
+        //*/
         
-        this.castle.level3 = {
-            level: 3,
-            clan_point: 10,
-            image: level3Card.image,
-            courtiers: {},
-            bonus: bonuses
-        };
-        
-        this.castle.level2 = {
-            level: 2,
-            clan_point: 6,
-            courtiers: {},
-            rooms: {
-                "room1": {},
-                "room2": {}
-            }
-        };
-        
-        this.castle.level1 = {
+        this.castle.levels.push({
             level: 1,
             clan_point: 3,
             courtiers: {},
@@ -90,7 +78,17 @@ class Board {
                 "room2": {},
                 "room3": {}
             }
-        };
+        });
+        
+        this.castle.levels.push({
+            level: 2,
+            clan_point: 6,
+            courtiers: {},
+            rooms: {
+                "room1": {},
+                "room2": {}
+            }
+        });
         
         let dieTileColors = ['black', 'red', 'white'];
         dieTileColors = [...dieTileColors].sort(() => Math.random() - 0.5);
@@ -149,7 +147,7 @@ class Board {
         this.castle.well_tiles = dieTiles;
         
         let dieTileMapIndex = 0;
-        for(let room of Object.keys(this.castle.level2.rooms)) {
+        for(let room of Object.keys(this.castle.levels[2].rooms)) {
             const colors = dieTileMap[dieTileMapIndex];
             let actions = {};
             
@@ -157,9 +155,10 @@ class Board {
                 if(!actions[color]) actions[color] = [];
             }
             
-            this.castle.level2.rooms[room] = {
+            this.castle.levels[2].rooms[room] = {
                 die_value: 4,
                 initial_die_value: 4,
+                max_die_count: this.player_count > 2 ? 2 : 1,
                 card: {},
                 colors: colors,
                 actions: actions
@@ -168,7 +167,7 @@ class Board {
             dieTileMapIndex++;
         }
         
-        for(let room of Object.keys(this.castle.level1.rooms)) {
+        for(let room of Object.keys(this.castle.levels[1].rooms)) {
             const colors = dieTileMap[dieTileMapIndex];
             let actions = {};
             
@@ -176,7 +175,7 @@ class Board {
                 if(!actions[color]) actions[color] = [];
             }
             
-            this.castle.level1.rooms[room] = {
+            this.castle.levels[1].rooms[room] = {
                 die_value: 3,
                 initial_die_value: 3,
                 card: {},
@@ -190,11 +189,24 @@ class Board {
         this.setCastleRooms(2, 2);
         this.setCastleRooms(1, 3);
         
-        this.castle.level0 = {
-            level: 0,
-            clan_point: 1,
-            courtiers: {}
-        };
+        const level3Cards = require('.././game_data/card_castle_level3.json');
+        const level3Card = level3Cards[Math.floor(Math.random() * (level3Cards.length - 1))];
+
+        let bonuses = [];
+
+        for (let action of level3Card.actions) {
+            let bonus = action;
+            bonus.occupied = false;
+            bonuses.push(bonus);
+        }
+
+        this.castle.levels.push({
+            level: 3,
+            clan_point: 10,
+            image: level3Card.image,
+            courtiers: {},
+            bonus: bonuses
+        });
     }
     
     setCastleRooms(level, roomCount) {
@@ -206,7 +218,7 @@ class Board {
         this[`deck_castle_level${level}`] = [...floorCards].sort(() => Math.random() - 0.5);
         for (let i = 1; i <= roomCount; i++) {
             const floorCard = this[`deck_castle_level${level}`].pop();
-            const room = this.castle[`level${level}`].rooms[`room${i}`];
+            const room = this.castle.levels[level].rooms[`room${i}`];
 
             this.setRoomCard(room, floorCard);
         }

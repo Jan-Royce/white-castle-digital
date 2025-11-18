@@ -1,0 +1,144 @@
+import { DieSpace } from './DieSpace.js';
+
+export class BoardSpace extends Phaser.GameObjects.Container {
+    constructor(config) {
+        const { scene, x, y, spaceId, width, height, color, dieSpace, scoreGfx, gfx, units, unitType, colorMap } = config;
+        
+        super(scene, x, y);
+        
+        this.space_id = spaceId;
+        this.width = width ?? 200;
+        this.height = height ?? 200;
+        this.color = color ?? 0x868686;
+        this.color_map = colorMap;
+        
+        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, this.width, this.height, this.color);
+        background.setOrigin(0);
+        this.add(background);
+        
+        background.setInteractive({ useHandCursor: true });
+        
+        background.on('pointerup', () => {
+            console.log(this.space_id)
+        });
+        
+        if(typeof(dieSpace) !== 'undefined') {
+            if(dieSpace.always_show) {
+                const dieDisplay = new Phaser.GameObjects.Container(this.scene, 0, 0);
+                
+                this.add(dieDisplay);
+                this.die_display = dieDisplay;
+            }
+            
+            const space = new DieSpace({
+                scene: this.scene,
+                x: 10,
+                y: this.height / 4,
+                size: dieSpace.die_size,
+                value: dieSpace.die_value,
+                maxCount: dieSpace.max_die_count,
+                alwaysShow: dieSpace.always_show
+            });
+            this.add(space);
+            this.die_space = space;
+            
+            if(dieSpace.max_die_count == Number.POSITIVE_INFINITY) {
+                const infinityIcon = new Phaser.GameObjects.Text(scene, dieSpace.die_size+space.x, space.y, "∞", {
+                    fontSize: '54px',
+                    color: '#ffffff'
+                });
+                infinityIcon.setStroke('#000', 4);
+                this.add(infinityIcon);
+            }
+        }
+        
+        if(typeof(gfx) !== 'undefined') {
+            this.add(gfx);
+            this.gfx = gfx;
+        }
+        
+        if(typeof(scoreGfx) !== 'undefined') {
+            this.add(scoreGfx);
+            this.score_gfx = scoreGfx;
+        }
+        
+        if(typeof (unitType) !== 'undefined') {
+            this.units = units;
+            this.unit_type = unitType;
+            
+            const unitSpace = new Phaser.GameObjects.Container(this.scene, 0, 0);
+            unitSpace.x = this.width / 4;
+            
+            this.add(unitSpace);
+            this.unit_space = unitSpace;
+        }
+    }
+    
+    updateDieDisplay()
+    {
+        let dieSpace = this.die_space;
+        
+        if(dieSpace.dice.length > 0) {
+            if(dieSpace.max_count == Number.POSITIVE_INFINITY) {
+                const dieDisplay = this.die_display;
+                
+                let xPos = 0;
+                for(let die of dieSpace.dice) {
+                    const dieIcon = new Phaser.GameObjects.Sprite(this.scene, xPos, -12, `dice${die.value}`);
+                    
+                    dieIcon.setDisplaySize(24,24);
+                    dieIcon.setOrigin(0);
+                    dieIcon.setTint(dieSpace.getColor(die.color));
+                    dieDisplay.add(dieIcon);
+                    
+                    xPos += 24;
+                }
+            } else {
+                const currentDie = dieSpace.dice[dieSpace.dice.length - 1];
+                
+                dieSpace.setAlpha(1);
+                dieSpace.setTexture(`dice${currentDie.value}`);
+                dieSpace.setTint(dieSpace.getColor(currentDie.color));
+                
+                if(dieSpace.max_count == dieSpace.dice.length) {
+                    dieSpace.disableInteractive();
+                }
+            }
+        }
+    }
+    
+    updateUnitDisplay() {
+        const unitSpace = this.unit_space;
+        
+        let xPos = 0;
+        for(const [key, count] of Object.entries(this.units)) {
+            if(count == 0) continue;
+            
+            const unit = new Phaser.GameObjects.Container(this.scene, xPos, 50);
+            
+            const unitIcon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `unit_${this.unit_type}`);
+            unitIcon.setDisplaySize(40, 40);
+            unitIcon.setTint(this.color_map[key]);
+            unitIcon.setOrigin(0);
+            unit.add(unitIcon);
+            
+            const unitCount = new Phaser.GameObjects.Text(this.scene, 12, 8, count, {
+                fontSize: '20px',
+                fontStyle: 'bold',
+                color: '#000'
+            });
+            unitCount.setStroke('#fff', 4);
+            unitCount.setOrigin(0);
+            unit.add(unitCount);
+            
+            unitSpace.add(unit);
+            
+            xPos += 40;
+        }
+    }
+    
+    resetSpace() {
+        //TODO remove all dice
+        this.updateDieDisplay();
+    }
+}

@@ -5,7 +5,6 @@ export class Bridge extends Phaser.GameObjects.Container {
         const { scene, x, y, color, dice } = config;
         
         super(scene, x, y);
-        this.scene = scene;
         
         this.dice_data = dice;
         this.dice = [];

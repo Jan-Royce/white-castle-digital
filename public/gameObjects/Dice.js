@@ -1,11 +1,9 @@
 export class Dice extends Phaser.GameObjects.Sprite {
     constructor(config) {
         const { scene, x, y, size, value, color } = config;
-        
         const texture = `dice${value}`;
         
         super(scene, x, y, texture);
-        this.scene = scene;
         
         const colors = {
             "red": 0xd47878,

@@ -1,19 +1,21 @@
 import { Bridge } from './Bridge.js';
+import { Castle } from './Castle.js';
 
 export class Board extends Phaser.GameObjects.Container {
     constructor(config) {
         const { scene, x, y, boardData } = config;
         
         super(scene, x, y);
-        this.scene = scene;
         
+        this.color_map = boardData.color_map;
         this.bridges = {};
         
         const width = this.scene.scale.width;
         const height = this.scene.scale.height;
+        this.height = height * 0.85;
         
         this.x = width * 0.15;
-        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, width * 0.85, height * 0.85, 0x9a9ed4);
+        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, width * 0.85, this.height, 0x9a9ed4);
         background.setOrigin(0);
         this.add(background);
         
@@ -42,9 +44,14 @@ export class Board extends Phaser.GameObjects.Container {
     }
     
     setUpCastle(castleData) {
-        // console.log(castleData.well_tiles)
-        // console.log(castleData.die_tile_map)
-        console.log(castleData)
-        
+        const castle = new Castle({
+            scene: this.scene,
+            x: 0,
+            y: 0,
+            height: this.height,
+            castleData: castleData,
+            colorMap: this.color_map
+        });
+        this.add(castle);
     }
 }

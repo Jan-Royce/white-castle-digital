@@ -2,11 +2,7 @@ export class Button extends Phaser.GameObjects.Container {
     constructor(config) {
         const { scene, x, y, fontColor, key1, key2, text, onClick } = config;
         
-        super(scene);
-        
-        this.scene = scene;
-        this.x = x;
-        this.y = y;
+        super(scene, x, y);
         
         const button = this.scene.add.image(x, y, key1).setInteractive({ useHandCursor: true });
         const buttonText = this.scene.add.text(x, y, text ?? '', {
