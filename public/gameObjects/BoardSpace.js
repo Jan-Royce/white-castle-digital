@@ -41,15 +41,6 @@ export class BoardSpace extends Phaser.GameObjects.Container {
             });
             this.add(space);
             this.die_space = space;
-            
-            if(dieSpace.max_die_count == Number.POSITIVE_INFINITY) {
-                const infinityIcon = new Phaser.GameObjects.Text(scene, dieSpace.die_size+space.x, space.y, "∞", {
-                    fontSize: '54px',
-                    color: '#ffffff'
-                });
-                infinityIcon.setStroke('#000', 4);
-                this.add(infinityIcon);
-            }
         }
         
         if(typeof(gfx) !== 'undefined') {
