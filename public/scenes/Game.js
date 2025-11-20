@@ -1,3 +1,6 @@
+import { Button } from '../components/Button.js';
+import { Board } from '../gameObjects/Board.js';
+
 export class Game extends Phaser.Scene
 {
     constructor() {
@@ -7,10 +10,11 @@ export class Game extends Phaser.Scene
     
     create() {
         const socket = io();
-        socket.on('lobby_full', () =>{
-            this.add.text(20,50, "Server is Full\nTry Again Later", {
-            fontSize: "30px",
-            color: "#ff0000",
+        
+        socket.on('lobby_full', () => {
+                this.add.text(20,50, "Server is Full\nTry Again Later", {
+                fontSize: "30px",
+                color: "#ff0000",
             });
         });
 
@@ -21,7 +25,7 @@ export class Game extends Phaser.Scene
             style: {
                 fontSize: '20px',
                 fontFamily: 'Arial',
-                color: '#ffffff',
+                color: '#000',
             },
             add: true
         };
@@ -30,6 +34,19 @@ export class Game extends Phaser.Scene
         playerCountTxt.setText("Players (0)");
         
         let playerNames = [];
+        
+        const startBtn = new Button({
+            scene: this,
+            x: this.scale.width / 4,
+            y: 100,
+            fontColor: '#fff',
+            key1: 'start_red',
+            key2: 'start_red_pressed',
+            onClick: (btn) => {
+                btn.destroy();
+                socket.emit('start_game');
+            }
+        });
         
         socket.on('update_players', (playerData) => {
             this.players = playerData;
@@ -51,6 +68,19 @@ export class Game extends Phaser.Scene
                 
                 listY+=30;
             }
+        });
+        
+        socket.on('start_game', () => {
+            startBtn.destroy();
+        });
+        
+        socket.on('board_setup', (board) => {
+            this.board = new Board({
+                scene: this, 
+                x: 0,
+                y: 0,
+                boardData: board
+            });
         });
     }
     

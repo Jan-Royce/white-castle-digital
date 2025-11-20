@@ -17,6 +17,11 @@
         "image": ""
     },
     {
+        "type": "action",
+        "name": "iron_or_food_or_pearl_2",
+        "image": ""
+    },
+    {
         "type": "resource",
         "resources": {
             "daimyo": 2
@@ -41,6 +46,21 @@
         "type": "resource",
         "resources": {
             "clan_point": 2
+        },
+        "image": ""
+    },
+    {
+        "type": "resource",
+        "resources": {
+            "coin": 5
+        },
+        "image": ""
+    },
+    {
+        "type": "resource",
+        "resources": {
+            "coin": 2,
+            "daimyo": 1
         },
         "image": ""
     }
