@@ -61,18 +61,9 @@ class Board {
             courtiers: {}
         });
         
-        /* for testing courtiers in gate
-        for (const id of Object.keys(this.color_map)) {
-            this.castle.levels[0].courtiers[id] = Math.floor(Math.random() * 3 + 1);
-        }
-            
-        // would need to call gate.updateUnitDisplay() on Castle.js on the frontend
-        //*/
-        
         this.castle.levels.push({
             level: 1,
             clan_point: 3,
-            courtiers: {},
             rooms: {
                 "room1": {},
                 "room2": {},
@@ -83,7 +74,6 @@ class Board {
         this.castle.levels.push({
             level: 2,
             clan_point: 6,
-            courtiers: {},
             rooms: {
                 "room1": {},
                 "room2": {}
@@ -161,7 +151,8 @@ class Board {
                 max_die_count: this.player_count > 2 ? 2 : 1,
                 card: {},
                 colors: colors,
-                actions: actions
+                actions: actions,
+                courtiers: {}
             };
             
             dieTileMapIndex++;
@@ -178,9 +169,11 @@ class Board {
             this.castle.levels[1].rooms[room] = {
                 die_value: 3,
                 initial_die_value: 3,
+                max_die_count: this.player_count > 2 ? 2 : 1,
                 card: {},
                 colors: colors,
-                actions: actions
+                actions: actions,
+                courtiers: {}
             };
             
             dieTileMapIndex++;
@@ -207,6 +200,19 @@ class Board {
             courtiers: {},
             bonus: bonuses
         });
+        
+        //* for testing courtiers in gate
+        for (const id of Object.keys(this.color_map)) {
+            this.castle.levels[0].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+            
+            let level1RoomId = Math.floor(Math.random() * 3 + 1);
+            let level2RoomId = Math.floor(Math.random() * 2 + 1);
+            this.castle.levels[1].rooms[`room${level1RoomId}`].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+            this.castle.levels[2].rooms[`room${level2RoomId}`].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+        }
+            
+        // would need to call gate.updateUnitDisplay() on Castle.js on the frontend
+        //*/
     }
     
     setCastleRooms(level, roomCount) {

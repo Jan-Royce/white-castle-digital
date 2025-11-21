@@ -4,6 +4,7 @@ export class Preloader extends Phaser.Scene {
     }
     
     preload() {
+        // TODO/NOTE maybe use spritesheet / atlas instead if it's more efficient
         this.load.setPath('assets');
         
         this.load.image('start_red', 'start_red.png');
@@ -21,9 +22,16 @@ export class Preloader extends Phaser.Scene {
         this.load.image('icon_pearl', 'icons/pearl.png');
         this.load.image('icon_coin', 'icons/coin.png');
         this.load.image('icon_daimyo', 'icons/daimyo.png');
+        
         this.load.image('icon_influence', 'icons/influence.png');
         this.load.image('icon_clan_point', 'icons/clan_point.png');
         this.load.image('icon_clan_point_end_game', 'icons/clan_point_end_game.png');
+        
+        this.load.image('icon_well', 'icons/well.png');
+        this.load.image('icon_lantern', 'icons/lantern.png');
+        this.load.image('icon_castle', 'icons/castle.png');
+        this.load.image('icon_yard', 'icons/yard.png');
+        this.load.image('icon_garden', 'icons/garden.png');
         
         this.load.image('tile_black', 'tiles/black.png');
         this.load.image('tile_red', 'tiles/red.png');
@@ -49,6 +57,35 @@ export class Preloader extends Phaser.Scene {
         this.load.image('score_castle_3', 'static/score_castle_3.png');
         this.load.image('score_castle_6', 'static/score_castle_6.png');
         this.load.image('score_castle_10', 'static/score_castle_10.png');
+        
+        this.load.image('castle_lvl1_01', 'cards/lvl1_01.png');
+        this.load.image('castle_lvl1_02', 'cards/lvl1_02.png');
+        this.load.image('castle_lvl1_03', 'cards/lvl1_03.png');
+        this.load.image('castle_lvl1_04', 'cards/lvl1_04.png');
+        this.load.image('castle_lvl1_05', 'cards/lvl1_05.png');
+        this.load.image('castle_lvl1_06', 'cards/lvl1_06.png');
+        this.load.image('castle_lvl1_07', 'cards/lvl1_07.png');
+        this.load.image('castle_lvl1_08', 'cards/lvl1_08.png');
+        this.load.image('castle_lvl1_09', 'cards/lvl1_09.png');
+        this.load.image('castle_lvl1_10', 'cards/lvl1_10.png');
+        this.load.image('castle_lvl1_11', 'cards/lvl1_11.png');
+        this.load.image('castle_lvl1_12', 'cards/lvl1_12.png');
+        this.load.image('castle_lvl1_13', 'cards/lvl1_13.png');
+        this.load.image('castle_lvl1_14', 'cards/lvl1_14.png');
+        this.load.image('castle_lvl1_15', 'cards/lvl1_15.png');
+        
+        this.load.image('castle_lvl2_01', 'cards/lvl2_01.png');
+        this.load.image('castle_lvl2_02', 'cards/lvl2_02.png');
+        this.load.image('castle_lvl2_03', 'cards/lvl2_03.png');
+        this.load.image('castle_lvl2_04', 'cards/lvl2_04.png');
+        this.load.image('castle_lvl2_05', 'cards/lvl2_05.png');
+        this.load.image('castle_lvl2_06', 'cards/lvl2_06.png');
+        this.load.image('castle_lvl2_07', 'cards/lvl2_07.png');
+        this.load.image('castle_lvl2_08', 'cards/lvl2_08.png');
+        this.load.image('castle_lvl2_09', 'cards/lvl2_09.png');
+        this.load.image('castle_lvl2_10', 'cards/lvl2_10.png');
+        this.load.image('castle_lvl2_11', 'cards/lvl2_11.png');
+        this.load.image('castle_lvl2_12', 'cards/lvl2_12.png');
     }
     
     create() {

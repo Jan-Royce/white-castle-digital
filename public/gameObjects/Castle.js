@@ -20,12 +20,15 @@ export class Castle extends Phaser.GameObjects.Container {
     }
     
     addLevels(levels) {
-        console.log(levels)
         for(let level of levels) {
             if(level.level == 0) {
                 const gate = this.addCastleGate(level);
                 this.add(gate);
                 this.levels.push(gate);
+                //* for testing courtiers in gate
+                gate.updateUnitDisplay();
+                //would need to uncomment loop on Board.setCastle() on backend
+                //*/
             } else if(level.level < 3) {
                 const floor = this.addCastleFloor(level);
                 this.add(floor);
@@ -33,10 +36,10 @@ export class Castle extends Phaser.GameObjects.Container {
             } else {
                 console.log('level 3')
                 console.log(level)
-                //level 
             }
-            
         }
+        
+        
     }
     
     addWell(tiles) {
@@ -105,11 +108,6 @@ export class Castle extends Phaser.GameObjects.Container {
             colorMap: this.color_map
         });
         
-        /* for testing courtiers in gate
-        gate.updateUnitDisplay();
-        //would need to uncomment loop on Board.setCastle() on backend
-        //*/
-        
         return gate;
     }
     
@@ -138,9 +136,10 @@ export class Castle extends Phaser.GameObjects.Container {
     
     addCastleFloor(data) {
         console.log(`level ${data.level}`)
-        console.log(data)
         const height = this.height - (150 + data.level * 140) - ((data.level - 1) * 20);
         const floorWidth = data.level == 1 ? 520 : 420;
+        const roomWidth = 160;
+        const roomHeight = 120;
         const xOffset = data.level == 1 ? 10 : 60;
         const color = data.level == 1 ? 0xdfd39d : 0x6e81d8;
         
@@ -150,9 +149,14 @@ export class Castle extends Phaser.GameObjects.Container {
         floor.add(floorBg);
         
         const roomColor = data.level == 1 ? 0x7e7756 : 0x5563a0;
-        let roomXOffset = 20;
         
-        // TODO: figure out dynamic spacing, same concept for bridge dice spacing
+        const roomSideOffset = 10;
+        let roomXOffset = roomSideOffset;
+        const roomCount = Object.keys(data.rooms).length;
+        const spaceTotal = floorWidth - (roomCount * roomWidth);
+        const spaceBetween = (spaceTotal - (2 * roomSideOffset)) / (roomCount - 1);
+        const roomXOffsetGrowth = roomWidth + spaceBetween;
+        
         for(const [roomId, roomData] of Object.entries(data.rooms)) {
             console.log(roomId)
             console.log(roomData)
@@ -161,32 +165,66 @@ export class Castle extends Phaser.GameObjects.Container {
                 scene: this.scene,
                 x: roomXOffset,
                 y: 10,
-                // y: height,
                 spaceId: `level${data.level}_${roomId}`,
-                width: 150,
-                height: 120,
+                width: roomWidth,
+                height: roomHeight,
                 color: roomColor,
                 scoreGfx: this.createCastleScoreGfx(150, data.level),
-                // gfx: this.createGateGfx(),
-                units: data.courtiers,
+                gfx: this.createRoomGfx(roomData, roomWidth, roomHeight),
+                units: roomData.courtiers,
                 unitType: 'courtier',
-                colorMap: this.color_map
+                unitPos: { x: 0, y: 0, wrap_per: 2 },
+                unitSize: 24,
+                colorMap: this.color_map,
+                dieSpace: {
+                    x: 4,
+                    y: 4,
+                    die_value: roomData.die_value,
+                    die_size: 40,
+                    max_die_count: roomData.max_die_count,
+                }
             });
-            roomXOffset += 164;
             
-            let tileYpos = 0;
+            roomXOffset += roomXOffsetGrowth;
+            
+            let tileYpos = 32;
             for(const tileColor of roomData.colors) {
-                const tile = new Phaser.GameObjects.Sprite(this.scene, 0, tileYpos, `tile_${tileColor}`);
-                tile.setDisplaySize(32, 32);
+                const tile = new Phaser.GameObjects.Sprite(this.scene, roomWidth/3, tileYpos, `tile_${tileColor}`);
+                tile.setDisplaySize(24, 24);
                 tile.setOrigin(0);
-                tileYpos += 36;
+                tileYpos += roomData.colors.length == 3 ? 28 : 56;
                 
                 room.add(tile);
             }
             
             floor.add(room);
+            
+            //* for testing courtiers in gate
+            room.updateUnitDisplay();
+            //would need to uncomment loop on Board.setCastle() on backend
+            //*/
         }
         
         return floor;
+    }
+    
+    // TODO/NOTE alternative to just rendering cards directly, maybe do pngs for icon sets
+    createRoomGfx(room, roomWidth, roomHeight) {
+        const cardW = 54;
+        const cardH = 90;
+        
+        const cardXOffset = 6;
+        const cardYOffset = 6;
+        
+        const gfx = new Phaser.GameObjects.Container(this.scene, 0, 0);
+        gfx.x = roomWidth - cardW - cardXOffset;
+        gfx.y = roomHeight - cardH - cardYOffset;
+        
+        const background = new Phaser.GameObjects.Sprite(this.scene, 0, 0, room.card.image);
+        background.setDisplaySize(cardW, cardH);
+        background.setOrigin(0);
+        gfx.add(background);
+        
+        return gfx;
     }
 }

@@ -2,7 +2,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
-        "image": "",
+        "image": "castle_lvl2_07",
         "sections": [
             [
                 {
@@ -21,7 +21,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
-        "image": "",
+        "image": "castle_lvl2_12",
         "sections": [
             [
                 {
@@ -44,7 +44,7 @@
     {
         "player_min_count": 2,
         "sizes": [2, 1],
-        "image": "",
+        "image": "castle_lvl2_03",
         "sections": [
             [
                 {
@@ -67,7 +67,7 @@
     {
         "player_min_count": 2,
         "sizes": [2, 1],
-        "image": "",
+        "image": "castle_lvl2_04",
         "sections": [
             [
                 {
@@ -90,7 +90,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
-        "image": "",
+        "image": "castle_lvl2_11",
         "sections": [
             [
                 {
@@ -109,7 +109,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
-        "image": "",
+        "image": "castle_lvl2_05",
         "sections": [
             [
                 {
@@ -128,12 +128,12 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
-        "image": "",
+        "image": "castle_lvl2_01",
         "sections": [
             [
                 {
                     "type": "resource",
-                    "resources": {"clan_points": 2}
+                    "resources": {"clan_point": 2}
                 },
                 {
                     "type": "action",
@@ -151,7 +151,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
-        "image": "",
+        "image": "castle_lvl2_09",
         "sections": [
             [
                 {
@@ -170,7 +170,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
-        "image": "",
+        "image": "castle_lvl2_02",
         "sections": [
             [
                 {
@@ -181,7 +181,7 @@
             [
                 {
                     "type": "resource",
-                    "resources": {"clan_points":2}
+                    "resources": {"clan_point":2}
                 },
                 {
                     "type": "action",
@@ -193,12 +193,12 @@
     {
         "player_min_count": 3,
         "sizes": [2, 1],
-        "image": "",
+        "image": "castle_lvl2_10",
         "sections": [
             [
                 {
                     "type": "resource",
-                    "resources": {"clan_points":2}
+                    "resources": {"clan_point":2}
                 },
                 {
                     "type": "action",
@@ -216,7 +216,7 @@
     {
         "player_min_count": 3,
         "sizes": [1, 2],
-        "image": "",
+        "image": "castle_lvl2_08",
         "sections": [
             [
                 {
@@ -235,7 +235,7 @@
     {
         "player_min_count": 3,
         "sizes": [2, 1],
-        "image": "",
+        "image": "castle_lvl2_06",
         "sections": [
             [
                 {
