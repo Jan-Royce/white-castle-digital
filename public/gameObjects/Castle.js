@@ -8,10 +8,11 @@ export class Castle extends Phaser.GameObjects.Container {
         
         this.x = 320;
         this.color_map = colorMap;
+        this.width = 540;
         this.height = height;
         this.levels = [];
         
-        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, 540, height, 0xa9dff5);
+        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, this.width, height, 0xa9dff5);
         background.setOrigin(0);
         this.add(background);
         
@@ -29,17 +30,12 @@ export class Castle extends Phaser.GameObjects.Container {
                 gate.updateUnitDisplay();
                 //would need to uncomment loop on Board.setCastle() on backend
                 //*/
-            } else if(level.level < 3) {
-                const floor = this.addCastleFloor(level);
+            } else {
+                const floor = level.level < 3 ? this.addCastleFloor(level) : this.addCastleTopFloor(level);
                 this.add(floor);
                 this.levels.push(floor);
-            } else {
-                console.log('level 3')
-                console.log(level)
             }
         }
-        
-        
     }
     
     addWell(tiles) {
@@ -97,7 +93,7 @@ export class Castle extends Phaser.GameObjects.Container {
             scene: this.scene,
             x: 280,
             y: this.height - 110,
-            spaceId: 'gate',
+            spaceId: 'castle_gate',
             width: spaceWidth,
             height: 100,
             color: 0xe2ab7e,
@@ -115,10 +111,10 @@ export class Castle extends Phaser.GameObjects.Container {
         const scoreGfx = ['score_castle_1', 'score_castle_3', 'score_castle_6', 'score_castle_10'];
         const gfx = new Phaser.GameObjects.Container(this.scene, 0, 0);
         
-        const bg = new Phaser.GameObjects.Sprite(this.scene, spaceWidth - 80, 4, scoreGfx[level]);
-        bg.setScale(0.225);
-        bg.setOrigin(0);
-        gfx.add(bg);
+        const spr = new Phaser.GameObjects.Sprite(this.scene, spaceWidth - 80, 4, scoreGfx[level]);
+        spr.setScale(0.225);
+        spr.setOrigin(0);
+        gfx.add(spr);
         
         return gfx;
     }
@@ -135,15 +131,14 @@ export class Castle extends Phaser.GameObjects.Container {
     }
     
     addCastleFloor(data) {
-        console.log(`level ${data.level}`)
-        const height = this.height - (150 + data.level * 140) - ((data.level - 1) * 20);
+        const floorHeight = this.height - (150 + data.level * 140) - ((data.level - 1) * 20);
         const floorWidth = data.level == 1 ? 520 : 420;
         const roomWidth = 160;
         const roomHeight = 120;
         const xOffset = data.level == 1 ? 10 : 60;
         const color = data.level == 1 ? 0xdfd39d : 0x6e81d8;
         
-        const floor = new Phaser.GameObjects.Container(this.scene, xOffset, height);
+        const floor = new Phaser.GameObjects.Container(this.scene, xOffset, floorHeight);
         const floorBg = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, floorWidth, 140, color);
         floorBg.setOrigin(0);
         floor.add(floorBg);
@@ -158,14 +153,11 @@ export class Castle extends Phaser.GameObjects.Container {
         const roomXOffsetGrowth = roomWidth + spaceBetween;
         
         for(const [roomId, roomData] of Object.entries(data.rooms)) {
-            console.log(roomId)
-            console.log(roomData)
-            
             const room = new BoardSpace({
                 scene: this.scene,
                 x: roomXOffset,
                 y: 10,
-                spaceId: `level${data.level}_${roomId}`,
+                spaceId: `castle_level${data.level}_${roomId}`,
                 width: roomWidth,
                 height: roomHeight,
                 color: roomColor,
@@ -220,11 +212,111 @@ export class Castle extends Phaser.GameObjects.Container {
         gfx.x = roomWidth - cardW - cardXOffset;
         gfx.y = roomHeight - cardH - cardYOffset;
         
-        const background = new Phaser.GameObjects.Sprite(this.scene, 0, 0, room.card.image);
-        background.setDisplaySize(cardW, cardH);
-        background.setOrigin(0);
-        gfx.add(background);
+        const card = new Phaser.GameObjects.Sprite(this.scene, 0, 0, room.card.image);
+        card.setDisplaySize(cardW, cardH);
+        card.setOrigin(0);
+        gfx.add(card);
         
+        return gfx;
+    }
+    
+    addCastleTopFloor(data) {
+        const roomWidth = 340;
+        const roomHeight = 140;
+        const offsetX = (this.width - roomWidth) / 2;
+        
+        const room = new BoardSpace({
+            scene: this.scene,
+            x: offsetX,
+            y: 10,
+            spaceId: `castle_top`,
+            width: roomWidth,
+            height: roomHeight,
+            color: 0x99c281,
+            scoreGfx: this.createCastleScoreGfx(roomWidth - 20, data.level),
+            gfx: this.createCastleTopGfx(roomHeight),
+            units: data.courtiers,
+            unitType: 'courtier',
+            unitPos: { x: roomWidth-60, y: 0, wrap_per: 2 },
+            unitSize: 24,
+            colorMap: this.color_map
+        });
+        
+        let bonusX = 85;
+        let spaceW = 56;
+        let spaceH = 96;
+        for(let i=0; i<data.bonus.length; i++) {
+            const bonus = data.bonus[i];
+            
+            const castleBonus = new BoardSpace({
+                scene: this.scene,
+                x: bonusX,
+                y: 36,
+                spaceId: `castle_top_bonus${i+1}`,
+                width: spaceW,
+                height: spaceH,
+                color: 0xdd9d9d,
+                noBackground: true,
+                units: bonus.courtiers,
+                unitType: 'courtier',
+                unitPos: { x: 2, y: -12 },
+                unitCount: false,
+                unitSize: 54,
+                colorMap: this.color_map
+            });
+            
+            if(bonus.type == 'action') {
+                let bonusIcon = new Phaser.GameObjects.Sprite(this.scene, spaceW / 2, 16, `icon_${bonus.name}`);
+                bonusIcon.setDisplaySize(40, 40);
+                castleBonus.add(bonusIcon);
+            } else {
+                for(const [resource, count] of Object.entries(bonus.resources)) {
+                    let bonusIcon = new Phaser.GameObjects.Sprite(this.scene, spaceW/2, 16, `icon_${resource}`);
+                    bonusIcon.setDisplaySize(40, 40);
+                    let bonusTxtGfx = new Phaser.GameObjects.Text(this.scene, spaceW/2+8, 8, count, {
+                        fontSize: '20px',
+                        fontStyle: 'bold',
+                        color: '#000'
+                    });
+                    bonusTxtGfx.setStroke('#fff', 4);
+                    bonusTxtGfx.setOrigin(0);
+                    
+                    castleBonus.add(bonusIcon);
+                    castleBonus.add(bonusTxtGfx);
+                }
+            }
+            
+            //* for testing courtiers in gate
+            castleBonus.updateUnitDisplay();
+            //would need to uncomment loop on Board.setCastle() on backend
+            //*/
+            
+            room.add(castleBonus);
+            
+            bonusX += 60;
+        }
+        
+        //* for testing courtiers in gate
+        room.updateUnitDisplay();
+        //would need to uncomment loop on Board.setCastle() on backend
+        //*/
+        
+        return room;
+    }
+    
+    createCastleTopGfx(roomHeight) {
+        const gfx = new Phaser.GameObjects.Container(this.scene, 4, roomHeight/4);
+        
+        const bg = new Phaser.GameObjects.Sprite(this.scene, 0, 0, 'gfx_castle_top');
+        bg.setScale(0.225);
+        bg.setOrigin(0);
+        gfx.add(bg);
+        
+        const bonuses = new Phaser.GameObjects.Sprite(this.scene, 80, 0, 'gfx_castle_bonus');
+        bonuses.setScale(0.28);
+        bonuses.setOrigin(0);
+        gfx.add(bonuses);
+
         return gfx;
     }
 }

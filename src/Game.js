@@ -61,7 +61,8 @@ class Game {
             playerCount: Object.entries(this.players).length,
             matchaExpansion: this.matcha_expansion,
             dieTilePromo: this.die_tile_promo,
-            colorMap: this.getPlayerColorMap()
+            colorMap: this.getPlayerColorMap(),
+            devMode: this.dev_mode
         });
     }
     

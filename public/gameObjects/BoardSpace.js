@@ -2,7 +2,7 @@ import { DieSpace } from './DieSpace.js';
 
 export class BoardSpace extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, spaceId, width, height, color, dieSpace, scoreGfx, gfx, units, unitType, unitPos, unitSize, colorMap } = config;
+        const { scene, x, y, spaceId, width, height, color, noBackground, dieSpace, scoreGfx, gfx, units, unitType, unitPos, unitSize, unitCount, colorMap } = config;
         
         super(scene, x, y);
         
@@ -14,6 +14,7 @@ export class BoardSpace extends Phaser.GameObjects.Container {
         
         const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, this.width, this.height, this.color);
         background.setOrigin(0);
+        if(typeof (noBackground) !== 'undefined' && noBackground) background.setAlpha(0);
         this.add(background);
         
         background.setInteractive({ useHandCursor: true });
@@ -60,6 +61,7 @@ export class BoardSpace extends Phaser.GameObjects.Container {
             this.units = units;
             this.unit_type = unitType;
             this.unit_size = unitSize ?? 40;
+            this.unit_count_show = typeof (unitCount) === 'undefined' || unitCount;
             
             const unitSpace = new Phaser.GameObjects.Container(this.scene, 0, 0);
             if(unitPos) {
@@ -129,14 +131,16 @@ export class BoardSpace extends Phaser.GameObjects.Container {
             unitIcon.setOrigin(0);
             unit.add(unitIcon);
             
-            const unitCount = new Phaser.GameObjects.Text(this.scene, this.unit_size/4+2, this.unit_size/4, count, {
-                fontSize: `${this.unit_size / 2}px`,
-                fontStyle: 'bold',
-                color: '#000'
-            });
-            unitCount.setStroke('#fff', 4);
-            unitCount.setOrigin(0);
-            unit.add(unitCount);
+            if (this.unit_count_show) {
+                const unitCount = new Phaser.GameObjects.Text(this.scene, this.unit_size/4+2, this.unit_size/4, count, {
+                    fontSize: `${this.unit_size / 2}px`,
+                    fontStyle: 'bold',
+                    color: '#000'
+                });
+                unitCount.setStroke('#fff', 4);
+                unitCount.setOrigin(0);
+                unit.add(unitCount);
+            }
             
             unitSpace.add(unit);
             

@@ -33,6 +33,11 @@ export class Preloader extends Phaser.Scene {
         this.load.image('icon_yard', 'icons/yard.png');
         this.load.image('icon_garden', 'icons/garden.png');
         
+        this.load.image('icon_white_scroll', 'icons/white_scroll.png');
+        this.load.image('icon_black_die_tile', 'icons/black_die_tile.png');
+        this.load.image('icon_red_die_tile', 'icons/red_die_tile.png');
+        this.load.image('icon_white_die_tile', 'icons/white_die_tile.png');
+        
         this.load.image('tile_black', 'tiles/black.png');
         this.load.image('tile_red', 'tiles/red.png');
         this.load.image('tile_white', 'tiles/white.png');
@@ -52,6 +57,8 @@ export class Preloader extends Phaser.Scene {
         
         this.load.image('gfx_well', 'static/gfx_well.png');
         this.load.image('gfx_gate', 'static/gfx_gate.png');
+        this.load.image('gfx_castle_top', 'static/gfx_castle_top.png');
+        this.load.image('gfx_castle_bonus', 'static/gfx_castle_bonus.png');
         
         this.load.image('score_castle_1', 'static/score_castle_1.png');
         this.load.image('score_castle_3', 'static/score_castle_3.png');
