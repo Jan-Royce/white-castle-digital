@@ -26,10 +26,6 @@ export class Castle extends Phaser.GameObjects.Container {
                 const gate = this.addCastleGate(level);
                 this.add(gate);
                 this.levels.push(gate);
-                //* for testing courtiers in gate
-                gate.updateUnitDisplay();
-                //would need to uncomment loop on Board.setCastle() on backend
-                //*/
             } else {
                 const floor = level.level < 3 ? this.addCastleFloor(level) : this.addCastleTopFloor(level);
                 this.add(floor);
@@ -190,11 +186,6 @@ export class Castle extends Phaser.GameObjects.Container {
             }
             
             floor.add(room);
-            
-            //* for testing courtiers in gate
-            room.updateUnitDisplay();
-            //would need to uncomment loop on Board.setCastle() on backend
-            //*/
         }
         
         return floor;
@@ -286,20 +277,10 @@ export class Castle extends Phaser.GameObjects.Container {
                 }
             }
             
-            //* for testing courtiers in gate
-            castleBonus.updateUnitDisplay();
-            //would need to uncomment loop on Board.setCastle() on backend
-            //*/
-            
             room.add(castleBonus);
             
             bonusX += 60;
         }
-        
-        //* for testing courtiers in gate
-        room.updateUnitDisplay();
-        //would need to uncomment loop on Board.setCastle() on backend
-        //*/
         
         return room;
     }

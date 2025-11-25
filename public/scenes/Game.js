@@ -81,6 +81,62 @@ export class Game extends Phaser.Scene
                 y: 0,
                 boardData: board
             });
+            
+            if(board.dev_mode) {
+                const showTestUnits = new Button({
+                    scene: this,
+                    x: 80,
+                    y: this.scale.height / 2 - 50,
+                    w: 140,
+                    h: 40,
+                    fontSize: 16,
+                    fontColor: '#000',
+                    bgColor: '#cecc78',
+                    text: "Show Units",
+                    onClick: () => {
+                         socket.emit('update_unit_display');
+                    }
+                });
+                
+                const resetBtn = new Button({
+                    scene: this,
+                    x: 80,
+                    y: this.scale.height / 2,
+                    w: 60,
+                    h: 40,
+                    fontSize: 16,
+                    fontColor: '#000',
+                    bgColor: '#cecc78',
+                    text: "Reset",
+                    onClick: (resetBtn) => {
+                        resetBtn.destroy();
+                        socket.emit('start_game');
+                    }
+                });
+            }
+        });
+        
+        socket.on('update_unit_display', (board) => {
+            for(const item of this.board.castle.levels) {
+                if(item.space_id == "castle_gate") {
+                    item.updateUnitDisplay();
+                } else if(item.space_id == "castle_top") {
+                    item.updateUnitDisplay();
+                    for(const bonus of item.list) {
+                        if(typeof (bonus.space_id) !== 'undefined') {
+                            bonus.updateUnitDisplay();
+                        }
+                    }
+                } else {
+                    for(const room of item.list) {
+                        if(typeof(room.space_id) !== 'undefined') {
+                            room.updateUnitDisplay();
+                        }
+                    }
+                }
+            }
+            //yard
+            //garden
         });
     }
     

@@ -53,5 +53,6 @@ export class Board extends Phaser.GameObjects.Container {
             colorMap: this.color_map
         });
         this.add(castle);
+        this.castle = castle;
     }
 }

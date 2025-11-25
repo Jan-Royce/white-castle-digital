@@ -30,6 +30,10 @@ function registerGameSocketHandler(io, game) {
             
             io.emit('board_setup', board);
         });
+        
+        socket.on('update_unit_display', () => {
+            io.emit('update_unit_display', game.board);
+        });
     });
 
     function updatePlayers(players) {
