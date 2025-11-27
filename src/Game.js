@@ -1,16 +1,17 @@
 class Game {
     constructor() {
        this.players = {};
+       this.game_started = false;
        this.colors = this.getGameColors();
        this.turn_order = [];
        this.active_player_index = 0;
        this.round = 1;
        this.turn = 1;
        this.matcha_expansion = false;
+       this.die_tile_promo = false;
        this.max_turn_per_player = this.matcha_expansion ? 4 : 3;
        this.max_total_turns = Object.entries(this.players).length * this.max_turn_per_player;
        this.garden_phase = false;
-
     }
     
     getGameColors() {
@@ -20,6 +21,11 @@ class Game {
     
     addPlayer(socketId, playerData) {
         this.players[socketId] = playerData;
+    }
+    
+    getPlayerCount()
+    {
+        return Object.entries(this.players).length;
     }
     
     assignColor()
@@ -37,7 +43,6 @@ class Game {
         delete(this.players[socketId]);
     }
     
-
     getPlayerColorMap() {
         let colorMap = {};
         for(const [id, player] of Object.entries(this.players)) {
@@ -55,10 +60,6 @@ class Game {
             dieTilePromo: this.die_tile_promo,
             colorMap: this.getPlayerColorMap()
         });
-    }
-
-    initPlayer(){
-
     }
     
     passTurn() {

@@ -1,21 +1,12 @@
 [
     {
-        "bridges": [
-            {
-                "color": "red",
-                "dice": [2, 4, 6]
-            },
-            {
-                "color": "black",
-                "dice": [1, 2, 6]
-            },
-            {
-                "color": "white",
-                "dice": [2, 2, 6]
-            }
-        ],
-        "castle": [
-            {
+        "bridges": {
+            "red": [2, 4, 6],
+            "black": [1, 2, 6],
+            "white": [2, 2, 6]
+        },
+        "castle": {
+            "level3": {
                 "level": 3,
                 "clan_point": 10,
                 "image": "level3_card_image", 
@@ -41,15 +32,15 @@
                     }
                 ]
             },
-            {
+            "level2": {
                 "level": 2,
                 "clan_point": 6,
                 "courtiers": { //dynamiic player id
                     "player1": 0,
                     "player2": 0
                 },
-                "rooms": [
-                    {
+                "rooms": {
+                    "room1": {
                         "die_value": 4,
                         "initial_die_value": 4,
                         "card": "card", //card object
@@ -68,18 +59,19 @@
                                 }
                             ]
                         }
-                    }
-                ]
+                    },
+                    "room2": {}
+                }
             },
-            {
+            "level1": {
                 "level": 1,
                 "clan_point": 3,
                 "courtiers": {
                     "player1": 0,
                     "player2": 0
                 },
-                "rooms": [
-                    {
+                "rooms": {
+                    "room1": {
                         "die_value": 3,
                         "initial_die_value": 3,
                         "card": "card",
@@ -106,10 +98,12 @@
                                 }
                             ]
                         }
-                    }
-                ]
+                    },
+                    "room2": {},
+                    "room3": {}
+                }
             },
-            {
+            "level0": {
                 "level": 0,
                 "clan_point": 1,
                 "courtiers": {
@@ -117,7 +111,7 @@
                     "player2": 0
                 }
             }
-        ],
+        },
         "yard": [
             {
                 "size": 3,

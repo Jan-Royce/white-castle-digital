@@ -8,9 +8,9 @@ const config = {
     title: 'The White Castle',
     description: '',
     parent: 'game-container',
-    width: 1920,
-    height: 1080,
-    backgroundColor: '#000000',
+    width: 1280,
+    height: 720,
+    backgroundColor: '#90e0bf',
     pixelArt: false,
     scene: [
         Boot,
@@ -21,6 +21,7 @@ const config = {
     scale: {
         mode: Phaser.Scale.FIT,
         mode: Phaser.Scale.AUTO,
+        mode: Phaser.Scale.NONE,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
 }

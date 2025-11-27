@@ -1,0 +1,164 @@
+[
+    {
+        "color": "black",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "pearl": 1
+            }
+        }
+    },
+    {
+        "color": "red",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "pearl": 1
+            }
+        }
+    },
+    {
+        "color": "white",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "pearl": 1
+            }
+        }
+    },
+    {
+        "color": "black",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "iron": 1
+            }
+        }
+    },
+    {
+        "color": "red",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "iron": 1
+            }
+        }
+    },
+    {
+        "color": "white",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "iron": 1
+            }
+        }
+    },
+    {
+        "color": "black",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "food": 1
+            }
+        }
+    },
+    {
+        "color": "red",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "food": 1
+            }
+        }
+    },
+    {
+        "color": "white",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "food": 1
+            }
+        }
+    },
+    {
+        "color": "black",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "coin": 1
+            }
+        }
+    },
+    {
+        "color": "red",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "coin": 1
+            }
+        }
+    },
+    {
+        "color": "white",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "coin": 1
+            }
+        }
+    },
+    {
+        "color": "black",
+        "action": {
+            "type": "action",
+            "name": "iron_or_food_or_pearl_1"
+        },
+        "tag": "any_resource"
+    },
+    {
+        "color": "red",
+        "action": {
+            "type": "action",
+            "name": "iron_or_food_or_pearl_1"
+        },
+        "tag": "any_resource"
+    },
+    {
+        "color": "white",
+        "action": {
+            "type": "action",
+            "name": "iron_or_food_or_pearl_1"
+        },
+        "tag": "any_resource"
+    },
+    {
+        "color": "black",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "influence": 1
+            }
+        },
+        "tag": "promo1"
+    },
+    {
+        "color": "red",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "daimyo": 1
+            }
+        },
+        "tag": "promo1"
+    },
+    {
+        "color": "white",
+        "action": {
+            "type": "resource",
+            "resources": {
+                "clan_point": 1
+            }
+        },
+        "tag": "promo1"
+    }
+]
