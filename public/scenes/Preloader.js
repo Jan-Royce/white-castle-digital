@@ -56,6 +56,7 @@ export class Preloader extends Phaser.Scene {
         this.load.image('unit_geysha', 'units/geysha.png');
         
         this.load.image('gfx_well', 'static/gfx_well.png');
+        this.load.image('gfx_outside_wall', 'static/gfx_outside_wall.png');
         this.load.image('gfx_gate', 'static/gfx_gate.png');
         this.load.image('gfx_castle_top', 'static/gfx_castle_top.png');
         this.load.image('gfx_castle_bonus', 'static/gfx_castle_bonus.png');

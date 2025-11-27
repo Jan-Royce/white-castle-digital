@@ -17,15 +17,17 @@ export class Bridge extends Phaser.GameObjects.Container {
         };
         
         this.x = 20;
-        const bridgeWidth = 290;
-        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, bridgeWidth, 80, colors[color]);
+        const bridgeWidth = 240;
+        const bridgeHeight = 60;
+        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, bridgeWidth, bridgeHeight, colors[color]);
         background.setOrigin(0);
         this.add(background);
         
         const sideOffset = 10;
         let xPos = sideOffset;
+        const dieSize = 40;
+        const yPos = (bridgeHeight - dieSize) / 2;
         const dieCount = dice.length;
-        const dieSize = 50;
         const spaceTotal = bridgeWidth - (dieCount * dieSize);
         const spaceBetween = (spaceTotal - (2 * sideOffset)) / (dieCount - 1);
         const offsetGrowth = dieSize + spaceBetween;
@@ -34,7 +36,7 @@ export class Bridge extends Phaser.GameObjects.Container {
             let die = new Dice({
                 scene: this.scene,
                 x: xPos,
-                y: 16,
+                y: yPos,
                 size: dieSize,
                 value: val,
                 color: color

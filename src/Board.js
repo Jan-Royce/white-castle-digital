@@ -15,6 +15,11 @@ class Board {
         this.garden = {};
         this.well_tiles = [];
         this.well = {};
+        this.outside_walls = {
+            //dice
+            garden_castle: [],
+            castle_yard: [],
+        };
         
         this.setBridges();
         
