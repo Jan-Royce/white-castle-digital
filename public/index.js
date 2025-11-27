@@ -20,6 +20,7 @@ const config = {
     ],
     scale: {
         mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.AUTO,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
 }

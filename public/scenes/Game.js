@@ -1,3 +1,8 @@
+import { Button } from '../components/Button.js';
+import { Board } from '../gameObjects/Board.js';
+import { PlayerResourceBoard } from '../gameObjects/PlayerResourceBoard.js';
+
+
 export class Game extends Phaser.Scene
 {
     constructor() {
@@ -51,6 +56,25 @@ export class Game extends Phaser.Scene
                 
                 listY+=30;
             }
+        });
+        
+        socket.on('start_game', () => {
+            startBtn.destroy();
+        });
+        
+        socket.on('board_setup', (board, players) => {
+            this.board = new Board({
+                scene: this, 
+                x: 0,
+                y: 0,
+                boardData: board
+            });
+            this.player = new PlayerResourceBoard({
+                scene: this,
+                x: 0,
+                y: (this.scale.height / 2) - 30,
+                playerData: players
+            });
         });
     }
     

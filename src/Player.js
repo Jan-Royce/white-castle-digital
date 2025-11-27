@@ -1,4 +1,3 @@
-// TODO: ADD Max Limit PLAYER Daimyo, food, iron and pearl
 class Player {
     constructor(id) {
         this.id = id;
@@ -22,10 +21,39 @@ class Player {
         // this.domain_geysha = -1;
         
         this.domain_card_section = {};
+        this.domain_card_size = null;
         this.lantern = {
             type: 'resource',
             resources: []
         }
+    }
+    // Convert Method // Check if daimyo enough
+    convertDaimyo(isCoin){
+        if(isCoin){
+            if(this.daimyo > 0){
+                this.daimyo--;
+                (this.coin >= 7) ? this.coin = 7 : this.coin += 1;
+            }
+        }
+        else{
+            if(this.daimyo > 0){
+                // Action : iron_or_food_or_pearl_1
+            }
+        }
+    }
+
+    playerSetup(lantern, actions){
+        lantern.forEach(resource =>{
+            this.addLanternReward(resource);
+        })
+
+        actions.forEach(node =>{
+            if(node.type === 'resource'){
+                for(const type in node.resources){
+                    this.checkResourceLimit(type,node.resources);
+                }
+            }
+        });
     }
 
     countResourceClanPoints(){
@@ -43,6 +71,14 @@ class Player {
         this.lantern.resources.push({[resourceReward]: 1});
     }
 
+    // Check the passage of time for 5 |1, 5 [3] |2, 4 [6] |3, [10,11,12, 13, 14 ,15]
+    PassageOfTimePayment(){
+
+    }
+    addInfluence(){ // add influence and check it's two dimension position
+        
+    }
+
     setDomainCard(sizes,sections){
         const colors = ['red', 'black', 'white'];
         let colorIndex = 0;
@@ -55,12 +91,20 @@ class Player {
             }
             sectionIndex++;
         })
-        if(sizes.length != 2){
-            this.addLanternReward('coin');
-        }else this.addLanternReward('clan_points');
+        switch (this.domain_card_size){
+            case 1:
+                this.addLanternReward('influence');
+                break;
+            case 2:
+                this.addLanternReward('clan_points');
+                break;
+            case 3:
+                this.addLanternReward('coin');
+                break;
+        }
+        this.domain_card_size = sizes.length;
     }
 
-    // Check if matcha Expansion enable
     domainBoardRewardRow(matcha_expansion,dieColor){
         if(matcha_expansion){matchaBoardReward(dieColor);}
         else{this.baseBoardReward(dieColor);}
@@ -95,9 +139,9 @@ class Player {
         };
         switch(dieColor){
             case 'red':
-                this.sectionRewardTrigger(REWARD.red[this.domain_courtier]);
+                this.sectionRewardTrigger(REWARD.red[this.domain_gardener]);
                 break;
-                case 'black':
+            case 'black':
                 this.sectionRewardTrigger(REWARD.black[this.domain_courtier]);
                 break;
             case 'white':
@@ -112,7 +156,7 @@ class Player {
             if(type === "lantern" && rewards[type] === true){
                 this.lanternTrigger();
             }else{
-                this[type] += rewards[type];
+                this.checkResourceLimit(type, rewards);
             }
         }
     }
@@ -121,7 +165,7 @@ class Player {
         this.domain_card_section[dieColor].forEach(node =>{
             if(node.type === 'resource'){
                 for(const type in node.resources){
-                    this[type] += node.resources[type];
+                    this.checkResourceLimit(type,node.resources);
                 }
             }else{
                 // Type : Action
@@ -133,11 +177,29 @@ class Player {
     {
         this.lantern.resources.forEach(resource => {
             for(const type in resource){
+                // Add action for influence
                 if(this[type] !== undefined){
-                    this[type] += resource[type];
+                    this.checkResourceLimit(type, resource);
                 }
             }
         });
+    }
+
+    checkResourceLimit(type, resource){
+        switch (type){
+            case "food":
+            case "coin":
+            case "iron":
+            case "pearl":
+                (this[type] >= 7) ? this[type] = 7 : this[type] += resource[type];
+                break;
+            case "daimyo":
+                (this[type] >= 5) ? this[type] = 5 : this[type] += resource[type];
+                break;
+            default:
+                this[type] += resource[type];
+                break;
+        }
     }
 }
 

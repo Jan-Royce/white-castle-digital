@@ -23,6 +23,16 @@ function registerGameSocketHandler(io, game) {
             updatePlayers(game.players);
         });
         
+        socket.on('start_game', () => {
+            // TODO Do NOT allow starting a game if there is only 1 player
+            socket.broadcast.emit('start_game');
+            
+            game.startBoard();
+            game.started = true;
+            const board = game.board;
+            
+            io.emit('board_setup', board, game.players);
+        });
     });
 
     function updatePlayers(players) {

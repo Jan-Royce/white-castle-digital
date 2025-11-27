@@ -19,7 +19,6 @@ class Game {
     }
     
     addPlayer(socketId, playerData) {
-        playerData.color = this.assignColor();
         this.players[socketId] = playerData;
     }
     
@@ -39,6 +38,29 @@ class Game {
     }
     
 
+    getPlayerColorMap() {
+        let colorMap = {};
+        for(const [id, player] of Object.entries(this.players)) {
+            colorMap[player.id] = parseInt(player.color.replace(/^#/, ''), 16);
+        }
+        
+        return colorMap;
+    }
+    
+    startBoard() {
+        const Board = require('./Board');
+        this.board = new Board({
+            playerCount: Object.entries(this.players).length,
+            matchaExpansion: this.matcha_expansion,
+            dieTilePromo: this.die_tile_promo,
+            colorMap: this.getPlayerColorMap()
+        });
+    }
+
+    initPlayer(){
+
+    }
+    
     passTurn() {
         //TODO check dice count
         
