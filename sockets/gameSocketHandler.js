@@ -31,8 +31,16 @@ function registerGameSocketHandler(io, game) {
             io.emit('board_setup', board);
         });
         
+        if(game.dev_mode) {
+            socket.on('display_test_units', () => {
+                console.log('display test units')
+                game.board.generateTestUnits();
+                io.emit('update_test_units', game.board);
+            });
+        }
+        
         socket.on('update_unit_display', () => {
-            io.emit('update_unit_display', game.board);
+            io.emit('update_unit_display');
         });
     });
 

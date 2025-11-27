@@ -192,13 +192,6 @@ class Board {
             let bonus = action;
             bonus.courtiers = {};
             
-            if(this.dev_mode) {
-                if(Math.floor(Math.random() * 2) > 0) {
-                    let player = Object.keys(this.color_map)[Math.floor(Math.random() * this.player_count)];
-                    bonus.courtiers[player] = 1;
-                }
-            }
-            
             bonuses.push(bonus);
         }
 
@@ -209,19 +202,6 @@ class Board {
             courtiers: {},
             bonus: bonuses
         });
-        
-        
-        if(this.dev_mode) {
-            for (const id of Object.keys(this.color_map)) {
-                this.castle.levels[0].courtiers[id] = Math.floor(Math.random() * 3 + 1);
-                
-                let level1RoomId = Math.floor(Math.random() * 3 + 1);
-                let level2RoomId = Math.floor(Math.random() * 2 + 1);
-                this.castle.levels[1].rooms[`room${level1RoomId}`].courtiers[id] = Math.floor(Math.random() * 3 + 1);
-                this.castle.levels[2].rooms[`room${level2RoomId}`].courtiers[id] = Math.floor(Math.random() * 3 + 1);
-                this.castle.levels[3].courtiers[id] = Math.floor(Math.random() * 3 + 1);
-            }
-        }
     }
     
     setCastleRooms(level, roomCount) {
@@ -256,6 +236,62 @@ class Board {
     
     setGarden() {
         
+    }
+    
+    generateTestUnits() {
+        this.clearAllUnits();
+        
+        for(const id of Object.keys(this.color_map)) {
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.castle.levels[0].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+            }
+
+            let level1RoomId = Math.floor(Math.random() * 3 + 1);
+            let level2RoomId = Math.floor(Math.random() * 2 + 1);
+            this.castle.levels[1].rooms[`room${level1RoomId}`].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+            this.castle.levels[2].rooms[`room${level2RoomId}`].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+            this.castle.levels[3].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+        }
+        
+        for(let i=0; i<this.castle.levels[3].bonus.length; i++) {
+            const bonus = this.castle.levels[3].bonus[i];
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                let player = Object.keys(this.color_map)[Math.floor(Math.random() * this.player_count)];
+                bonus.courtiers[player] = 1;
+            }
+        }
+        
+        //yard
+        //garden
+    }
+    
+    clearAllUnits() {
+        this.clearCastleUnits();
+        this.clearYardUnits();
+        this.clearGardenUnits();
+    }
+    
+    clearCastleUnits() {
+        this.castle.levels[0].courtiers = {};
+        this.castle.levels[1].rooms['room1'].courtiers = {};
+        this.castle.levels[1].rooms['room2'].courtiers = {};
+        this.castle.levels[1].rooms['room3'].courtiers = {};
+        this.castle.levels[2].rooms['room1'].courtiers = {};
+        this.castle.levels[2].rooms['room2'].courtiers = {};
+        this.castle.levels[3].courtiers = {};
+
+        this.castle.levels[3].bonus[0].courtiers = {};
+        this.castle.levels[3].bonus[1].courtiers = {};
+        this.castle.levels[3].bonus[2].courtiers = {};
+    }
+    
+    clearYardUnits() {
+        //TODO
+    }
+    
+    clearGardenUnits() {
+        //TODO
     }
 }
 
