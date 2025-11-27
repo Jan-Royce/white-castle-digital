@@ -2,17 +2,17 @@ import { BoardSpace } from './BoardSpace.js';
 
 export class Castle extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, height, castleData, colorMap } = config;
+        const { scene, x, y, w, h, castleData, colorMap } = config;
 
         super(scene, x, y);
         
         this.x = 320;
         this.color_map = colorMap;
-        this.width = 540;
-        this.height = height;
+        this.width = w;
+        this.height = h;
         this.levels = [];
         
-        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, this.width, height, 0xa9dff5);
+        const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, this.width, this.height, 0xa9dff5);
         background.setOrigin(0);
         this.add(background);
         

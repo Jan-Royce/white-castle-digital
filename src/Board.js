@@ -236,7 +236,34 @@ class Board {
     }
     
     setYard() {
+        let yardTilesBlue = require('.././game_data/tile_yard_blue.json');
+        yardTilesBlue = [...yardTilesBlue].sort(() => Math.random() - 0.5);
+        let yardTilesYellow = require('.././game_data/tile_yard_yellow.json');
+        yardTilesYellow = [...yardTilesYellow].sort(() => Math.random() - 0.5);
         
+        this.yard.push(
+            {
+                level: 3,
+                cost: 5,
+                multiplier: 2,
+                warriors: {},
+                actions: [yardTilesBlue.pop(), yardTilesYellow.pop()]
+            },
+            {
+                level: 2,
+                cost: 3,
+                multiplier: 1,
+                warriors: {},
+                actions: [yardTilesBlue.pop()]
+            },
+            {
+                level: 1,
+                cost: 1,
+                multiplier: 1,
+                warriors: {},
+                actions: [yardTilesYellow.pop()]
+            }
+        );
     }
     
     setGarden() {

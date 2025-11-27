@@ -1,5 +1,6 @@
 import { Bridge } from './Bridge.js';
 import { Castle } from './Castle.js';
+import { Yard } from './Yard.js';
 import { BoardSpace } from './BoardSpace.js';
 
 export class Board extends Phaser.GameObjects.Container {
@@ -26,6 +27,7 @@ export class Board extends Phaser.GameObjects.Container {
         
         this.setUpBridges(boardData.bridges);
         this.setUpCastle(boardData.castle);
+        this.setUpYard(boardData.yard);
         this.setUpOutsideWalls(boardData.player_count, {w: this.width, h: this.height});
     }
     
@@ -52,12 +54,27 @@ export class Board extends Phaser.GameObjects.Container {
             scene: this.scene,
             x: 0,
             y: 0,
-            height: this.height,
+            w: 540,
+            h: this.height,
             castleData: castleData,
             colorMap: this.color_map
         });
         this.add(castle);
         this.castle = castle;
+    }
+    
+    setUpYard(yardData) {
+        const yard = new Yard({
+            scene: this.scene,
+            x: 880,
+            y: 20,
+            w: 190,
+            h: this.height - 160,
+            yardData: yardData,
+            colorMap: this.color_map
+        });
+        this.add(yard);
+        this.yard = yard;
     }
     
     setUpOutsideWalls(playerCount, boardDimensions) {

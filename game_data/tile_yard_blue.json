@@ -2,51 +2,61 @@
     {
         "type": "action",
         "name": "castle",
-        "image": ""
+        "image": "",
+        "color": "blue"
     },
     {
         "type": "action",
         "name": "garden",
-        "image": ""
+        "image": "",
+        "color": "blue"
     },
     {
         "type": "action",
         "name": "yard",
-        "image": ""
+        "image": "",
+        "color": "blue"
     },
     {
         "type": "action",
         "name": "castle_or_yard_or_garden",
-        "image": ""
+        "image": "",
+        "color": "blue"
     },
     {
         "type": "action",
         "name": "black_die_tile",
-        "image": ""
+        "image": "",
+        "color": "blue"
     },
     {
         "type": "action",
         "name": "red_die_tile",
-        "image": ""
+        "image": "",
+        "color": "blue"
     },
     {
         "type": "action",
         "name": "white_die_tile",
-        "image": ""
+        "image": "",
+        "color": "blue"
     },
     {
         "type": "action",
         "name": "wild_die_tile",
-        "image": ""
+        "image": "",
+        "color": "blue"
     },
     {
         "type": "action",
         "name": "domain_select",
-        "image": ""
+        "image": "",
+        "color": "blue"
     },
     {
         "type": "action",
         "name": "black_scroll",
-        "image": ""
+        "image": "",
+        "color": "blue"
     }
 ]

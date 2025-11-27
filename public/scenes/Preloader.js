@@ -65,6 +65,8 @@ export class Preloader extends Phaser.Scene {
         this.load.image('score_castle_3', 'static/score_castle_3.png');
         this.load.image('score_castle_6', 'static/score_castle_6.png');
         this.load.image('score_castle_10', 'static/score_castle_10.png');
+        this.load.image('score_yard_1', 'static/score_yard_1.png');
+        this.load.image('score_yard_2', 'static/score_yard_2.png');
         
         this.load.image('castle_lvl1_01', 'cards/lvl1_01.png');
         this.load.image('castle_lvl1_02', 'cards/lvl1_02.png');
