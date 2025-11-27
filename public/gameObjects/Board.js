@@ -62,7 +62,7 @@ export class Board extends Phaser.GameObjects.Container {
     
     setUpOutsideWalls(playerCount, boardDimensions) {
         const width = 220;
-        const height = 120;
+        const height = 100;
         const outside = new Phaser.GameObjects.Container(this.scene, 0, 0);
         
         const outsideBg = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, width, height, 0xb4d170);
