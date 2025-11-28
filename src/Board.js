@@ -294,7 +294,19 @@ class Board {
             }
         }
         
-        //yard
+        for(const id of Object.keys(this.color_map)) {
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.yard[0].warriors[id] = Math.floor(Math.random() * 3 + 1);
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.yard[1].warriors[id] = Math.floor(Math.random() * 3 + 1);
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.yard[2].warriors[id] = Math.floor(Math.random() * 3 + 1);
+            }
+        }
         //garden
     }
     
@@ -319,7 +331,9 @@ class Board {
     }
     
     clearYardUnits() {
-        //TODO
+        this.yard[0].warriors = {};
+        this.yard[1].warriors = {};
+        this.yard[2].warriors = {};
     }
     
     clearGardenUnits() {

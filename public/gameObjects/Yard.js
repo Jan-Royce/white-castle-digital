@@ -4,7 +4,7 @@ import { BoardSpace } from './BoardSpace.js';
 export class Yard extends Phaser.GameObjects.Container {
     constructor(config) {
         const { scene, x, y, w, h, yardData, colorMap } = config;
-        
+         
         super(scene, x, y);
         
         this.color_map = colorMap;
@@ -27,9 +27,10 @@ export class Yard extends Phaser.GameObjects.Container {
         const spaceTotal = this.height - (yardHeight * 3);
         const spaceBetween = (spaceTotal - (2 * offset)) / 2;
         const offsetGrowth = yardHeight + spaceBetween;
+        const unitSize = 36;
         
         for (let yard of levels) {
-            console.log(yard)
+            const unitPosX = (yardWidth - unitSize * 4) / 2;
             const yardLevel = new BoardSpace({
                 scene: this.scene,
                 x: (this.width - yardWidth) / 2,
@@ -41,8 +42,8 @@ export class Yard extends Phaser.GameObjects.Container {
                 scoreGfx: this.createYardScoreGfx({w: yardWidth, h: yardHeight}, yard.multiplier, yard.cost),
                 gfx: this.createYardGfx(yard.actions, yardWidth, yardHeight),
                 unitType: 'warrior',
-                unitPos: { x: 0, y: 0, wrap_per: 2 },
-                unitSize: 20,
+                unitPos: { x: unitPosX, y: 10 },
+                unitSize: unitSize,
                 colorMap: this.color_map
             });
             
@@ -62,15 +63,12 @@ export class Yard extends Phaser.GameObjects.Container {
             yardTile.x = xPos;
             gfx.add(yardTile);
             
-            xPos += yardWidth * 0.4;
+            xPos += yardWidth * 0.4 + 8;
         }
         
         return gfx;
     }
     
-    // TODO CONTINUE HERE : fix centering for all instances
-    // change icon size for certain icons
-    // action: iron_or_food_or_pearl_2 needs to have text overlay
     createYardTile(tile, dimensions) {
         const gfx = new Phaser.GameObjects.Container(this.scene, 0, 0);
         
@@ -84,49 +82,94 @@ export class Yard extends Phaser.GameObjects.Container {
         
         let tileSprSize = 40;
         
-        if(tile.type == 'action') {
-            const name = tile.name;
+        let name = tile.name;
+        if(tile.type == 'action' && name != 'iron_or_food_or_pearl_2') {
             const icon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `icon_${name}`);
+            
             icon.setDisplaySize(tileSprSize, tileSprSize);
             icon.setOrigin(0);
             icon.x = (tileW - icon.displayWidth) / 2;
             icon.y = (tileH - icon.displayHeight) / 2;
             
             gfx.add(icon);
+        } else if(tile.type == 'action' && name == 'iron_or_food_or_pearl_2') {
+            const iconWrap = this.createIconWrap(
+                {
+                    x: (tileW - tileSprSize) / 2,
+                    y: (tileH - tileSprSize) / 2
+                },
+                {
+                    name: 'icon_iron_or_food_or_pearl',
+                    size: tileSprSize
+                },
+                {
+                    content: 2,
+                    font_size: 20
+                }
+            );
+
+            gfx.add(iconWrap);
         } else {
-            if(Object.entries(tile.resources).length > 1) tileSprSize = 30;
+            const iconCount = Object.entries(tile.resources).length;
+            let xPos = (tileW - tileSprSize) / 2;
+            let xPosGrowth = 10;
             
-            let xPos = 0;
+            if(iconCount > 1) {
+                tileSprSize = 28;
+                const gapSize = (tileW - tileSprSize * iconCount) / (iconCount + 1);
+                xPos = gapSize;
+                xPosGrowth = gapSize + tileSprSize;
+            }
+            
             const fontSize = 20;
             
             for(const [resource, count] of Object.entries(tile.resources)) {
-                let iconWrap = new Phaser.GameObjects.Container(this.scene, xPos, 0);
-                
-                let icon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `icon_${resource}`);
-                icon.setDisplaySize(tileSprSize, tileSprSize);
-                icon.setOrigin(0);
-                
-                let countTxt = new Phaser.GameObjects.Text(this.scene, icon.displayWidth - fontSize / 2, (icon.displayHeight - fontSize) / 2, count, {
-                    fontSize: `${fontSize}px`,
-                    fontStyle: 'bold',
-                    color: '#000'
-                });
-                countTxt.setStroke('#fff', 4);
-                countTxt.setOrigin(0);
-                
-                console.log(iconWrap.displayWidth)
-                iconWrap.x = (tileW - (tileSprSize + xPos)) / 2;
-                
-                iconWrap.add(icon);
-                iconWrap.add(countTxt);
+                const iconWrap = this.createIconWrap(
+                    {
+                        x: xPos,
+                        y: (tileH - tileSprSize) / 2
+                    }, 
+                    {
+                        name: `icon_${resource}`,
+                        size: tileSprSize
+                    },
+                    {
+                        content: count,
+                        font_size: fontSize
+                    }
+                );
                 
                 gfx.add(iconWrap);
                 
-                xPos += tileSprSize + 20;
+                xPos += xPosGrowth;
             }
         }
         
         return gfx;
+    }
+    
+    createIconWrap(pos, spr, text) {
+        let iconWrap = new Phaser.GameObjects.Container(this.scene, pos.x, pos.y);
+        
+        let icon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, spr.name);
+        icon.setDisplaySize(spr.size, spr.size);
+        icon.setOrigin(0);
+        
+        iconWrap.add(icon);
+        
+        if(text.content != '') {
+            let countTxt = new Phaser.GameObjects.Text(this.scene, icon.displayWidth - text.font_size / 2, (icon.displayHeight - text.font_size) / 2, text.content, {
+                fontSize: `${text.font_size}px`,
+                fontStyle: 'bold',
+                color: '#000'
+            });
+            countTxt.setStroke('#fff', 4);
+            countTxt.setOrigin(0);
+            
+            iconWrap.add(countTxt);
+        }
+        
+        return iconWrap;
     }
     
     createYardScoreGfx(yardDimensions, multiplier, cost) {

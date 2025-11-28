@@ -116,18 +116,25 @@ export class Game extends Phaser.Scene
                 });
                 
                 socket.on('update_test_units', (board) => {
-                    this.clearUnitDisplays();
-                    
                     for(const item of this.board.castle.levels) {
                         if(item.space_id == "castle_gate") {
                             item.units = board.castle.levels[0].courtiers;
+                            item.unit_space.destroy();
+                            item.createUnitSpace();
+                            item.updateUnitDisplay();
                         } else if(item.space_id == "castle_top") {
                             item.units = board.castle.levels[3].courtiers;
+                            item.unit_space.destroy();
+                            item.createUnitSpace();
+                            item.updateUnitDisplay();
                             
                             let bonusIndex = 0;
                             for(const bonus of item.list) {
                                 if(typeof (bonus.space_id) !== 'undefined') {
                                     bonus.units = board.castle.levels[3].bonus[bonusIndex].courtiers;
+                                    bonus.unit_space.destroy();
+                                    bonus.createUnitSpace();
+                                    bonus.updateUnitDisplay();
                                     bonusIndex++;
                                 }
                             }
@@ -135,12 +142,24 @@ export class Game extends Phaser.Scene
                             for(const room of item.list) {
                                 if(typeof(room.space_id) !== 'undefined') {
                                     room.units = board.castle.levels[room.floor_id].rooms[room.room_id].courtiers;
+                                    room.unit_space.destroy();
+                                    room.createUnitSpace();
+                                    room.updateUnitDisplay();
                                 }
                             }
                         }
                     }
                     
-                    this.updateUnitDisplays();
+                    let i=0;
+                    for(const item of this.board.yard.levels) {
+                        item.units = board.yard[i].warriors;
+                        item.unit_space.destroy();
+                        item.createUnitSpace();
+                        item.updateUnitDisplay();
+                        i++;
+                    }
+                    //garden
+                    
                 });
             }
         });
@@ -152,35 +171,6 @@ export class Game extends Phaser.Scene
     
     update() {
         
-    }
-    
-    //NOTE: this assumes that any unit data has been updated on the respective game object
-    // OR maybe it should constantly update to make sure that all clients are synced to back-end?
-    clearUnitDisplays() {
-        for(const item of this.board.castle.levels) {
-            if(item.space_id == "castle_gate") {
-                item.unit_space.destroy();
-                item.createUnitSpace();
-            } else if(item.space_id == "castle_top") {
-                item.unit_space.destroy();
-                item.createUnitSpace();
-                
-                for(const bonus of item.list) {
-                    if(typeof (bonus.space_id) !== 'undefined') {
-                        bonus.unit_space.destroy();
-                        bonus.createUnitSpace();
-                        bonus.createUnitSpace();
-                    }
-                }
-            } else {
-                for(const room of item.list) {
-                    if(typeof(room.space_id) !== 'undefined') {
-                        room.unit_space.destroy();
-                        room.createUnitSpace();
-                    }
-                }
-            }
-        }
     }
     
     updateUnitDisplays() {
@@ -202,7 +192,10 @@ export class Game extends Phaser.Scene
                 }
             }
         }
-        //yard
+        
+        for(const item of this.board.yard.levels) {
+            item.updateUnitDisplay();
+        }
         //garden
     }
 }
