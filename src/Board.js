@@ -29,10 +29,9 @@ class Board {
         } else {
             dieTiles = dieTiles.filter((tile) => !tile.tag || tile.tag != 'promo1');
         }
-        dieTiles = [...dieTiles].sort(() => Math.random() - 0.5);
+        dieTiles = this.shuffle(dieTiles);
         
         this.setCastle(dieTiles);
-        this.setWell();
         
         this.setYard();
         this.setGarden();
@@ -87,7 +86,7 @@ class Board {
         });
         
         let dieTileColors = ['black', 'red', 'white'];
-        dieTileColors = [...dieTileColors].sort(() => Math.random() - 0.5);
+        dieTileColors = this.shuffle(dieTileColors);
         
         let dieTileMap = [
             ['',''],
@@ -215,7 +214,7 @@ class Board {
             floorCards = floorCards.filter((card) => card.player_min_count == 2);
         }
 
-        this[`deck_castle_level${level}`] = [...floorCards].sort(() => Math.random() - 0.5);
+        this[`deck_castle_level${level}`] = this.shuffle(floorCards);
         for (let i = 1; i <= roomCount; i++) {
             const floorCard = this[`deck_castle_level${level}`].pop();
             const room = this.castle.levels[level].rooms[`room${i}`];
@@ -231,15 +230,11 @@ class Board {
         }
     }
     
-    setWell() {
-        
-    }
-    
     setYard() {
         let yardTilesBlue = require('.././game_data/tile_yard_blue.json');
-        yardTilesBlue = [...yardTilesBlue].sort(() => Math.random() - 0.5);
+        yardTilesBlue = this.shuffle(yardTilesBlue);
         let yardTilesYellow = require('.././game_data/tile_yard_yellow.json');
-        yardTilesYellow = [...yardTilesYellow].sort(() => Math.random() - 0.5);
+        yardTilesYellow = this.shuffle(yardTilesYellow);
         
         this.yard.push(
             {
@@ -267,7 +262,24 @@ class Board {
     }
     
     setGarden() {
+        this.garden.red = [];
+        this.garden.black = [];
+        this.garden.white = [];
         
+        let stoneGardens = require('.././game_data/card_stone_garden.json');
+        stoneGardens = this.shuffle(stoneGardens);
+        let plantGardens = require('.././game_data/card_plant_garden.json');
+        plantGardens = this.shuffle(plantGardens);
+        
+        for(const [color, bridge] of Object.entries(this.garden)) {
+            const stoneGarden = stoneGardens.pop();
+            stoneGarden.gardeners = {};
+            this.garden[color].push(stoneGarden);
+            
+            const plantGarden = plantGardens.pop();
+            plantGarden.gardeners = {};
+            this.garden[color].push(plantGarden);
+        }
     }
     
     generateTestUnits() {
@@ -307,7 +319,44 @@ class Board {
                 this.yard[2].warriors[id] = Math.floor(Math.random() * 3 + 1);
             }
         }
-        //garden
+        
+        let gardenerCount = 5;
+        for (const id of Object.keys(this.color_map)) {
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.red[0].gardeners[id] = 1;
+                gardenerCount--;
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.red[1].gardeners[id] = 1;
+                gardenerCount--;
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.black[0].gardeners[id] = 1;
+                gardenerCount--;
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.black[1].gardeners[id] = 1;
+                gardenerCount--;
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.white[0].gardeners[id] = 1;
+                gardenerCount--;
+            }
+            
+            if(gardenerCount <= 0) {
+                gardenerCount = 5;
+                continue;
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.white[1].gardeners[id] = 1;
+                gardenerCount--;
+            }
+        }
     }
     
     clearAllUnits() {
@@ -337,7 +386,16 @@ class Board {
     }
     
     clearGardenUnits() {
-        //TODO
+        this.garden.red[0].gardeners = {};
+        this.garden.red[1].gardeners = {};
+        this.garden.black[0].gardeners = {};
+        this.garden.black[1].gardeners = {};
+        this.garden.white[0].gardeners = {};
+        this.garden.white[1].gardeners = {};
+    }
+    
+    shuffle(arr) {
+        return [...arr].sort(() => Math.random() - 0.5);
     }
 }
 

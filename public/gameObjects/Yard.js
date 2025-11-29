@@ -1,4 +1,3 @@
-import { Board } from './Board.js';
 import { BoardSpace } from './BoardSpace.js';
 
 export class Yard extends Phaser.GameObjects.Container {

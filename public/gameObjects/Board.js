@@ -1,6 +1,7 @@
 import { Bridge } from './Bridge.js';
 import { Castle } from './Castle.js';
 import { Yard } from './Yard.js';
+import { Garden } from './Garden.js';
 import { BoardSpace } from './BoardSpace.js';
 
 export class Board extends Phaser.GameObjects.Container {
@@ -25,12 +26,14 @@ export class Board extends Phaser.GameObjects.Container {
         
         this.scene.add.existing(this);
         
-        this.setUpBridges(boardData.bridges);
         this.setUpCastle(boardData.castle);
         this.setUpYard(boardData.yard);
         this.setUpOutsideWalls(boardData.player_count, {w: this.width, h: this.height});
+        this.setUpGarden(boardData.garden);
+        this.setUpBridges(boardData.bridges);
     }
     
+    // TODO Continue here: make bridge spaces equal size for garden spaces
     setUpBridges(bridgeData) {
         let yPos = 20;
         for(const [color, dice] of Object.entries(bridgeData)) {
@@ -126,5 +129,19 @@ export class Board extends Phaser.GameObjects.Container {
         
         this.add(outside);
         this.outside_walls = outside;
+    }
+    
+    setUpGarden(gardenData) {
+        const garden = new Garden({
+            scene: this.scene,
+            x: 20,
+            y: 20,
+            w: 280,
+            h: this.height - 40,
+            gardenData: gardenData,
+            colorMap: this.color_map
+        });
+        this.add(garden);
+        this.garden = garden;
     }
 }
