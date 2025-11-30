@@ -13,6 +13,7 @@ function registerGameSocketHandler(io, game) {
            
         game.addPlayer(socket.id, player);
         updatePlayers(game.players);
+        io.to(socket.id).emit('create_player', player);
 
         socket.on('disconnect', () => {
             console.log(`user ${socket.id} disconnected`);

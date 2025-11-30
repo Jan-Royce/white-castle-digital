@@ -7,4 +7,5 @@ class PlayerDomainBoard extends Phaser.GameObjects.Container{
     setUpResourceBoard(){
         
     }
+
 }

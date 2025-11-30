@@ -1,6 +1,6 @@
 import { Button } from '../components/Button.js';
 import { Board } from '../gameObjects/Board.js';
-import { PlayerResourceBoard } from '../gameObjects/PlayerResourceBoard.js';
+import { Player } from '../gameObjects/Player.js';
 
 
 export class Game extends Phaser.Scene
@@ -12,7 +12,6 @@ export class Game extends Phaser.Scene
     
     create() {
         const socket = io();
-        
         socket.on('lobby_full', () => {
                 this.add.text(20,50, "Server is Full\nTry Again Later", {
                 fontSize: "30px",
@@ -49,10 +48,18 @@ export class Game extends Phaser.Scene
                 socket.emit('start_game');
             }
         });
+
+        socket.on('create_player', (player) => {
+            this.player = new Player({
+                scene: this,
+                x: 0,
+                y: 0,
+                playerId: player
+            });
+        });
         
         socket.on('update_players', (playerData) => {
             this.players = playerData;
-            
             playerCountTxt.setText(`Players (${Object.entries(this.players).length})`);
             
             for(let _playerName of playerNames) {
@@ -77,18 +84,22 @@ export class Game extends Phaser.Scene
         });
         
         socket.on('board_setup', (board, players) => {
-            this.board = new Board({
-                scene: this, 
-                x: 0,
-                y: 0,
-                boardData: board
-            });
-            this.player = new PlayerResourceBoard({
-                scene: this,
-                x: 0,
-                y: (this.scale.height / 2) - 30,
-                playerData: players
-            });
+            // this.board = new Board({
+            //     scene: this, 
+            //     x: 0,
+            //     y: 0,
+            //     boardData: board
+            // });
+
+            //display player ResourceBoard
+            this.player.setUpPlayerBoard();
+            //Other player
+            // this.player = new PlayerResourceBoard({
+            //     scene: this,
+            //     x: 0,
+            //     y: (this.scale.height) - 50,
+            //     playerData: players
+            // });
         });
     }
     
