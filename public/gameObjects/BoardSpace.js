@@ -2,11 +2,13 @@ import { DieSpace } from './DieSpace.js';
 
 export class BoardSpace extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, spaceId, width, height, color, dieSpace, scoreGfx, gfx, units, unitType, colorMap } = config;
+        const { scene, x, y, spaceId, floorId, roomId, width, height, color, noBackground, dieSpace, scoreGfx, gfx, units, unitType, unitPos, unitSize, unitCount, colorMap } = config;
         
         super(scene, x, y);
         
         this.space_id = spaceId;
+        if(typeof(floorId) !== 'undefined') this.floor_id = floorId;
+        if(typeof(roomId) !== 'undefined') this.room_id = roomId;
         this.width = width ?? 200;
         this.height = height ?? 200;
         this.color = color ?? 0x868686;
@@ -14,6 +16,7 @@ export class BoardSpace extends Phaser.GameObjects.Container {
         
         const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, this.width, this.height, this.color);
         background.setOrigin(0);
+        if(typeof (noBackground) !== 'undefined' && noBackground) background.setAlpha(0);
         this.add(background);
         
         background.setInteractive({ useHandCursor: true });
@@ -30,10 +33,13 @@ export class BoardSpace extends Phaser.GameObjects.Container {
                 this.die_display = dieDisplay;
             }
             
+            let dieSpaceX = dieSpace.x ?? 10;
+            let dieSpaceY = dieSpace.y ?? this.height / 4;
+            
             const space = new DieSpace({
                 scene: this.scene,
-                x: 10,
-                y: this.height / 4,
+                x: dieSpaceX,
+                y: dieSpaceY,
                 size: dieSpace.die_size,
                 value: dieSpace.die_value,
                 maxCount: dieSpace.max_die_count,
@@ -54,15 +60,32 @@ export class BoardSpace extends Phaser.GameObjects.Container {
         }
         
         if(typeof (unitType) !== 'undefined') {
-            this.units = units;
+            this.units = units ?? {};
             this.unit_type = unitType;
+            this.unit_size = unitSize ?? 40;
+            this.unit_count_show = typeof (unitCount) === 'undefined' || unitCount;
+            this.unit_pos = unitPos;
             
-            const unitSpace = new Phaser.GameObjects.Container(this.scene, 0, 0);
-            unitSpace.x = this.width / 4;
-            
-            this.add(unitSpace);
-            this.unit_space = unitSpace;
+            this.createUnitSpace();
         }
+    }
+    
+    createUnitSpace() {
+        const unitSpace = new Phaser.GameObjects.Container(this.scene, 0, 0);
+        if (this.unit_pos) {
+            if (typeof (this.unit_pos.x) !== 'undefined') unitSpace.x = this.unit_pos.x;
+            if (typeof (this.unit_pos.y) !== 'undefined') unitSpace.y = this.unit_pos.y;
+            if (typeof (this.unit_pos.wrap_per) !== 'undefined') {
+                this.unit_space_wrap = true;
+                this.unit_space_wrap_per = this.unit_pos.wrap_per;
+            }
+        } else {
+            this.unit_space_wrap = false;
+            unitSpace.x = this.width / 4;
+        }
+
+        this.add(unitSpace);
+        this.unit_space = unitSpace;
     }
     
     updateDieDisplay()
@@ -102,29 +125,42 @@ export class BoardSpace extends Phaser.GameObjects.Container {
         const unitSpace = this.unit_space;
         
         let xPos = 0;
+        let yPos = 50;
+        let wrapCount = 0;
+        
         for(const [key, count] of Object.entries(this.units)) {
             if(count == 0) continue;
             
-            const unit = new Phaser.GameObjects.Container(this.scene, xPos, 50);
+            const unit = new Phaser.GameObjects.Container(this.scene, xPos, yPos);
             
             const unitIcon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `unit_${this.unit_type}`);
-            unitIcon.setDisplaySize(40, 40);
+            unitIcon.setDisplaySize(this.unit_size, this.unit_size);
             unitIcon.setTint(this.color_map[key]);
             unitIcon.setOrigin(0);
             unit.add(unitIcon);
             
-            const unitCount = new Phaser.GameObjects.Text(this.scene, 12, 8, count, {
-                fontSize: '20px',
-                fontStyle: 'bold',
-                color: '#000'
-            });
-            unitCount.setStroke('#fff', 4);
-            unitCount.setOrigin(0);
-            unit.add(unitCount);
+            if (this.unit_count_show) {
+                const unitCount = new Phaser.GameObjects.Text(this.scene, this.unit_size/4+2, this.unit_size/4, count, {
+                    fontSize: `${this.unit_size / 2}px`,
+                    fontStyle: 'bold',
+                    color: '#000'
+                });
+                unitCount.setStroke('#fff', 4);
+                unitCount.setOrigin(0);
+                unit.add(unitCount);
+            }
             
             unitSpace.add(unit);
             
-            xPos += 40;
+            wrapCount++;
+            
+            if(this.unit_space_wrap && this.unit_space_wrap_per == wrapCount) {
+                wrapCount = 0;
+                xPos = 0;
+                yPos += this.unit_size;
+            } else {
+                xPos += this.unit_size;
+            }
         }
     }
     

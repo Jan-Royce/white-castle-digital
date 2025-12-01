@@ -2,7 +2,7 @@
     {
         "player_min_count": 2, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_08",
         "sections": [
             [
                 {
@@ -35,7 +35,7 @@
     {
         "player_min_count": 2, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_04",
         "sections": [
             [
                 {
@@ -68,7 +68,7 @@
     {
         "player_min_count": 2, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_06",
         "sections": [
             [
                 {
@@ -101,7 +101,7 @@
     {
         "player_min_count": 2, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_10",
         "sections": [
             [
                 {
@@ -130,7 +130,7 @@
     {
         "player_min_count": 2, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_05",
         "sections": [
             [
                 {
@@ -159,7 +159,7 @@
     {
         "player_min_count": 2, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_03",
         "sections": [
             [
                 {
@@ -188,7 +188,7 @@
     {
         "player_min_count": 2, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_15",
         "sections": [
             [
                 {
@@ -221,7 +221,7 @@
     {
         "player_min_count": 2, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_14",
         "sections": [
             [
                 {
@@ -250,7 +250,7 @@
     {
         "player_min_count": 2, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_02",
         "sections": [
             [
                 {
@@ -279,7 +279,7 @@
     {
         "player_min_count": 3, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_09",
         "sections": [
             [
                 {
@@ -300,7 +300,7 @@
             [
                 {
                     "type": "resource",
-                    "resources": {"influence": 2}
+                    "resources": {"clan_point": 2}
                 }
             ]
         ]
@@ -308,7 +308,7 @@
     {
         "player_min_count": 3, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_01",
         "sections": [
             [
                 {
@@ -323,7 +323,7 @@
             [
                 {
                     "type": "resource",
-                    "resources": { "daimyo":1,"clan_points": 1}
+                    "resources": { "daimyo":1,"clan_point": 1}
                 }
             ],
             [
@@ -341,7 +341,7 @@
     {
         "player_min_count": 3, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_11",
         "sections": [
             [
                 {
@@ -374,7 +374,7 @@
     {
         "player_min_count": 3, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_07",
         "sections": [
             [
                 {
@@ -407,18 +407,18 @@
     {
         "player_min_count": 3, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_13",
         "sections": [
             [
                 {
                     "type": "resource",
-                    "resources": { "clan_points": 2}
+                    "resources": { "clan_point": 2}
                 }
             ],
             [
                 {
                     "type": "resource",
-                    "resources": { "daimyo": -1}
+                    "resources": { "daimyo": 1}
                 },
                 {
                     "type": "action",
@@ -440,7 +440,7 @@
     {
         "player_min_count": 3, 
         "sizes": [1, 1, 1],
-        "image": "",
+        "image": "castle_lvl1_12",
         "sections": [
             [
                 {

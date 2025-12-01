@@ -75,16 +75,160 @@ export class Game extends Phaser.Scene
         });
         
         socket.on('board_setup', (board) => {
+            if(typeof(this.board) !== 'undefined') this.board.destroy();
             this.board = new Board({
                 scene: this, 
                 x: 0,
                 y: 0,
                 boardData: board
             });
+            
+            if(board.dev_mode) {
+                const devTools = new Phaser.GameObjects.Container(this, 0, 0);
+                const background = new Phaser.GameObjects.Rectangle(this, 0, 0, 160, 160, 0xd3d3d3);
+                background.setOrigin(0);
+                devTools.add(background);
+                devTools.setAlpha(0.75);
+                this.add.existing(devTools);
+                
+                
+                const devButtonsX = 80;
+                
+                const AddTestUnits = new Button({
+                    scene: this,
+                    x: devButtonsX,
+                    y: 40,
+                    w: 140,
+                    h: 40,
+                    fontSize: 12,
+                    fontColor: '#000',
+                    bgColor: '#cecc78',
+                    text: "Update Test Units",
+                    parent: devTools,
+                    onClick: () => {
+                         socket.emit('display_test_units');
+                    }
+                });
+                
+                const resetBtn = new Button({
+                    scene: this,
+                    x: devButtonsX,
+                    y: 100,
+                    w: 60,
+                    h: 40,
+                    fontSize: 16,
+                    fontColor: '#000',
+                    bgColor: '#cecc78',
+                    text: "Reset",
+                    parent: devTools,
+                    onClick: (resetBtn) => {
+                        resetBtn.destroy();
+                        socket.emit('start_game');
+                    }
+                });
+                
+                socket.on('update_test_units', (board) => {
+                    for(const item of this.board.castle.levels) {
+                        if(item.space_id == "castle_gate") {
+                            item.units = board.castle.levels[0].courtiers;
+                            item.unit_space.destroy();
+                            item.createUnitSpace();
+                            item.updateUnitDisplay();
+                        } else if(item.space_id == "castle_top") {
+                            item.units = board.castle.levels[3].courtiers;
+                            item.unit_space.destroy();
+                            item.createUnitSpace();
+                            item.updateUnitDisplay();
+                            
+                            let bonusIndex = 0;
+                            for(const bonus of item.list) {
+                                if(typeof (bonus.space_id) !== 'undefined') {
+                                    bonus.units = board.castle.levels[3].bonus[bonusIndex].courtiers;
+                                    bonus.unit_space.destroy();
+                                    bonus.createUnitSpace();
+                                    bonus.updateUnitDisplay();
+                                    bonusIndex++;
+                                }
+                            }
+                        } else {
+                            for(const room of item.list) {
+                                if(typeof(room.space_id) !== 'undefined') {
+                                    room.units = board.castle.levels[room.floor_id].rooms[room.room_id].courtiers;
+                                    room.unit_space.destroy();
+                                    room.createUnitSpace();
+                                    room.updateUnitDisplay();
+                                }
+                            }
+                        }
+                    }
+                    
+                    let i=0;
+                    for(const item of this.board.yard.levels) {
+                        item.units = board.yard[i].warriors;
+                        item.unit_space.destroy();
+                        item.createUnitSpace();
+                        item.updateUnitDisplay();
+                        i++;
+                    }
+                    
+                    const bridgeOrder = ['red', 'black', 'white'];
+                    for(const color of bridgeOrder) {
+                        const plots = this.board.garden.garden_plots[color];
+                        
+                        plots[0].units = board.garden[color][0].gardeners;
+                        plots[0].unit_space.destroy();
+                        plots[0].createUnitSpace();
+                        plots[0].updateUnitDisplay();
+                        
+                        plots[1].units = board.garden[color][1].gardeners;
+                        plots[1].unit_space.destroy();
+                        plots[1].createUnitSpace();
+                        plots[1].updateUnitDisplay();
+                    }
+                });
+            }
+        });
+        
+        //NOTE: currently not used by anything
+        socket.on('update_unit_display', () => {
+            this.updateUnitDisplays();
         });
     }
     
     update() {
         
+    }
+    
+    updateUnitDisplays() {
+        for(const item of this.board.castle.levels) {
+            if (item.space_id == "castle_gate") {
+                item.updateUnitDisplay();
+            } else if (item.space_id == "castle_top") {
+                item.updateUnitDisplay();
+                for (const bonus of item.list) {
+                    if (typeof (bonus.space_id) !== 'undefined') {
+                        bonus.updateUnitDisplay();
+                    }
+                }
+            } else {
+                for (const room of item.list) {
+                    if (typeof (room.space_id) !== 'undefined') {
+                        room.updateUnitDisplay();
+                    }
+                }
+            }
+        }
+        
+        for(const item of this.board.yard.levels) {
+            item.updateUnitDisplay();
+        }
+        
+        const bridgeOrder = ['red', 'black', 'white'];
+        for (const color of bridgeOrder) {
+            const plots = this.board.garden.garden_plots[color];
+            
+            plots[0].updateUnitDisplay();
+            plots[1].updateUnitDisplay();
+        }
     }
 }

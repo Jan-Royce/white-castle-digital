@@ -4,57 +4,66 @@
         "resources": {
             "pearl": 3
         },
-        "image": ""
+        "image": "",
+        "color": "yellow"
     },
     {
         "type": "action",
         "name": "well",
-        "image": ""
+        "image": "",
+        "color": "yellow"
     },
     {
         "type": "action",
         "name": "white_scroll",
-        "image": ""
+        "image": "",
+        "color": "yellow"
     },
     {
         "type": "action",
         "name": "iron_or_food_or_pearl_2",
-        "image": ""
+        "image": "",
+        "color": "yellow"
     },
     {
         "type": "resource",
         "resources": {
             "daimyo": 2
         },
-        "image": ""
+        "image": "",
+        "color": "yellow"
     },
     {
         "type": "resource",
         "resources": {
             "food": 3
         },
-        "image": ""
+        "image": "",
+        "color": "yellow"
     },
     {
         "type": "resource",
         "resources": {
             "influence": 2
         },
-        "image": ""
+        "image": "",
+        "color": "yellow"
     },
     {
         "type": "resource",
         "resources": {
             "clan_point": 2
         },
-        "image": ""
+        "image": "",
+        "color": "yellow"
     },
     {
         "type": "resource",
         "resources": {
             "coin": 5
         },
-        "image": ""
+        "image": "",
+        "color": "yellow"
     },
     {
         "type": "resource",
@@ -62,6 +71,7 @@
             "coin": 2,
             "daimyo": 1
         },
-        "image": ""
+        "image": "",
+        "color": "yellow"
     }
 ]

@@ -20,5 +20,5 @@ app.get('/', (req, res) => {
 });
 
 server.listen(3000, () => {
-    console.log('server running at localhost:3000');
+    console.log(`server running at localhost:3000 on ${process.env.MODE == 'development' ? 'DEVELOPMENT' : 'PRODUCTION' } mode`);
 });

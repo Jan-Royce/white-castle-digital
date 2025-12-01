@@ -1,7 +1,8 @@
 class Board {
     constructor(config) {
-        const { playerCount, matchaExpansion, dieTilePromo, colorMap } = config;
+        const { playerCount, matchaExpansion, dieTilePromo, colorMap, devMode } = config;
         
+        this.dev_mode = devMode;
         this.player_count = playerCount;
         this.color_map = colorMap;
         this.matcha_expansion = matchaExpansion;
@@ -14,6 +15,11 @@ class Board {
         this.garden = {};
         this.well_tiles = [];
         this.well = {};
+        this.outside_walls = {
+            //dice
+            garden_castle: [],
+            castle_yard: [],
+        };
         
         this.setBridges();
         
@@ -23,10 +29,9 @@ class Board {
         } else {
             dieTiles = dieTiles.filter((tile) => !tile.tag || tile.tag != 'promo1');
         }
-        dieTiles = [...dieTiles].sort(() => Math.random() - 0.5);
+        dieTiles = this.shuffle(dieTiles);
         
         this.setCastle(dieTiles);
-        this.setWell();
         
         this.setYard();
         this.setGarden();
@@ -61,18 +66,9 @@ class Board {
             courtiers: {}
         });
         
-        /* for testing courtiers in gate
-        for (const id of Object.keys(this.color_map)) {
-            this.castle.levels[0].courtiers[id] = Math.floor(Math.random() * 3 + 1);
-        }
-            
-        // would need to call gate.updateUnitDisplay() on Castle.js on the frontend
-        //*/
-        
         this.castle.levels.push({
             level: 1,
             clan_point: 3,
-            courtiers: {},
             rooms: {
                 "room1": {},
                 "room2": {},
@@ -83,7 +79,6 @@ class Board {
         this.castle.levels.push({
             level: 2,
             clan_point: 6,
-            courtiers: {},
             rooms: {
                 "room1": {},
                 "room2": {}
@@ -91,7 +86,7 @@ class Board {
         });
         
         let dieTileColors = ['black', 'red', 'white'];
-        dieTileColors = [...dieTileColors].sort(() => Math.random() - 0.5);
+        dieTileColors = this.shuffle(dieTileColors);
         
         let dieTileMap = [
             ['',''],
@@ -161,7 +156,8 @@ class Board {
                 max_die_count: this.player_count > 2 ? 2 : 1,
                 card: {},
                 colors: colors,
-                actions: actions
+                actions: actions,
+                courtiers: {}
             };
             
             dieTileMapIndex++;
@@ -178,9 +174,11 @@ class Board {
             this.castle.levels[1].rooms[room] = {
                 die_value: 3,
                 initial_die_value: 3,
+                max_die_count: this.player_count > 2 ? 2 : 1,
                 card: {},
                 colors: colors,
-                actions: actions
+                actions: actions,
+                courtiers: {}
             };
             
             dieTileMapIndex++;
@@ -190,13 +188,14 @@ class Board {
         this.setCastleRooms(1, 3);
         
         const level3Cards = require('.././game_data/card_castle_level3.json');
-        const level3Card = level3Cards[Math.floor(Math.random() * (level3Cards.length - 1))];
+        const level3Card = level3Cards[Math.floor(Math.random() * (level3Cards.length))];
 
         let bonuses = [];
 
         for (let action of level3Card.actions) {
             let bonus = action;
-            bonus.occupied = false;
+            bonus.courtiers = {};
+            
             bonuses.push(bonus);
         }
 
@@ -215,7 +214,7 @@ class Board {
             floorCards = floorCards.filter((card) => card.player_min_count == 2);
         }
 
-        this[`deck_castle_level${level}`] = [...floorCards].sort(() => Math.random() - 0.5);
+        this[`deck_castle_level${level}`] = this.shuffle(floorCards);
         for (let i = 1; i <= roomCount; i++) {
             const floorCard = this[`deck_castle_level${level}`].pop();
             const room = this.castle.levels[level].rooms[`room${i}`];
@@ -231,16 +230,172 @@ class Board {
         }
     }
     
-    setWell() {
-        
-    }
-    
     setYard() {
+        let yardTilesBlue = require('.././game_data/tile_yard_blue.json');
+        yardTilesBlue = this.shuffle(yardTilesBlue);
+        let yardTilesYellow = require('.././game_data/tile_yard_yellow.json');
+        yardTilesYellow = this.shuffle(yardTilesYellow);
         
+        this.yard.push(
+            {
+                level: 3,
+                cost: 5,
+                multiplier: 2,
+                warriors: {},
+                actions: [yardTilesBlue.pop(), yardTilesYellow.pop()]
+            },
+            {
+                level: 2,
+                cost: 3,
+                multiplier: 1,
+                warriors: {},
+                actions: [yardTilesBlue.pop()]
+            },
+            {
+                level: 1,
+                cost: 1,
+                multiplier: 1,
+                warriors: {},
+                actions: [yardTilesYellow.pop()]
+            }
+        );
     }
     
     setGarden() {
+        this.garden.red = [];
+        this.garden.black = [];
+        this.garden.white = [];
         
+        let stoneGardens = require('.././game_data/card_stone_garden.json');
+        stoneGardens = this.shuffle(stoneGardens);
+        let plantGardens = require('.././game_data/card_plant_garden.json');
+        plantGardens = this.shuffle(plantGardens);
+        
+        for(const [color, bridge] of Object.entries(this.garden)) {
+            const stoneGarden = stoneGardens.pop();
+            stoneGarden.gardeners = {};
+            this.garden[color].push(stoneGarden);
+            
+            const plantGarden = plantGardens.pop();
+            plantGarden.gardeners = {};
+            this.garden[color].push(plantGarden);
+        }
+    }
+    
+    generateTestUnits() {
+        this.clearAllUnits();
+        
+        for(const id of Object.keys(this.color_map)) {
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.castle.levels[0].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+            }
+
+            let level1RoomId = Math.floor(Math.random() * 3 + 1);
+            let level2RoomId = Math.floor(Math.random() * 2 + 1);
+            this.castle.levels[1].rooms[`room${level1RoomId}`].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+            this.castle.levels[2].rooms[`room${level2RoomId}`].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+            this.castle.levels[3].courtiers[id] = Math.floor(Math.random() * 3 + 1);
+        }
+        
+        for(let i=0; i<this.castle.levels[3].bonus.length; i++) {
+            const bonus = this.castle.levels[3].bonus[i];
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                let player = Object.keys(this.color_map)[Math.floor(Math.random() * this.player_count)];
+                bonus.courtiers[player] = 1;
+            }
+        }
+        
+        for(const id of Object.keys(this.color_map)) {
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.yard[0].warriors[id] = Math.floor(Math.random() * 3 + 1);
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.yard[1].warriors[id] = Math.floor(Math.random() * 3 + 1);
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.yard[2].warriors[id] = Math.floor(Math.random() * 3 + 1);
+            }
+        }
+        
+        let gardenerCount = 5;
+        for (const id of Object.keys(this.color_map)) {
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.red[0].gardeners[id] = 1;
+                gardenerCount--;
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.red[1].gardeners[id] = 1;
+                gardenerCount--;
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.black[0].gardeners[id] = 1;
+                gardenerCount--;
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.black[1].gardeners[id] = 1;
+                gardenerCount--;
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.white[0].gardeners[id] = 1;
+                gardenerCount--;
+            }
+            
+            if(gardenerCount <= 0) {
+                gardenerCount = 5;
+                continue;
+            }
+            
+            if(Math.floor(Math.random() * 2) > 0) {
+                this.garden.white[1].gardeners[id] = 1;
+                gardenerCount--;
+            }
+        }
+    }
+    
+    clearAllUnits() {
+        this.clearCastleUnits();
+        this.clearYardUnits();
+        this.clearGardenUnits();
+    }
+    
+    clearCastleUnits() {
+        this.castle.levels[0].courtiers = {};
+        this.castle.levels[1].rooms['room1'].courtiers = {};
+        this.castle.levels[1].rooms['room2'].courtiers = {};
+        this.castle.levels[1].rooms['room3'].courtiers = {};
+        this.castle.levels[2].rooms['room1'].courtiers = {};
+        this.castle.levels[2].rooms['room2'].courtiers = {};
+        this.castle.levels[3].courtiers = {};
+
+        this.castle.levels[3].bonus[0].courtiers = {};
+        this.castle.levels[3].bonus[1].courtiers = {};
+        this.castle.levels[3].bonus[2].courtiers = {};
+    }
+    
+    clearYardUnits() {
+        this.yard[0].warriors = {};
+        this.yard[1].warriors = {};
+        this.yard[2].warriors = {};
+    }
+    
+    clearGardenUnits() {
+        this.garden.red[0].gardeners = {};
+        this.garden.red[1].gardeners = {};
+        this.garden.black[0].gardeners = {};
+        this.garden.black[1].gardeners = {};
+        this.garden.white[0].gardeners = {};
+        this.garden.white[1].gardeners = {};
+    }
+    
+    shuffle(arr) {
+        return [...arr].sort(() => Math.random() - 0.5);
     }
 }
 

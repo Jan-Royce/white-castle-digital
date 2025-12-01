@@ -12,6 +12,8 @@ class Game {
        this.max_turn_per_player = this.matcha_expansion ? 4 : 3;
        this.max_total_turns = Object.entries(this.players).length * this.max_turn_per_player;
        this.garden_phase = false;
+       
+       this.dev_mode = process.env.MODE == 'development';
     }
     
     getGameColors() {
@@ -59,7 +61,8 @@ class Game {
             playerCount: Object.entries(this.players).length,
             matchaExpansion: this.matcha_expansion,
             dieTilePromo: this.die_tile_promo,
-            colorMap: this.getPlayerColorMap()
+            colorMap: this.getPlayerColorMap(),
+            devMode: this.dev_mode
         });
     }
     
