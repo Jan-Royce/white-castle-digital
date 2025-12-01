@@ -1,6 +1,6 @@
 export class Button extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, w, h, fontSize, fontColor, bgColor, key1, key2, text, onClick } = config;
+        const { scene, x, y, w, h, fontSize, fontColor, bgColor, key1, key2, text, onClick, parent } = config;
         
         super(scene, x, y);
         
@@ -29,6 +29,10 @@ export class Button extends Phaser.GameObjects.Container {
             if (onClick) onClick(this);
         });
         
-        this.scene.add.existing(this);
+        if(typeof(parent) !== 'undefined') {
+            parent.add(this);
+        } else {
+            this.scene.add.existing(this);
+        }
     }
 }

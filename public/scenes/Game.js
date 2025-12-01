@@ -84,16 +84,27 @@ export class Game extends Phaser.Scene
             });
             
             if(board.dev_mode) {
+                const devTools = new Phaser.GameObjects.Container(this, 0, 0);
+                const background = new Phaser.GameObjects.Rectangle(this, 0, 0, 160, 160, 0xd3d3d3);
+                background.setOrigin(0);
+                devTools.add(background);
+                devTools.setAlpha(0.75);
+                this.add.existing(devTools);
+                
+                
+                const devButtonsX = 80;
+                
                 const AddTestUnits = new Button({
                     scene: this,
-                    x: 80,
-                    y: this.scale.height / 2 - 50,
+                    x: devButtonsX,
+                    y: 40,
                     w: 140,
                     h: 40,
                     fontSize: 12,
                     fontColor: '#000',
                     bgColor: '#cecc78',
                     text: "Update Test Units",
+                    parent: devTools,
                     onClick: () => {
                          socket.emit('display_test_units');
                     }
@@ -101,14 +112,15 @@ export class Game extends Phaser.Scene
                 
                 const resetBtn = new Button({
                     scene: this,
-                    x: 80,
-                    y: this.scale.height / 2,
+                    x: devButtonsX,
+                    y: 100,
                     w: 60,
                     h: 40,
                     fontSize: 16,
                     fontColor: '#000',
                     bgColor: '#cecc78',
                     text: "Reset",
+                    parent: devTools,
                     onClick: (resetBtn) => {
                         resetBtn.destroy();
                         socket.emit('start_game');
@@ -162,9 +174,7 @@ export class Game extends Phaser.Scene
                     const bridgeOrder = ['red', 'black', 'white'];
                     for(const color of bridgeOrder) {
                         const plots = this.board.garden.garden_plots[color];
-                       
-                        // console.log(this.board.garden.garden_plots)
-                        // console.log(board.garden[color])
+                        
                         plots[0].units = board.garden[color][0].gardeners;
                         plots[0].unit_space.destroy();
                         plots[0].createUnitSpace();
@@ -179,6 +189,7 @@ export class Game extends Phaser.Scene
             }
         });
         
+        //NOTE: currently not used by anything
         socket.on('update_unit_display', () => {
             this.updateUnitDisplays();
         });
@@ -211,6 +222,13 @@ export class Game extends Phaser.Scene
         for(const item of this.board.yard.levels) {
             item.updateUnitDisplay();
         }
-        //garden
+        
+        const bridgeOrder = ['red', 'black', 'white'];
+        for (const color of bridgeOrder) {
+            const plots = this.board.garden.garden_plots[color];
+            
+            plots[0].updateUnitDisplay();
+            plots[1].updateUnitDisplay();
+        }
     }
 }

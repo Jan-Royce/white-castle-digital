@@ -39,6 +39,7 @@ function registerGameSocketHandler(io, game) {
             });
         }
         
+        //NOTE: currently not used by anything
         socket.on('update_unit_display', () => {
             io.emit('update_unit_display');
         });

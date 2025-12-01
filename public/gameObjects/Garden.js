@@ -42,7 +42,6 @@ export class Garden extends Phaser.GameObjects.Container {
             xPos = 10;
             
             for(let i=0; i<plots.length; i++) {
-                console.log(plots[i])
                 const gardenPlot = new BoardSpace({
                     scene: this.scene,
                     x: xPos,
@@ -71,10 +70,8 @@ export class Garden extends Phaser.GameObjects.Container {
         }
     }
     
-    //TODO TEMP display before adding gfx
     createGardenPlotGfx(plot, plotW, plotH) {
         const gfx = new Phaser.GameObjects.Container(this.scene, 0, 0);
-        // gfx.y = (plotH - 14) / 2;
         
         const iconSize = 30;
         const foodIcon = new Phaser.GameObjects.Sprite(this.scene, 6, 0, 'icon_food');
