@@ -10,7 +10,9 @@ function registerGameSocketHandler(io, game) {
             socket.disconnect();
             return;
         }
-           
+        // Add game color
+        player.color = game.assignColor();
+        
         game.addPlayer(socket.id, player);
         updatePlayers(game.players);
         io.to(socket.id).emit('create_player', player);

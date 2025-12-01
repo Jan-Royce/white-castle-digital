@@ -1,6 +1,7 @@
 import { Button } from '../components/Button.js';
 import { Board } from '../gameObjects/Board.js';
 import { Player } from '../gameObjects/Player.js';
+import { RivalResourceBoard } from '../gameObjects/RivalResourceBoard.js';
 
 
 export class Game extends Phaser.Scene
@@ -54,52 +55,59 @@ export class Game extends Phaser.Scene
                 scene: this,
                 x: 0,
                 y: 0,
-                playerId: player
+                player: player
             });
+            console.log(this.player.id)
         });
         
-        socket.on('update_players', (playerData) => {
-            this.players = playerData;
-            playerCountTxt.setText(`Players (${Object.entries(this.players).length})`);
+        // socket.on('update_players', (playerData) => {
+        //     this.players = playerData;
+        //     playerCountTxt.setText(`Players (${Object.entries(this.players).length})`);
             
-            for(let _playerName of playerNames) {
-                _playerName.destroy();
-            }
+        //     for(let _playerName of playerNames) {
+        //         _playerName.destroy();
+        //     }
             
-            let listY = 50;
-            for (const [id, player] of Object.entries(this.players)) {
-                let playerName = this.make.text(textConfig);
-                playerNames.push(playerName);
+        //     let listY = 50;
+        //     for (const [id, player] of Object.entries(this.players)) {
+        //         let playerName = this.make.text(textConfig);
+        //         playerNames.push(playerName);
                 
-                playerName.setText(id);
-                playerName.setColor(player.color);
-                playerName.y = listY;
+        //         playerName.setText(id);
+        //         playerName.setColor(player.color);
+        //         playerName.y = listY;
                 
-                listY+=30;
-            }
-        });
+        //         listY+=30;
+        //     }
+        // });
         
         socket.on('start_game', () => {
             startBtn.destroy();
         });
         
         socket.on('board_setup', (board, players) => {
-            // this.board = new Board({
-            //     scene: this, 
-            //     x: 0,
-            //     y: 0,
-            //     boardData: board
-            // });
+            this.player.resourceBoard.visible = true;
+            this.board = new Board({
+                scene: this, 
+                x: 0,
+                y: 0,
+                boardData: board
+            });
 
-            //display player ResourceBoard
-            this.player.setUpPlayerBoard();
-            //Other player
-            // this.player = new PlayerResourceBoard({
-            //     scene: this,
-            //     x: 0,
-            //     y: (this.scale.height) - 50,
-            //     playerData: players
-            // });
+            let gap = 0;
+            Object.entries(players).forEach(([id, value]) => {
+                if(this.player.id != id){
+                    console.log(value)
+                    this.rivalPlayers = new RivalResourceBoard({
+                        scene: this, 
+                        x: 0, 
+                        y: 0, 
+                        spacing: gap,
+                        player: value
+                    });
+                    gap+=100;
+                }
+            });
         });
     }
     

@@ -1,4 +1,4 @@
-class PlayerDomainBoard extends Phaser.GameObjects.Container{
+class DomainBoard extends Phaser.GameObjects.Container{
     constructor(config){
         const { scene, x, y } = config;
         

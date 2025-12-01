@@ -44,11 +44,15 @@ export class Preloader extends Phaser.Scene {
         
         this.load.image('gfx_well', 'static/gfx_well.png');
         this.load.image('gfx_gate', 'static/gfx_gate.png');
+        this.load.image('gfx_daimyo_convert_coin', 'static/gfx_daimyo_convert_coin.png');
+        this.load.image('gfx_daimyo_convert_resource', 'static/gfx_daimyo_convert_resource.png');
+        this.load.image('gfx_lantern', 'static/gfx_lantern.png');
         
         this.load.image('score_castle_1', 'static/score_castle_1.png');
         this.load.image('score_castle_3', 'static/score_castle_3.png');
         this.load.image('score_castle_6', 'static/score_castle_6.png');
         this.load.image('score_castle_10', 'static/score_castle_10.png');
+
     }
     
     create() {

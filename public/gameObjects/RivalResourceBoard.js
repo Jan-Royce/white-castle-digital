@@ -1,18 +1,29 @@
 
 
-export class MinResourceBoard extends Phaser.GameObjects.Container{
+export class RivalResourceBoard extends Phaser.GameObjects.Container{
     constructor(config){
-        const { scene, x, y, playerId} = config;
+        const { scene, x, y, spacing, player} = config;
         super(scene, x, y);
-        this.playerId = id
-        this.scene.add.existing(this);
+        this.player = player
+        this.scene.add.existing(this);  
         this.resources = {};
-        this.height = y;
         //adding rectangle background 
-        const resourceBackground = new Phaser.GameObjects.Rectangle(scene, 0, (this.height - 50), 300, 50, 0x9a9ed4);
+
+        this.playerUsername = new Phaser.GameObjects.Container(this.scene, -10, -30);
+        const playerId = new Phaser.GameObjects.Text(this.scene, 15, 15, this.player.id, {
+            fontSize: '20px',
+            fontStyle: 'bold',
+            color: this.player.color
+        });
+        playerId.setStroke("#000", 2);
+        playerId.setOrigin(0);
+        this.playerUsername.add(playerId);
+        this.rivalResourceBoard = new Phaser.GameObjects.Container(this.scene, 0, 100 + spacing);
+        const resourceBackground = new Phaser.GameObjects.Rectangle(scene, 0, 0, 300, 50, 0x9a9ed4);
         resourceBackground.setOrigin(0);
-        this.add(resourceBackground);
-        this.lanternIconGap = 0;
+        this.rivalResourceBoard.add(resourceBackground);
+        this.rivalResourceBoard.add(this.playerUsername);
+        this.add(this.rivalResourceBoard);
 
         //Handle Player Icons 
         this.setPlayerResourceIcons();
@@ -21,9 +32,11 @@ export class MinResourceBoard extends Phaser.GameObjects.Container{
         // Set domain board
     }
 
+
     setPlayerResourceIcons(){
         const iconNames = ["food", "iron", "pearl", "daimyo", "coin"];
-        const resourceBoard = new Phaser.GameObjects.Container(this.scene, 0, this.height - 45); 
+        const resourceBoard = new Phaser.GameObjects.Container(this.scene, 0, 0); 
+        
         let iconGap = 0;
         iconNames.forEach( icon => {
             const resourceContainer = new Phaser.GameObjects.Container(this.scene, iconGap, 0);
@@ -57,7 +70,7 @@ export class MinResourceBoard extends Phaser.GameObjects.Container{
             resourceBoard.add(resourceContainer);
             iconGap+=60;
         });
-        this.add(resourceBoard);
+        this.rivalResourceBoard.add(resourceBoard);
         // this.resources.pearl.text = "2/7";
     }
 }
