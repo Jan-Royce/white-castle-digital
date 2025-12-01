@@ -105,6 +105,25 @@ export class Preloader extends Phaser.Scene {
         this.load.image('cost_yard_1', 'static/cost_yard_1.png');
         this.load.image('cost_yard_3', 'static/cost_yard_3.png');
         this.load.image('cost_yard_5', 'static/cost_yard_5.png');
+        
+        this.load.image('stone_coin_3', 'cards/stone_garden_coin_3.png');
+        this.load.image('stone_daimyo_2', 'cards/stone_garden_daimyo_2.png');
+        this.load.image('stone_iron_or_food_or_pearl_2', 'cards/stone_garden_iron_or_food_or_pearl_2.png');
+        this.load.image('stone_lantern', 'cards/stone_garden_lantern.png');
+        this.load.image('stone_well', 'cards/stone_garden_well.png');
+        this.load.image('stone_white_scroll', 'cards/stone_garden_white_scroll.png');
+        this.load.image('plant_castle', 'cards/plant_castle_action.png');
+        this.load.image('plant_castle_or_yard_or_garden', 'cards/plant_castle_or_yard_or_garden_action.png');
+        this.load.image('plant_domain_select', 'cards/plant_domain_select_action.png');
+        this.load.image('plant_garden', 'cards/plant_garden_action.png');
+        this.load.image('plant_wild_die_tile', 'cards/plant_wild_die_tile_action.png');
+        this.load.image('plant_yard', 'cards/plant_yard_action.png');
+        
+        this.load.image('score_garden_1', 'static/score_garden_1.png');
+        this.load.image('score_garden_3', 'static/score_garden_3.png');
+        this.load.image('score_garden_5', 'static/score_garden_5.png');
+        this.load.image('score_garden_7', 'static/score_garden_7.png');
+        this.load.image('score_garden_9', 'static/score_garden_9.png');
     }
     
     create() {

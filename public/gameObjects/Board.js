@@ -16,6 +16,9 @@ export class Board extends Phaser.GameObjects.Container {
         const width = this.scene.scale.width;
         const height = this.scene.scale.height;
         
+        this.bridge_width = 240;
+        this.bridge_height = 60;
+        
         this.setSize(width * 0.85, height * 0.85);
         this.x = width * 0.15;
         this.y = 40;
@@ -33,23 +36,39 @@ export class Board extends Phaser.GameObjects.Container {
         this.setUpBridges(boardData.bridges);
     }
     
-    // TODO Continue here: make bridge spaces equal size for garden spaces
     setUpBridges(bridgeData) {
-        let yPos = 20;
+        const bridgeWrap = new Phaser.GameObjects.Container(this.scene, this.garden.x, this.garden.y);
+        const bridgeWrapBg = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, this.garden.displayWidth, this.garden.displayHeight, 0x868686);
+        bridgeWrapBg.setOrigin(0);
+        bridgeWrapBg.setAlpha(0);
+        bridgeWrap.add(bridgeWrapBg);
+        
+        const gardenH = this.garden.displayHeight;
+        const bridgeCount = Object.keys(bridgeData).length;
+        const yOffset = 10;
+        let yPos = yOffset;
+        const spaceTotal = gardenH - (this.bridge_height * bridgeCount) - (yOffset * 2);
+        const spaceBetween = Math.floor(spaceTotal / bridgeCount);
+        const bridgeOffsetGrowth = spaceBetween + this.bridge_height;
+        
         for(const [color, dice] of Object.entries(bridgeData)) {
             let bridge = new Bridge({
                 scene: this.scene,
                 x: 0,
                 y: yPos,
+                w: this.bridge_width,
+                h: this.bridge_height,
                 color: color,
                 dice: dice
             });
             
             this.bridges[color] = bridge;
-            this.add(bridge);
+            bridgeWrap.add(bridge);
             
-            yPos += 200;
+            yPos += bridgeOffsetGrowth;
         }
+        
+        this.add(bridgeWrap);
     }
     
     setUpCastle(castleData) {
@@ -139,7 +158,8 @@ export class Board extends Phaser.GameObjects.Container {
             w: 280,
             h: this.height - 40,
             gardenData: gardenData,
-            colorMap: this.color_map
+            colorMap: this.color_map,
+            bridgeHeight: this.bridge_height
         });
         this.add(garden);
         this.garden = garden;

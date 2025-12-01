@@ -8,7 +8,7 @@
                 "name": "lantern"
             }
         ],
-        "image": ""
+        "image": "stone_lantern"
     },
     {
         "cost": 1,
@@ -19,7 +19,7 @@
                 "resources": { "coin": 3 }
             }
         ],
-        "image": ""
+        "image": "stone_coin_3"
     },
     {
         "cost": 2,
@@ -30,7 +30,7 @@
                 "name": "white_scroll"
             }
         ],
-        "image": ""
+        "image": "stone_white_scroll"
     },
     {
         "cost": 1,
@@ -41,7 +41,7 @@
                 "name": "iron_or_food_or_pearl_2"
             }
         ],
-        "image": ""
+        "image": "stone_iron_or_food_or_pearl_2"
     },
     {
         "cost": 3,
@@ -52,7 +52,7 @@
                 "name": "well"
             }
         ],
-        "image": ""
+        "image": "stone_well"
     },
     {
         "cost": 2,
@@ -63,6 +63,6 @@
                 "resources": { "daimyo": 2 }
             }
         ],
-        "image": ""
+        "image": "stone_daimyo_2"
     }
 ]

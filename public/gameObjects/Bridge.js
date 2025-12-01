@@ -2,7 +2,7 @@ import { Dice } from './Dice.js';
 
 export class Bridge extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, color, dice } = config;
+        const { scene, x, y, w, h, color, dice } = config;
         
         super(scene, x, y);
         
@@ -17,8 +17,8 @@ export class Bridge extends Phaser.GameObjects.Container {
         };
         
         this.x = 20;
-        const bridgeWidth = 240;
-        const bridgeHeight = 60;
+        const bridgeWidth = w;
+        const bridgeHeight = h;
         const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, bridgeWidth, bridgeHeight, colors[color]);
         background.setOrigin(0);
         this.add(background);

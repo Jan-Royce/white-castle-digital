@@ -158,8 +158,23 @@ export class Game extends Phaser.Scene
                         item.updateUnitDisplay();
                         i++;
                     }
-                    //garden
                     
+                    const bridgeOrder = ['red', 'black', 'white'];
+                    for(const color of bridgeOrder) {
+                        const plots = this.board.garden.garden_plots[color];
+                       
+                        // console.log(this.board.garden.garden_plots)
+                        // console.log(board.garden[color])
+                        plots[0].units = board.garden[color][0].gardeners;
+                        plots[0].unit_space.destroy();
+                        plots[0].createUnitSpace();
+                        plots[0].updateUnitDisplay();
+                        
+                        plots[1].units = board.garden[color][1].gardeners;
+                        plots[1].unit_space.destroy();
+                        plots[1].createUnitSpace();
+                        plots[1].updateUnitDisplay();
+                    }
                 });
             }
         });
