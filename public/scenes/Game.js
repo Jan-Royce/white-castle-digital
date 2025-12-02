@@ -35,7 +35,7 @@ export class Game extends Phaser.Scene
         let playerCountTxt = this.make.text(textConfig);
         playerCountTxt.setText("Players (0)");
         
-        let playerNames = [];
+        // let playerNames = [];
         
         const startBtn = new Button({
             scene: this,
@@ -57,7 +57,7 @@ export class Game extends Phaser.Scene
                 y: 0,
                 player: player
             });
-            console.log(this.player.id)
+            // console.log(this.player.id)
         });
         
         // socket.on('update_players', (playerData) => {
@@ -86,18 +86,19 @@ export class Game extends Phaser.Scene
         });
         
         socket.on('board_setup', (board, players) => {
-            this.player.resourceBoard.visible = true;
-            this.board = new Board({
-                scene: this, 
-                x: 0,
-                y: 0,
-                boardData: board
-            });
+            this.player.resource_board.visible = true;
+            
+            // this.board = new Board({
+            //     scene: this, 
+            //     x: 0,
+            //     y: 0,
+            //     boardData: board
+            // });
 
             let gap = 0;
             Object.entries(players).forEach(([id, value]) => {
+                // Handle the player leaving
                 if(this.player.id != id){
-                    console.log(value)
                     this.rivalPlayers = new RivalResourceBoard({
                         scene: this, 
                         x: 0, 

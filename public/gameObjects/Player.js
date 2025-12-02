@@ -8,14 +8,10 @@ export class Player extends Phaser.GameObjects.Container{
         this.player = player;
         this.scene.add.existing(this);
 
-        this.lanternCard = []
-        // this.setUpPlayerBoard();
-        this.setUpPlayerBoard();
-        this.resourceBoard.visible = false;
-    }
-    
-    setPlayerColor(){
+        this.lantern_card = []
         
+        this.setUpPlayerBoard();
+        this.resource_board.visible = false;
     }
     
     setUpPlayerDomainBoard(){
@@ -23,10 +19,11 @@ export class Player extends Phaser.GameObjects.Container{
     }
     
     setUpPlayerBoard(){
-        this.resourceBoard = new ResourceBoard({
+        this.resource_board = new ResourceBoard({
             scene: this.scene,
             x: 0,
-            y: 0
+            y: 0,
+            player: this.player
         });
     }
 }

@@ -4,73 +4,83 @@ export class RivalResourceBoard extends Phaser.GameObjects.Container{
     constructor(config){
         const { scene, x, y, spacing, player} = config;
         super(scene, x, y);
-        this.player = player
-        this.scene.add.existing(this);  
-        this.resources = {};
-        //adding rectangle background 
+        this.player_id = player.id;
+        this.player = player;
 
-        this.playerUsername = new Phaser.GameObjects.Container(this.scene, -10, -30);
-        const playerId = new Phaser.GameObjects.Text(this.scene, 15, 15, this.player.id, {
-            fontSize: '20px',
+        this.scene.add.existing(this);  
+        this.resources_ammount = {};
+
+        this.rival_resouce_board = new Phaser.GameObjects.Container(this.scene, 0, 100 + spacing);
+        this.displayPlayerId();        
+        this.add(this.rival_resouce_board);
+
+        this.setPlayerResourceIcons();
+    }
+    
+    updateRivalResource(){
+        this.resources_ammount.food.text = `${this.player.coin}/7`
+        this.resources_ammount.iron.text = `${this.player.coin}/7`
+        this.resources_ammount.pearl.text = `${this.player.coin}/7`
+        this.resources_ammount.daimyo.text = `${this.player.coin}/7`
+        this.resources_ammount.coin.text = `${this.player.coin}/7`
+    }
+    displayPlayerId(){
+        const playerId = new Phaser.GameObjects.Text(this.scene, 5, -20, this.player_id, {
+            fontSize: '15px',
             fontStyle: 'bold',
             color: this.player.color
         });
         playerId.setStroke("#000", 2);
         playerId.setOrigin(0);
-        this.playerUsername.add(playerId);
-        this.rivalResourceBoard = new Phaser.GameObjects.Container(this.scene, 0, 100 + spacing);
-        const resourceBackground = new Phaser.GameObjects.Rectangle(scene, 0, 0, 300, 50, 0x9a9ed4);
-        resourceBackground.setOrigin(0);
-        this.rivalResourceBoard.add(resourceBackground);
-        this.rivalResourceBoard.add(this.playerUsername);
-        this.add(this.rivalResourceBoard);
-
-        //Handle Player Icons 
-        this.setPlayerResourceIcons();
-        //Handle Other Players resource Icons
-
-        // Set domain board
+        this.rival_resouce_board.add(playerId);
     }
-
-
+    //display lantern trigger
     setPlayerResourceIcons(){
         const iconNames = ["food", "iron", "pearl", "daimyo", "coin"];
-        const resourceBoard = new Phaser.GameObjects.Container(this.scene, 0, 0); 
-        
+        const resourceBoard = new Phaser.GameObjects.Container(this.scene, 5, 0); 
+        const resourceBackground = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 160, 30, 0x9a9ed4).setOrigin(0);
         let iconGap = 0;
         iconNames.forEach( icon => {
             const resourceContainer = new Phaser.GameObjects.Container(this.scene, iconGap, 0);
-            const resourceIcon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `icon_${icon}`);
-            resourceIcon.setDisplaySize(40, 40);
-            resourceIcon.setOrigin(0);
-            if(icon != "coin"){
-                const resourceLimit = new Phaser.GameObjects.Text(this.scene, 20, 20, (icon != "daimyo") ? "0/7":"0/5" , {
-                    fontSize: '20px',
-                    fontStyle: 'bold',
-                    color: '#000'
-                });
-                resourceLimit.setStroke("#ffffff", 2);
-                this.resources[icon] = resourceLimit;
-                resourceLimit.setOrigin(0);
-                resourceContainer.add(resourceIcon);
-                resourceContainer.add(resourceLimit);
-            }
-            else{
-                const coin = new Phaser.GameObjects.Text(this.scene, 20, 20, "0", {
-                    fontSize: '20px',
-                    fontStyle: 'bold',
-                    color: '#000'
-                });
-                coin.setStroke("#ffffff", 2);
-                this.resources[icon] = coin;
-                coin.setOrigin(0);
-                resourceContainer.add(resourceIcon);
-                resourceContainer.add(coin);
-            }
-            resourceBoard.add(resourceContainer);
-            iconGap+=60;
+            this.setResourceIcon({
+                container: resourceContainer, 
+                iconName: icon,
+                width: 25, 
+                height: 25, 
+                x: 0, 
+                y: 0
+            });
+            this.setText({
+                container: resourceContainer, 
+                iconName: icon, 
+                x:10, 
+                y:10
+            });
+            resourceBoard.add(resourceContainer)
+            iconGap+=30;
         });
-        this.rivalResourceBoard.add(resourceBoard);
-        // this.resources.pearl.text = "2/7";
+        this.rival_resouce_board.add(resourceBackground);
+        this.rival_resouce_board.add(resourceBoard);
+    }
+
+    setText(config){
+        const {container, iconName, x, y} = config;
+        let setText = `0`;
+        const resourceText = new Phaser.GameObjects.Text(this.scene, x, y, setText, {
+            fontSize: '15px',
+            fontStyle: 'bold',
+            color: '#000'
+        }).setStroke("#ffffff", 2);
+        this.resources_ammount[iconName] = resourceText;
+        resourceText.setOrigin(0);
+        container.add(resourceText);
+    }
+
+    setResourceIcon(config){
+        const {container, iconName, width, height, x, y} = config;
+        const icon = new Phaser.GameObjects.Sprite(this.scene, x, y, `icon_${iconName}`);
+        icon.setDisplaySize(width, height);
+        icon.setOrigin(0);
+        container.add(icon);
     }
 }

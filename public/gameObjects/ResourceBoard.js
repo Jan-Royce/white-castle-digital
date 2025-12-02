@@ -1,100 +1,107 @@
 
-
 export class ResourceBoard extends Phaser.GameObjects.Container{
     constructor(config){
-        const { scene, x, y} = config;
+        const { scene, x, y, player} = config;
         super(scene, x, y);
+        this.player = player;
         this.scene.add.existing(this);
-        this.resources = {};
-        // const width = this.scene.scale.width;
+        this.resources_ammount= {};
+
+        this.board_width = 300;
+        this.board_height = 100;
         const height = this.scene.scale.height;
-        //UI 
-        this.playerResourceBoard = new Phaser.GameObjects.Container(this.scene, 0, height);
-        const resourceBackground = new Phaser.GameObjects.Rectangle(scene, 0, (this.height - 50), 300, 50, 0x9a9ed4);
-        resourceBackground.setOrigin(0);
-        this.playerResourceBoard.add(resourceBackground);
-        // Fields
-        this.lanternIconGap = 0;
+
+        this.lantern_icon_gap = 0;
+
+        this.player_resouce_board = new Phaser.GameObjects.Container(this.scene, 0, height - this.board_height);
         
-        //Handle Player Icons 
-        this.setPlayerResourceIcons();
-        this.setPlayerConvertionIcon();
-        this.setPlayerLanternIcon();
-        this.add(this.playerResourceBoard);
+        this.displayPlayerResourceIcons();
+        this.displayGfxIcon();
+        
+        this.add(this.player_resouce_board);
     }
     
-    // fix this so the board accept multiple card
-    addPlayerLanternTrigger(icon){
-        const lanternResourceContainer = new Phaser.GameObjects.Container(this.scene, 60,  this.height - 82);
-        const lanterResourceIcon = new Phaser.GameObjects.Sprite(this.scene, this.lanternIconGap, 0, `icon_${icon}`);
-        lanterResourceIcon.setDisplaySize(30, 30);
-        lanterResourceIcon.setOrigin(0);
+    updatePlayerResource(){
+        this.resources_ammount.food.text = `${this.player.coin}/7`
+        this.resources_ammount.iron.text = `${this.player.coin}/7`
+        this.resources_ammount.pearl.text = `${this.player.coin}/7`
+        this.resources_ammount.daimyo.text = `${this.player.coin}/7`
+        this.resources_ammount.coin.text = `${this.player.coin}/7`
+    }
+
+    addLanternTrigger(icon){ // TODO: function to change this 
+        const lanternResourceContainer = new Phaser.GameObjects.Container(this.scene, 50,  (this.board_height / 2) - 30);
+        const lanterResourceIcon = new Phaser.GameObjects.Sprite(this.scene, this.lantern_icon_gap, 0, `icon_${icon}`)
+        .setDisplaySize(30,30).setOrigin(0);
         lanternResourceContainer.add(lanterResourceIcon);
-        this.playerResourceBoard.add(lanternResourceContainer)
-        this.lanternIconGap += 20;
+        this.player_resouce_board.add(lanternResourceContainer)
+        this.lantern_icon_gap += 20;
     }
 
-    setPlayerConvertionIcon(){
-        const convertionContainer = new Phaser.GameObjects.Container(this.scene, 0, this.height - 120);
-        const coinConvertIcon = new Phaser.GameObjects.Sprite(this.scene, 80, 0, `gfx_daimyo_convert_coin`);
-        const resouceConvertIcon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `gfx_daimyo_convert_resource`);
-        
-        coinConvertIcon.setDisplaySize(85, 35);
-        coinConvertIcon.setOrigin(0);
-        resouceConvertIcon.setDisplaySize(85, 35);
-        resouceConvertIcon.setOrigin(0);
-        convertionContainer.add(coinConvertIcon);
-        convertionContainer.add(resouceConvertIcon);
-        this.playerResourceBoard.add(convertionContainer);
-    }
-    
-    setPlayerLanternIcon(){
-        const lanternIconContainer = new Phaser.GameObjects.Container(this.scene, 0, this.height - 80);
-        const lanternIcon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `gfx_lantern`);
-        lanternIcon.setDisplaySize(45, 30);
-        lanternIcon.setOrigin(0);
-        lanternIconContainer.add(lanternIcon);
-        this.playerResourceBoard.add(lanternIconContainer);
-
+    displayGfxIcon(){
+        const gfxIconNames = ["daimyo_convert_coin", "daimyo_convert_resource", "lantern"]
+        const convertionContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
+        let width = 85, height = 35;
+        gfxIconNames.forEach( icon =>{
+            const gfxIcon = new Phaser.GameObjects.Sprite(this.scene, 
+                (icon != "lantern" && icon == "daimyo_convert_coin") ? width + 5: 0, 
+                (icon == "lantern") ? (this.height/2) + 20: (this.height/2) - 20, `gfx_${icon}`);
+            if(icon === "lantern"){width = 45, height = 30;}
+            gfxIcon.setDisplaySize(width, height);
+            gfxIcon.setOrigin(0);
+            convertionContainer.add(gfxIcon)
+        });
+        this.player_resouce_board.add(convertionContainer);
     }
 
-    setPlayerResourceIcons(){
-        const iconNames = ["food", "iron", "pearl", "daimyo", "coin"];
-        const resourceBoard = new Phaser.GameObjects.Container(this.scene, 0, this.height - 45); 
+    displayPlayerResourceIcons(){
+        const resourceIconNames = ["food", "iron", "pearl", "daimyo", "coin"];
+        const resourceBoard = new Phaser.GameObjects.Container(this.scene, 10, this.board_height / 2); 
+        const resourceBackground = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, this.board_width, this.board_height, 0x9a9ed4).setOrigin(0);
         let iconGap = 0;
-        iconNames.forEach( icon => {
+        resourceIconNames.forEach( icon => {
             const resourceContainer = new Phaser.GameObjects.Container(this.scene, iconGap, 0);
-            const resourceIcon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `icon_${icon}`);
-            resourceIcon.setDisplaySize(40, 40);
-            resourceIcon.setOrigin(0);
-            if(icon != "coin"){
-                const resourceLimit = new Phaser.GameObjects.Text(this.scene, 20, 20, (icon != "daimyo") ? "0/7":"0/5" , {
-                    fontSize: '20px',
-                    fontStyle: 'bold',
-                    color: '#000'
-                });
-                resourceLimit.setStroke("#ffffff", 2);
-                this.resources[icon] = resourceLimit;
-                resourceLimit.setOrigin(0);
-                resourceContainer.add(resourceIcon);
-                resourceContainer.add(resourceLimit);
-            }
-            else{
-                const coin = new Phaser.GameObjects.Text(this.scene, 20, 20, "0", {
-                    fontSize: '20px',
-                    fontStyle: 'bold',
-                    color: '#000'
-                });
-                coin.setStroke("#ffffff", 2);
-                this.resources[icon] = coin;
-                coin.setOrigin(0);
-                resourceContainer.add(resourceIcon);
-                resourceContainer.add(coin);
-            }
-            resourceBoard.add(resourceContainer);
+            this.setResourceIcon({
+                container: resourceContainer, 
+                iconName: icon,
+                width: 40, 
+                height: 40, 
+                x: 0, 
+                y: 0
+            });
+            this.setText({
+                container: resourceContainer, 
+                iconName: icon, 
+                x:20, 
+                y:20
+            });
+            resourceBoard.add(resourceContainer)
             iconGap+=60;
         });
-        this.playerResourceBoard.add(resourceBoard);
+        this.player_resouce_board.add(resourceBackground);
+        this.player_resouce_board.add(resourceBoard);
         // this.resources.pearl.text = "2/7";
+    }
+
+    setText(config){
+        const {container, iconName, x, y} = config;
+        let setText = `0`;
+        if(iconName != "coin"){setText = (iconName != "daimyo") ? `0/7`: `0/5`;}
+        const resourceText = new Phaser.GameObjects.Text(this.scene, x, y, setText, {
+            fontSize: '20px',
+            fontStyle: 'bold',
+            color: '#000'
+        }).setStroke("#ffffff", 2);
+        this.resources_ammount[iconName] = resourceText;
+        resourceText.setOrigin(0);
+        container.add(resourceText);
+    }
+
+    setResourceIcon(config){
+        const {container, iconName, width, height, x, y} = config;
+        const icon = new Phaser.GameObjects.Sprite(this.scene, x, y, `icon_${iconName}`);
+        icon.setDisplaySize(width, height);
+        icon.setOrigin(0);
+        container.add(icon);
     }
 }
