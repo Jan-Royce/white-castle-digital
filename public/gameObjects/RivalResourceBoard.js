@@ -8,7 +8,7 @@ export class RivalResourceBoard extends Phaser.GameObjects.Container{
         this.player = player;
 
         this.scene.add.existing(this);  
-        this.resources_ammount = {};
+        this.resources_amount = {};
 
         this.rival_resouce_board = new Phaser.GameObjects.Container(this.scene, 0, 100 + spacing);
         this.displayPlayerId();        
@@ -18,11 +18,11 @@ export class RivalResourceBoard extends Phaser.GameObjects.Container{
     }
     
     updateRivalResource(){
-        this.resources_ammount.food.text = `${this.player.coin}/7`
-        this.resources_ammount.iron.text = `${this.player.coin}/7`
-        this.resources_ammount.pearl.text = `${this.player.coin}/7`
-        this.resources_ammount.daimyo.text = `${this.player.coin}/7`
-        this.resources_ammount.coin.text = `${this.player.coin}/7`
+        this.resources_amount.food.text = `${this.player.coin}/7`
+        this.resources_amount.iron.text = `${this.player.coin}/7`
+        this.resources_amount.pearl.text = `${this.player.coin}/7`
+        this.resources_amount.daimyo.text = `${this.player.coin}/7`
+        this.resources_amount.coin.text = `${this.player.coin}/7`
     }
     displayPlayerId(){
         const playerId = new Phaser.GameObjects.Text(this.scene, 5, -20, this.player_id, {
@@ -71,7 +71,7 @@ export class RivalResourceBoard extends Phaser.GameObjects.Container{
             fontStyle: 'bold',
             color: '#000'
         }).setStroke("#ffffff", 2);
-        this.resources_ammount[iconName] = resourceText;
+        this.resources_amount[iconName] = resourceText;
         resourceText.setOrigin(0);
         container.add(resourceText);
     }

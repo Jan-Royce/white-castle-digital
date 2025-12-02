@@ -5,7 +5,7 @@ export class ResourceBoard extends Phaser.GameObjects.Container{
         super(scene, x, y);
         this.player = player;
         this.scene.add.existing(this);
-        this.resources_ammount= {};
+        this.resources_amount= {};
 
         this.board_width = 300;
         this.board_height = 100;
@@ -22,11 +22,11 @@ export class ResourceBoard extends Phaser.GameObjects.Container{
     }
     
     updatePlayerResource(){
-        this.resources_ammount.food.text = `${this.player.coin}/7`
-        this.resources_ammount.iron.text = `${this.player.coin}/7`
-        this.resources_ammount.pearl.text = `${this.player.coin}/7`
-        this.resources_ammount.daimyo.text = `${this.player.coin}/7`
-        this.resources_ammount.coin.text = `${this.player.coin}/7`
+        this.resources_amount.food.text = `${this.player.coin}/7`
+        this.resources_amount.iron.text = `${this.player.coin}/7`
+        this.resources_amount.pearl.text = `${this.player.coin}/7`
+        this.resources_amount.daimyo.text = `${this.player.coin}/7`
+        this.resources_amount.coin.text = `${this.player.coin}/7`
     }
 
     addLanternTrigger(icon){ // TODO: function to change this 
@@ -92,7 +92,7 @@ export class ResourceBoard extends Phaser.GameObjects.Container{
             fontStyle: 'bold',
             color: '#000'
         }).setStroke("#ffffff", 2);
-        this.resources_ammount[iconName] = resourceText;
+        this.resources_amount[iconName] = resourceText;
         resourceText.setOrigin(0);
         container.add(resourceText);
     }
