@@ -1,9 +1,9 @@
-export class DieSpace extends Phaser.GameObjects.Sprite {
+export class DieSpace extends Phaser.GameObjects.Container {
     constructor(config) {
         const { scene, x, y, size, value, color, maxCount, alwaysShow } = config;
         const texture = `dice${value}`;
         
-        super(scene, x, y, texture);
+        super(scene, x, y);
         
         this.init_value = value;
         this.value = value;
@@ -18,14 +18,26 @@ export class DieSpace extends Phaser.GameObjects.Sprite {
          * }
          */
         this.dice = [];
-        if(maxCount == Number.POSITIVE_INFINITY || this.dice.length == 0) this.setAlpha(0.55);
+        this.color_restrictions = [];
         
-        this.setDisplaySize(size, size);
-        this.setOrigin(0);
-        this.tint = this.getColor(this.color);
-        this.setInteractive({ useHandCursor: true });
+        const bg = new Phaser.GameObjects.Rectangle(scene, 0, 0, size, size, 0xff501a);
+        bg.setOrigin(0);
+        bg.setAlpha(0);
+        this.bg = bg;
+        this.add(bg);
         
-        this.on('pointerup', () => {
+        const die = new Phaser.GameObjects.Sprite(this.scene, 0, 0, texture);
+        this.die = die;
+        this.add(die);
+        
+        if(maxCount == Number.POSITIVE_INFINITY || this.dice.length == 0) die.setAlpha(0.55);
+        
+        die.setDisplaySize(size, size);
+        die.setOrigin(0);
+        die.tint = this.getColor(this.color);
+        die.setInteractive({ useHandCursor: true });
+        
+        die.on('pointerup', () => {
             console.log(`${this.color} ${value}`);
         });
     }
@@ -40,5 +52,13 @@ export class DieSpace extends Phaser.GameObjects.Sprite {
         };
         
         return colors[colorString];
+    }
+    
+    addHighlight() {
+        this.bg.setAlpha(1);
+    }
+    
+    removeHighlight() {
+        this.bg.setAlpha(0);
     }
 }

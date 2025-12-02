@@ -12,6 +12,8 @@ export class Board extends Phaser.GameObjects.Container {
         
         this.color_map = boardData.color_map;
         this.bridges = {};
+        this.die_spaces = [];
+        this.dice = [];
         
         const width = this.scene.scale.width;
         const height = this.scene.scale.height;
@@ -34,6 +36,8 @@ export class Board extends Phaser.GameObjects.Container {
         this.setUpOutsideWalls(boardData.player_count, {w: this.width, h: this.height});
         this.setUpGarden(boardData.garden);
         this.setUpBridges(boardData.bridges);
+        
+        console.log(this.die_spaces)
     }
     
     setUpBridges(bridgeData) {
@@ -59,7 +63,8 @@ export class Board extends Phaser.GameObjects.Container {
                 w: this.bridge_width,
                 h: this.bridge_height,
                 color: color,
-                dice: dice
+                dice: dice,
+                board: this
             });
             
             this.bridges[color] = bridge;
@@ -83,6 +88,9 @@ export class Board extends Phaser.GameObjects.Container {
         });
         this.add(castle);
         this.castle = castle;
+        
+        this.die_spaces.push(this.castle.well.die_space);
+        this.die_spaces = this.die_spaces.concat(this.castle.die_spaces);
     }
     
     setUpYard(yardData) {
@@ -142,6 +150,7 @@ export class Board extends Phaser.GameObjects.Container {
             });
 
             outside.add(boardSpace);
+            this.die_spaces.push(boardSpace.die_space);
             
             xPos += width/2;
         }
@@ -163,5 +172,17 @@ export class Board extends Phaser.GameObjects.Container {
         });
         this.add(garden);
         this.garden = garden;
+    }
+    
+    clearDieSpaceHighlights() {
+        for(const space of this.die_spaces) {
+            space.removeHighlight();
+        }
+    }
+    
+    clearDiceHighlights() {
+        for(const die of this.dice) {
+            die.removeHighlight();
+        }
     }
 }

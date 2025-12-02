@@ -11,6 +11,7 @@ export class Castle extends Phaser.GameObjects.Container {
         this.width = w;
         this.height = h;
         this.levels = [];
+        this.die_spaces = [];
         
         const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, this.width, this.height, 0xa9dff5);
         background.setOrigin(0);
@@ -186,6 +187,9 @@ export class Castle extends Phaser.GameObjects.Container {
             }
             
             floor.add(room);
+            
+            room.die_space.color_restrictions = Object.keys(roomData.actions);
+            this.die_spaces.push(room.die_space);
         }
         
         return floor;

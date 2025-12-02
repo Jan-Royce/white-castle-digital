@@ -2,10 +2,11 @@ import { Dice } from './Dice.js';
 
 export class Bridge extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, w, h, color, dice } = config;
+        const { scene, x, y, w, h, color, dice, board } = config;
         
         super(scene, x, y);
         
+        this.board = board;
         this.dice_data = dice;
         this.dice = [];
         
@@ -39,13 +40,14 @@ export class Bridge extends Phaser.GameObjects.Container {
                 y: yPos,
                 size: dieSize,
                 value: val,
-                color: color
+                color: color,
+                board: this.board
             });
             
             this.dice.push(die);
             this.add(die);
+            this.board.dice.push(die);
             
-            //dynamic spacing based on die count
             xPos += offsetGrowth;
         }
     }
