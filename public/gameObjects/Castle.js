@@ -2,7 +2,7 @@ import { BoardSpace } from './BoardSpace.js';
 
 export class Castle extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, w, h, castleData, colorMap } = config;
+        const { scene, x, y, w, h, board, castleData, colorMap } = config;
 
         super(scene, x, y);
         
@@ -10,6 +10,7 @@ export class Castle extends Phaser.GameObjects.Container {
         this.color_map = colorMap;
         this.width = w;
         this.height = h;
+        this.board = board;
         this.levels = [];
         this.die_spaces = [];
         
@@ -49,7 +50,8 @@ export class Castle extends Phaser.GameObjects.Container {
                 die_value: 1,
                 die_size: 50,
                 max_die_count: Number.POSITIVE_INFINITY,
-                always_show: true
+                always_show: true,
+                board: this.board
             }
         });
         this.add(well);
@@ -171,6 +173,7 @@ export class Castle extends Phaser.GameObjects.Container {
                     die_value: roomData.die_value,
                     die_size: 40,
                     max_die_count: roomData.max_die_count,
+                    board: this.board
                 }
             });
             

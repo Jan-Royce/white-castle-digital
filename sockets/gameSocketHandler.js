@@ -43,6 +43,15 @@ function registerGameSocketHandler(io, game) {
         socket.on('update_unit_display', () => {
             io.emit('update_unit_display');
         });
+        
+        socket.on('remove_die', (die) => {
+            game.board.removeDie(die);
+            socket.broadcast.emit('remote_remove_die', die);
+        });
+        
+        socket.on('place_die', (data) => {
+            socket.broadcast.emit('remote_place_die', data);
+        });
     });
 
     function updatePlayers(players) {

@@ -282,6 +282,10 @@ class Board {
         }
     }
     
+    removeDie(die) {
+        this.bridges[die.color].splice(die.index, 1);
+    }
+    
     generateTestUnits() {
         this.clearAllUnits();
         

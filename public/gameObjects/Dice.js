@@ -1,6 +1,6 @@
 export class Dice extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, size, value, color, board } = config;
+        const { scene, x, y, board, bridge, size, value, color } = config;
         const texture = `dice${value}`;
         
         super(scene, x, y);
@@ -13,8 +13,10 @@ export class Dice extends Phaser.GameObjects.Container {
         };
         
         this.board = board;
+        this.bridge = bridge;
         this.value = value;
         this.color = color;
+        this.can_take = false;
         
         const bg = new Phaser.GameObjects.Rectangle(scene, 0, 0, size, size, 0x1acaff);
         bg.setOrigin(0);
@@ -32,16 +34,18 @@ export class Dice extends Phaser.GameObjects.Container {
         die.setInteractive({ useHandCursor: true });
         
         die.on('pointerup', () => {
-            console.log(`${color} ${value}`);
-            //TODO add the current coin check here
+            if(!this.can_take) return;
             
             this.board.clearDieSpaceHighlights();
             this.board.clearDiceHighlights();
             
             this.addHighlight();
+            this.board.selected_die = this;
             
             let spaces = this.board.die_spaces.filter(space => {
-                return (space.color_restrictions.length == 0 || space.color_restrictions.includes(this.color)) && space.value <= this.value;
+                //TODO add the current coin check here to see which spaces can be paid for
+                return (space.color_restrictions.length == 0 || space.color_restrictions.includes(this.color))
+                    && space.dice.length < space.max_count;
             });
             
             for(const space of spaces) {
