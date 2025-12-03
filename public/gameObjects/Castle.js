@@ -56,6 +56,7 @@ export class Castle extends Phaser.GameObjects.Container {
         });
         this.add(well);
         this.well = well;
+        this.well.die_space.board_space = well;
     }
     
     createWellGfx(tiles) {

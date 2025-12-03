@@ -7,14 +7,14 @@ export class Bridge extends Phaser.GameObjects.Container {
         super(scene, x, y);
         
         this.board = board;
-        this.dice_data = dice;
+        this.dice_data = this.formatDiceData(dice);
         this.dice = [];
         
         const colors = {
-            "red": 0xce4c4c,
-            "black": 0x454742,
-            "white": 0xece9e9,
-            "green": 0x92dd67
+            "red": 0xce4e4e,
+            "black": 0x464744,
+            "white": 0xbebebe,
+            "green": 0x8ccf65
         };
         
         this.x = 20;
@@ -27,17 +27,13 @@ export class Bridge extends Phaser.GameObjects.Container {
         background.setOrigin(0);
         this.add(background);
         
-        const bgWidth = this.die_size + this.die_side_offset * 1.25;
+        const sideWidth = this.die_size + this.die_side_offset * 1.25;
+        const bgWidth = background.displayWidth - (sideWidth * 2);
         
-        const leftBg = new Phaser.GameObjects.Rectangle(scene, 0, 0, bgWidth, this.bridge_height, 0x000000);
-        leftBg.setOrigin(0);
-        leftBg.setAlpha(0.25);
-        this.add(leftBg);
-        
-        const rightBg = new Phaser.GameObjects.Rectangle(scene, (this.bridge_width - bgWidth), 0, bgWidth, this.bridge_height, 0x000000);
-        rightBg.setOrigin(0);
-        rightBg.setAlpha(0.25);
-        this.add(rightBg);
+        const lightBg = new Phaser.GameObjects.Rectangle(scene, sideWidth, 0, bgWidth, this.bridge_height, 0xffffff);
+        lightBg.setOrigin(0);
+        lightBg.setAlpha(0.4);
+        this.add(lightBg);
         
         let xPos = this.die_side_offset;
         const yPos = (this.bridge_height - this.die_size) / 2;
@@ -76,25 +72,71 @@ export class Bridge extends Phaser.GameObjects.Container {
         }
     }
     
+    formatDiceData(data, end='left') {
+        let formatted = data.filter(val => val > 0);
+        
+        if (formatted.length == 5) return data;
+        
+        switch(formatted.length) {
+            case 4:
+                formatted.splice(2, 0, 0);
+                break;
+            case 3:
+                formatted.splice(1, 0, 0);
+                formatted.splice(3, 0, 0);
+                break;
+            case 2:
+                formatted = [formatted[0]].concat(Array(3).fill(0)).concat([formatted[1]]);
+                break;
+            case 1:
+                if(end == 'left') {
+                    formatted = Array(4).fill(0).concat(formatted);
+                } else {
+                    formatted = formatted.concat(Array(4).fill(0));
+                }
+                break;
+        }
+        
+        return formatted;
+    }
+    
     removeDie(index, die) {
-        this.dice_data.splice(index, 1);
+        const diceData = this.dice_data.filter(val => val > 0);
+        
+        diceData.splice(index, 1);
+        this.dice_data = this.formatDiceData(diceData, index == 0 ? 'left' : 'right');
         this.dice.splice(index, 1);
         die.destroy();
+        
         this.updateDice();
     }
     
     updateDice() {
         let xPos = this.die_side_offset;
-        const dieCount = this.dice.length;
+        const dieCount = this.dice_data.length;
         const spaceTotal = this.bridge_width - (dieCount * this.die_size);
         const spaceBetween = (spaceTotal - (2 * this.die_side_offset)) / (dieCount - 1);
         const offsetGrowth = this.die_size + spaceBetween;
         
-        for(let i=0; i<this.dice.length; i++) {
-            const die = this.dice[i];
+        /**
+         * NOTE: dice_data was used instead of dice to consider empty spaces especially when
+         * the only remaining die is on the right side instead of left
+         */
+        let diceIndex = 0;
+        for(let i=0; i<this.dice_data.length; i++) {
+            if(this.dice_data[i] == 0) {
+                xPos += offsetGrowth;
+                continue;
+            }
+            const die = this.dice[diceIndex];
+            if(typeof(die) == 'undefined') {
+                console.log(i)
+                console.log(this._dice_data)
+            }
+            
             die.x = xPos;
             
-            if(i==0 || i==this.dice.length-1) {
+            if(diceIndex==0 || diceIndex==this.dice.length-1) {
                 die.can_take = true;
                 die.die.input.cursor = 'pointer';
             } else {
@@ -102,6 +144,7 @@ export class Bridge extends Phaser.GameObjects.Container {
                 die.die.input.cursor = 'not-allowed';
             }
             
+            diceIndex++;
             xPos += offsetGrowth;
         }
     }

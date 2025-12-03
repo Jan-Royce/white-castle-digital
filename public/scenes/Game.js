@@ -1,6 +1,7 @@
 import { NetworkManager } from '../network/NetworkManager.js';
 import { Button } from '../components/Button.js';
 import { Board } from '../gameObjects/Board.js';
+import { EventManager } from '../network/EventManager.js';
 
 export class Game extends Phaser.Scene
 {
@@ -12,8 +13,9 @@ export class Game extends Phaser.Scene
     create() {
         const socket = io();
         
-        // TODO after merging to dev, move all socket events to NetworkManager
+        // TODO after merging to dev, move all socket events to either of the managers here
         const networkManager = new NetworkManager(this, socket);
+        const eventManager = new EventManager(this);
         
         socket.on('lobby_full', () => {
                 this.add.text(20,50, "Server is Full\nTry Again Later", {
@@ -196,18 +198,6 @@ export class Game extends Phaser.Scene
         //NOTE: currently not used by anything
         socket.on('update_unit_display', () => {
             this.updateUnitDisplays();
-        });
-        
-        this.events.on('remote_remove_die', (die) => {
-            const bridge = this.board.bridges[die.color];
-            const toRemove = bridge.dice[die.index];
-            bridge.removeDie(die.index, toRemove);
-        });
-        
-        this.events.on('remote_place_die', (data) => {
-            const die = data.die;
-            const dieSpace = this.board.die_spaces[data.index];
-            dieSpace.placeDie(die);
         });
     }
     

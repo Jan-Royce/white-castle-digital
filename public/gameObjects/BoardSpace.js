@@ -93,31 +93,19 @@ export class BoardSpace extends Phaser.GameObjects.Container {
     {
         let dieSpace = this.die_space;
         
-        if(dieSpace.dice.length > 0) {
-            if(dieSpace.max_count == Number.POSITIVE_INFINITY) {
-                const dieDisplay = this.die_display;
+        if (dieSpace.dice.length > 0 && dieSpace.max_count == Number.POSITIVE_INFINITY) {
+            const dieDisplay = this.die_display;
+            
+            let xPos = 0;
+            for(let die of dieSpace.dice) {
+                const dieIcon = new Phaser.GameObjects.Sprite(this.scene, xPos, -12, `dice${die.value}`);
                 
-                let xPos = 0;
-                for(let die of dieSpace.dice) {
-                    const dieIcon = new Phaser.GameObjects.Sprite(this.scene, xPos, -12, `dice${die.value}`);
-                    
-                    dieIcon.setDisplaySize(24,24);
-                    dieIcon.setOrigin(0);
-                    dieIcon.setTint(dieSpace.getColor(die.color));
-                    dieDisplay.add(dieIcon);
-                    
-                    xPos += 24;
-                }
-            } else {
-                const currentDie = dieSpace.dice[dieSpace.dice.length - 1];
+                dieIcon.setDisplaySize(24,24);
+                dieIcon.setOrigin(0);
+                dieIcon.setTint(dieSpace.getColor(die.color));
+                dieDisplay.add(dieIcon);
                 
-                dieSpace.setAlpha(1);
-                dieSpace.setTexture(`dice${currentDie.value}`);
-                dieSpace.setTint(dieSpace.getColor(currentDie.color));
-                
-                if(dieSpace.max_count == dieSpace.dice.length) {
-                    dieSpace.disableInteractive();
-                }
+                xPos += 24;
             }
         }
     }
@@ -167,6 +155,5 @@ export class BoardSpace extends Phaser.GameObjects.Container {
     
     resetSpace() {
         //TODO remove all dice
-        this.updateDieDisplay();
     }
 }

@@ -10,6 +10,7 @@ export class DieSpace extends Phaser.GameObjects.Container {
         this.color = color ?? 'gray';
         this.max_count = maxCount;
         this.board = board;
+        this.always_show = alwaysShow;
         /**
          * dice example
          * 
@@ -67,7 +68,7 @@ export class DieSpace extends Phaser.GameObjects.Container {
             bridge.removeDie(removeAt, selected);
             this.scene.events.emit('remove_die', { color: selected.color, index: removeAt });
             
-            //TODO lantern trigger check
+            //TODO lantern trigger check, use bridge.dice_data to determine if leftmost (?) or just use index
             
             //TODO board space action/s
         });
@@ -98,12 +99,15 @@ export class DieSpace extends Phaser.GameObjects.Container {
     placeDie(die) {
         this.dice.push(die);
         
-        this.color = die.color;
-        this.value = die.value;
-        
-        this.die.setTexture(`dice${this.value}`);
-        this.die.tint = this.getColor(this.color);
-        this.die.setAlpha(1);
+        if(!this.always_show) {
+            this.color = die.color;
+            this.value = die.value;
+            this.die.setTexture(`dice${this.value}`);
+            this.die.tint = this.getColor(this.color);
+            this.die.setAlpha(1);
+        } else {
+            this.board_space.updateDieDisplay();
+        }
         
         this.board.clearDieSpaceHighlights();
         this.board.clearDiceHighlights();
