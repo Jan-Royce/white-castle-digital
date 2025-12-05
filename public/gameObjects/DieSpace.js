@@ -1,6 +1,6 @@
 export class DieSpace extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, board, size, value, color, maxCount, alwaysShow } = config;
+        const { scene, x, y, board, size, value, color, maxCount, alwaysShow, actions } = config;
         const texture = `dice${value}`;
         
         super(scene, x, y);
@@ -10,6 +10,7 @@ export class DieSpace extends Phaser.GameObjects.Container {
         this.color = color ?? 'gray';
         this.max_count = maxCount;
         this.board = board;
+        this.actions = actions;
         this.always_show = alwaysShow;
         /**
          * dice example
@@ -47,7 +48,7 @@ export class DieSpace extends Phaser.GameObjects.Container {
             const selected = this.board.selected_die;
             
             if(selected.value != this.value) {
-                this.board.createEvent({
+                this.scene.events.emit('place_die_coins', {
                     type: 'resource',
                     resources: {
                         coin: selected.value - this.value
@@ -65,12 +66,23 @@ export class DieSpace extends Phaser.GameObjects.Container {
             
             const bridge = selected.bridge;
             const removeAt = bridge.dice.indexOf(selected);
+            let lanternTrigger = removeAt == 0;
+            if (bridge.dice.length == 1) lanternTrigger = bridge.dice_data.indexOf(selected.value) == 0;
+
             bridge.removeDie(removeAt, selected);
             this.scene.events.emit('remove_die', { color: selected.color, index: removeAt });
             
-            //TODO lantern trigger check, use bridge.dice_data to determine if leftmost (?) or just use index
+            if(lanternTrigger) {
+                this.scene.events.emit('trigger_lantern');
+            }
             
-            //TODO board space action/s
+            let actions = [];
+            if(this.color_restrictions.length == 0) {
+                actions = this.actions;
+            } else {
+                actions = this.actions[selected.color];
+            }
+            this.scene.events.emit('add_actions', actions);
         });
     }
     

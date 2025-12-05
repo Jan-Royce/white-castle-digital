@@ -15,6 +15,7 @@ export class Board extends Phaser.GameObjects.Container {
         this.die_spaces = [];
         this.dice = [];
         this.selected_die = null;
+        this.well = [];
         
         const width = this.scene.scale.width;
         const height = this.scene.scale.height;
@@ -33,6 +34,7 @@ export class Board extends Phaser.GameObjects.Container {
         this.scene.add.existing(this);
         
         this.setUpCastle(boardData.castle);
+        this.setWellData();
         this.setUpYard(boardData.yard);
         this.setUpOutsideWalls(boardData.player_count, {w: this.width, h: this.height});
         this.setUpGarden(boardData.garden);
@@ -93,6 +95,17 @@ export class Board extends Phaser.GameObjects.Container {
         this.die_spaces = this.die_spaces.concat(this.castle.die_spaces);
     }
     
+    setWellData() {
+        this.well = [
+            {
+                type: 'resource',
+                resources: {
+                    daimyo: 1
+                }
+            }
+        ].concat(this.castle.well_actions);
+    }
+    
     setUpYard(yardData) {
         const yard = new Yard({
             scene: this.scene,
@@ -127,7 +140,7 @@ export class Board extends Phaser.GameObjects.Container {
         outside.x = boardDimensions.w - width - 20;
         outside.y = boardDimensions.h - height - 10;
         
-        const ids = ['garden_castle', 'castle_yard'];
+        const ids = ['garden_or_castle', 'castle_or_yard'];
         const dieSize = 36;
         
         let xPos = 0;
@@ -146,7 +159,13 @@ export class Board extends Phaser.GameObjects.Container {
                     die_value: 5,
                     die_size: dieSize,
                     max_die_count: playerCount > 2 ? 2 : 1,
-                    board: this
+                    board: this,
+                    actions: [
+                        {
+                            type: 'action',
+                            name: ids[i]
+                        }
+                    ]
                 }
             });
 
@@ -173,11 +192,6 @@ export class Board extends Phaser.GameObjects.Container {
         });
         this.add(garden);
         this.garden = garden;
-    }
-    
-    createEvent(data) {
-        //TODO sockets
-        console.log(data)
     }
     
     clearDieSpaceHighlights() {

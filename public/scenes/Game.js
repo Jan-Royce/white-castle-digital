@@ -1,7 +1,8 @@
-import { NetworkManager } from '../network/NetworkManager.js';
+import { NetworkManager } from '../managers/NetworkManager.js';
 import { Button } from '../components/Button.js';
 import { Board } from '../gameObjects/Board.js';
-import { EventManager } from '../network/EventManager.js';
+import { EventManager } from '../managers/EventManager.js';
+import { ActionManager } from '../managers/ActionManager.js';
 
 export class Game extends Phaser.Scene
 {
@@ -16,6 +17,7 @@ export class Game extends Phaser.Scene
         // TODO after merging to dev, move all socket events to either of the managers here
         const networkManager = new NetworkManager(this, socket);
         const eventManager = new EventManager(this);
+        const actionManager = new ActionManager(this);
         
         socket.on('lobby_full', () => {
                 this.add.text(20,50, "Server is Full\nTry Again Later", {

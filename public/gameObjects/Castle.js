@@ -37,6 +37,10 @@ export class Castle extends Phaser.GameObjects.Container {
     }
     
     addWell(tiles) {
+        const wellActions = [
+            tiles[0].action,
+            tiles[1].action
+        ];
         const well = new BoardSpace({
             scene: this.scene,
             x: 20,
@@ -51,11 +55,13 @@ export class Castle extends Phaser.GameObjects.Container {
                 die_size: 50,
                 max_die_count: Number.POSITIVE_INFINITY,
                 always_show: true,
-                board: this.board
+                board: this.board,
+                actions: wellActions
             }
         });
         this.add(well);
         this.well = well;
+        this.well_actions = wellActions;
         this.well.die_space.board_space = well;
     }
     
@@ -174,7 +180,8 @@ export class Castle extends Phaser.GameObjects.Container {
                     die_value: roomData.die_value,
                     die_size: 40,
                     max_die_count: roomData.max_die_count,
-                    board: this.board
+                    board: this.board,
+                    actions: roomData.actions
                 }
             });
             

@@ -44,7 +44,8 @@ export class BoardSpace extends Phaser.GameObjects.Container {
                 value: dieSpace.die_value,
                 maxCount: dieSpace.max_die_count,
                 alwaysShow: dieSpace.always_show,
-                board: dieSpace.board
+                board: dieSpace.board,
+                actions: dieSpace.actions
             });
             this.add(space);
             this.die_space = space;
