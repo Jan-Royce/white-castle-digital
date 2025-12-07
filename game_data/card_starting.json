@@ -20,8 +20,9 @@
         "type": "resource",
         "actions": [
             {
-                "type": "action",
-                "name": "iron_or_food_or_pearl_2"
+                "type": "select_resource",
+                "name": "select_resource_2",
+                "amount": 2
             },
             {
                 "type": "resource",
@@ -58,8 +59,9 @@
         "type": "resource",
         "actions": [
             {
-                "type": "action",
-                "name": "iron_or_food_or_pearl_1"
+                "type": "select_resource",
+                "name": "select_resource_1",
+                "amount": 1
             },
             {
                 "type": "resource",
@@ -132,8 +134,9 @@
         "type": "resource",
         "actions": [
             {
-                "type": "action",
-                "name": "iron_or_food_or_pearl_3"
+                "type": "select_resource",
+                "name": "select_resource_3",
+                "amount": 3
             },
             {
                 "type": "resource",

@@ -22,7 +22,7 @@ export class Preloader extends Phaser.Scene {
         this.load.image('icon_pearl', 'icons/pearl.png');
         this.load.image('icon_coin', 'icons/coin.png');
         this.load.image('icon_daimyo', 'icons/daimyo.png');
-        this.load.image('icon_iron_or_food_or_pearl', 'icons/iron_or_food_or_pearl.png');
+        this.load.image('icon_select_resource', 'icons/select_resource.png');
         
         this.load.image('icon_influence', 'icons/influence.png');
         this.load.image('icon_clan_point', 'icons/clan_point.png');
@@ -49,7 +49,7 @@ export class Preloader extends Phaser.Scene {
         this.load.image('tile_food', 'tiles/food.png');
         this.load.image('tile_iron', 'tiles/iron.png');
         this.load.image('tile_pearl', 'tiles/pearl.png');
-        this.load.image('tile_iron_or_food_or_pearl_1', 'tiles/iron_or_food_or_pearl_1.png');
+        this.load.image('tile_select_resource', 'tiles/select_resource.png');
         this.load.image('tile_coin', 'tiles/coin.png');
         this.load.image('tile_daimyo', 'tiles/daimyo.png');
         this.load.image('tile_influence', 'tiles/influence.png');
@@ -108,7 +108,7 @@ export class Preloader extends Phaser.Scene {
         
         this.load.image('stone_coin_3', 'cards/stone_garden_coin_3.png');
         this.load.image('stone_daimyo_2', 'cards/stone_garden_daimyo_2.png');
-        this.load.image('stone_iron_or_food_or_pearl_2', 'cards/stone_garden_iron_or_food_or_pearl_2.png');
+        this.load.image('stone_select_resource_2', 'cards/stone_garden_select_resource_2.png');
         this.load.image('stone_lantern', 'cards/stone_garden_lantern.png');
         this.load.image('stone_well', 'cards/stone_garden_well.png');
         this.load.image('stone_white_scroll', 'cards/stone_garden_white_scroll.png');

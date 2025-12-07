@@ -82,7 +82,7 @@ export class Yard extends Phaser.GameObjects.Container {
         let tileSprSize = 40;
         
         let name = tile.name;
-        if(tile.type == 'action' && name != 'iron_or_food_or_pearl_2') {
+        if(tile.type == 'action') {
             const icon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `icon_${name}`);
             
             icon.setDisplaySize(tileSprSize, tileSprSize);
@@ -91,14 +91,14 @@ export class Yard extends Phaser.GameObjects.Container {
             icon.y = (tileH - icon.displayHeight) / 2;
             
             gfx.add(icon);
-        } else if(tile.type == 'action' && name == 'iron_or_food_or_pearl_2') {
+        } else if(tile.type == 'select_resource') {
             const iconWrap = this.createIconWrap(
                 {
                     x: (tileW - tileSprSize) / 2,
                     y: (tileH - tileSprSize) / 2
                 },
                 {
-                    name: 'icon_iron_or_food_or_pearl',
+                    name: 'icon_select_resource',
                     size: tileSprSize
                 },
                 {

@@ -10,17 +10,15 @@
                     "resources": { "daimyo": 1}
                 },
                 {
-                    "type": "action",
-                    "name": "iron_or_food_or_pearl_1"
+                    "type": "select_resource",
+                    "name": "select_resource_1",
+                    "amount": 1
                 }
             ],
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1 }
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "castle"
                 }
             ],
@@ -39,11 +37,8 @@
         "sections": [
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "yard"
                 }
             ],
@@ -60,7 +55,7 @@
             [
                 {
                     "type": "action",
-                    "action": "lantern"
+                    "name": "lantern"
                 }
             ]
         ]
@@ -82,11 +77,8 @@
             ],
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1 }
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "castle"
                 }
             ],
@@ -117,11 +109,8 @@
             ],
             [
                 {
-                    "type": "resource",
-                    "resources": {"daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "garden"
                 }
             ]
@@ -134,18 +123,15 @@
         "sections": [
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "castle"
                 }
             ],
             [
                 {
                     "type": "resource",
-                    "resource": {"influence": 1}
+                    "resources": {"influence": 1}
                 }
             ],
             [
@@ -170,16 +156,13 @@
             [
                 {
                     "type": "resource",
-                    "resource": {"pearl": 2}
+                    "resources": {"pearl": 2}
                 }
             ],
             [
                 {
-                    "type": "resource",
-                    "resources": {"daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "yard"
                 }
             ]
@@ -192,18 +175,15 @@
         "sections": [
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1}
-                },
-                {
-                    "type": "action",
-                    "action": "yard"
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
+                    "name": "yard"
                 }
             ],
             [
                 {
                     "type": "resource",
-                    "resource": {"pearl": 1, "food":1}
+                    "resources": {"pearl": 1, "food":1}
                 }
             ],
             [
@@ -232,16 +212,13 @@
             [
                 {
                     "type": "resource",
-                    "resource": {"daimyo": 1, "clan_point":1}
+                    "resources": {"daimyo": 1, "clan_point":1}
                 }
             ],
             [
                 {
-                    "type": "resource",
-                    "resources": {"daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "garden"
                 }
             ]
@@ -260,11 +237,8 @@
             ],
             [
                 {
-                    "type": "resource",
-                    "resource": {"daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "garden"
                 }
             ],
@@ -283,11 +257,8 @@
         "sections": [
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "castle"
                 }
             ],
@@ -312,11 +283,8 @@
         "sections": [
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "castle"
                 }
             ],
@@ -355,18 +323,16 @@
             ],
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "garden"
                 }
             ],
             [
                 {
-                    "type": "action",
-                    "name": "iron_or_food_or_pearl_2"
+                    "type": "select_resource",
+                    "name": "select_resource_2",
+                    "amount": 2
                 }
             ]
         ]
@@ -378,8 +344,9 @@
         "sections": [
             [
                 {
-                    "type": "action",
-                    "name": "iron_or_food_or_pearl_2"
+                    "type": "select_resource",
+                    "name": "select_resource_2",
+                    "amount": 2
                 }
             ],
             [
@@ -394,11 +361,8 @@
             ],
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "yard"
                 }
             ]
@@ -421,17 +385,15 @@
                     "resources": { "daimyo": 1}
                 },
                 {
-                    "type": "action",
-                    "name": "iron_or_food_or_pearl_1"
+                    "type": "select_resource",
+                    "name": "select_resource_1",
+                    "amount": 1
                 }
             ],
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "yard"
                 }
             ]
@@ -454,11 +416,8 @@
             ],
             [
                 {
-                    "type": "resource",
-                    "resources": { "daimyo": -1}
-                },
-                {
-                    "type": "action",
+                    "type": "paid_action",
+                    "cost": { "daimyo": 1 },
                     "name": "garden"
                 }
             ],

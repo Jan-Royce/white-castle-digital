@@ -110,24 +110,27 @@
     {
         "color": "black",
         "action": {
-            "type": "action",
-            "name": "iron_or_food_or_pearl_1"
+            "type": "select_resource",
+            "name": "select_resource",
+            "amount": 1
         },
         "tag": "any_resource"
     },
     {
         "color": "red",
         "action": {
-            "type": "action",
-            "name": "iron_or_food_or_pearl_1"
+            "type": "select_resource",
+            "name": "select_resource",
+            "amount": 1
         },
         "tag": "any_resource"
     },
     {
         "color": "white",
         "action": {
-            "type": "action",
-            "name": "iron_or_food_or_pearl_1"
+            "type": "select_resource",
+            "name": "select_resource",
+            "amount": 1
         },
         "tag": "any_resource"
     },

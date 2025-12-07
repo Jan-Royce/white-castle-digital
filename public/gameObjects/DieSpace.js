@@ -48,7 +48,7 @@ export class DieSpace extends Phaser.GameObjects.Container {
             const selected = this.board.selected_die;
             
             if(selected.value != this.value) {
-                this.scene.events.emit('place_die_coins', {
+                this.scene.events.emit('gain_resources', {
                     type: 'resource',
                     resources: {
                         coin: selected.value - this.value

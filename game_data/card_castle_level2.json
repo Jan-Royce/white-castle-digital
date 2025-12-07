@@ -161,8 +161,9 @@
             ],
             [
                 {
-                    "type": "action",
-                    "name": "iron_or_food_or_pearl_3"
+                    "type": "select_resource",
+                    "name": "select_resource_3",
+                    "amount": 3
                 }
             ]
         ]
@@ -226,8 +227,9 @@
             ],
             [
                 {
-                    "type": "action",
-                    "name": "iron_or_food_or_pearl_3"
+                    "type": "select_resource",
+                    "name": "select_resource_3",
+                    "amount": 3
                 }
             ]
         ]
@@ -239,8 +241,9 @@
         "sections": [
             [
                 {
-                    "type": "action",
-                    "name": "iron_or_food_or_pearl_3"
+                    "type": "select_resource",
+                    "name": "select_resource_3",
+                    "amount": 3
                 }
             ],
             [

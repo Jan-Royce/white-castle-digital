@@ -20,8 +20,9 @@
         "color": "yellow"
     },
     {
-        "type": "action",
-        "name": "iron_or_food_or_pearl_2",
+        "type": "select_resource",
+        "name": "select_resource_2",
+        "amount": 2,
         "image": "",
         "color": "yellow"
     },

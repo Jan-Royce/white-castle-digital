@@ -37,11 +37,12 @@
         "clan_point": 1,
         "actions": [
             {
-                "type": "action",
-                "name": "iron_or_food_or_pearl_2"
+                "type": "select_resource",
+                "name": "select_resource_2",
+                "amount": 2
             }
         ],
-        "image": "stone_iron_or_food_or_pearl_2"
+        "image": "stone_select_resource_2"
     },
     {
         "cost": 3,

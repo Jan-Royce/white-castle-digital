@@ -4,11 +4,8 @@
         "clan_point": 7,
         "actions": [
             {
-                "type": "resource",
-                "resources": { "coin": -3 }
-            },
-            {
-                "type": "action",
+                "type": "paid_action",
+                "cost": { "coin": 3 },
                 "name": "yard"
             }
         ],
@@ -19,11 +16,8 @@
         "clan_point": 5,
         "actions": [
             {
-                "type": "resource",
-                "resources": { "coin": -4 }
-            },
-            {
-                "type": "action",
+                "type": "paid_action",
+                "cost": { "coin": 4 },
                 "name": "domain_select"
             }
         ],
@@ -34,11 +28,8 @@
         "clan_point": 5,
         "actions": [
             {
-                "type": "resource",
-                "resources": { "coin": -4 }
-            },
-            {
-                "type": "action",
+                "type": "paid_action",
+                "cost": { "coin": 4 },
                 "name": "castle_or_yard_or_garden"
             }
         ],
@@ -49,11 +40,8 @@
         "clan_point": 7,
         "actions": [
             {
-                "type": "resource",
-                "resources": { "coin": -3 }
-            },
-            {
-                "type": "action",
+                "type": "paid_action",
+                "cost": { "coin": 3 },
                 "name": "castle"
             }
         ],
@@ -64,11 +52,8 @@
         "clan_point": 9,
         "actions": [
             {
-                "type": "resource",
-                "resources": { "coin": -4 }
-            },
-            {
-                "type": "action",
+                "type": "paid_action",
+                "cost": { "coin": 4 },
                 "name": "wild_die_tile"
             }
         ],
@@ -79,11 +64,8 @@
         "clan_point": 7,
         "actions": [
             {
-                "type": "resource",
-                "resources": { "coin": -3 }
-            },
-            {
-                "type": "action",
+                "type": "paid_action",
+                "cost": { "coin": 3 },
                 "name": "garden"
             }
         ],

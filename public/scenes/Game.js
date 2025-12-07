@@ -99,7 +99,6 @@ export class Game extends Phaser.Scene
                 devTools.setAlpha(0.75);
                 this.add.existing(devTools);
                 
-                
                 const devButtonsX = 80;
                 
                 const AddTestUnits = new Button({
