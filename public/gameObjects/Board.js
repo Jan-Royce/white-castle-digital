@@ -161,10 +161,10 @@ export class Board extends Phaser.GameObjects.Container {
                     max_die_count: playerCount > 2 ? 2 : 1,
                     board: this,
                     actions: [
-                        {
+                        [{
                             type: 'action',
                             name: ids[i]
-                        }
+                        }]
                     ]
                 }
             });

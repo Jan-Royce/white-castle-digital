@@ -22,6 +22,7 @@ export class Bridge extends Phaser.GameObjects.Container {
         this.die_side_offset = 10;
         this.bridge_width = w;
         this.bridge_height = h;
+        this.die_ypos = (this.bridge_height - this.die_size) / 2;
         
         const background = new Phaser.GameObjects.Rectangle(scene, 0, 0, this.bridge_width, this.bridge_height, colors[color]);
         background.setOrigin(0);
@@ -36,7 +37,7 @@ export class Bridge extends Phaser.GameObjects.Container {
         this.add(lightBg);
         
         let xPos = this.die_side_offset;
-        const yPos = (this.bridge_height - this.die_size) / 2;
+        const yPos = this.die_ypos;
         const dieCount = dice.length;
         const spaceTotal = this.bridge_width - (dieCount * this.die_size);
         const spaceBetween = (spaceTotal - (2 * this.die_side_offset)) / (dieCount - 1);
@@ -111,6 +112,32 @@ export class Bridge extends Phaser.GameObjects.Container {
         this.updateDice();
     }
     
+    returnDie(index, die, dir) {
+        let diceData = this.dice_data.filter(val => val > 0);
+        
+        if(index == 0) {
+            diceData.splice(0, 0, die.value);
+        } else {
+            diceData.push(die.value);
+        }
+        this.dice_data = this.formatDiceData(diceData, dir);
+        
+        const returningDice = new Dice({
+            scene: this.scene,
+            x: 0,
+            y: this.die_ypos,
+            size: this.die_size,
+            value: die.value,
+            color: die.color,
+            board: this.board,
+            bridge: this
+        });
+        this.add(returningDice);
+        
+        this.dice.splice(index, 0, returningDice);
+        this.updateDice();
+    }
+    
     updateDice() {
         let xPos = this.die_side_offset;
         const dieCount = this.dice_data.length;
@@ -129,10 +156,6 @@ export class Bridge extends Phaser.GameObjects.Container {
                 continue;
             }
             const die = this.dice[diceIndex];
-            if(typeof(die) == 'undefined') {
-                console.log(i)
-                console.log(this._dice_data)
-            }
             
             die.x = xPos;
             
@@ -140,7 +163,7 @@ export class Bridge extends Phaser.GameObjects.Container {
                 die.can_take = true;
                 die.die.input.cursor = 'pointer';
             } else {
-                die.die.input.useHandCursor = false;
+                die.can_take = false;
                 die.die.input.cursor = 'not-allowed';
             }
             

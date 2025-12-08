@@ -6,15 +6,13 @@ export class EventManager {
     }
     
     bindEvents() {
-        this.scene.events.on('remote_remove_die', (die) => {
-            const bridge = this.scene.board.bridges[die.color];
-            const toRemove = bridge.dice[die.index];
-            bridge.removeDie(die.index, toRemove);
-        });
-
         this.scene.events.on('remote_place_die', (data) => {
             const die = data.die;
-            const dieSpace = this.scene.board.die_spaces[data.index];
+            const bridge = this.scene.board.bridges[die.color];
+            const toRemove = bridge.dice[data.die_index];
+            const dieSpace = this.scene.board.die_spaces[data.space_index];
+            
+            bridge.removeDie(data.die_index, toRemove);
             dieSpace.placeDie(die);
         });
     }

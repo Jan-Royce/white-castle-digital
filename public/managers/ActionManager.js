@@ -1,41 +1,136 @@
 import { ActionBar } from "../components/ActionBar.js";
+import { Button } from "../components/Button.js";
 
 export class ActionManager {
     constructor(scene) {
         this.scene = scene;
         this.action_stack = [];
         
+        this.createActionUndoBtn();
+        
         this.bindEvents();
     }
     
     bindEvents() {
-        this.scene.events.on('gain_resources', (data) => {
-            // emit event for player function for gaining resources here
-            // also socket emit for opponent data updates
-            this.action_stack.push(data);
+        this.scene.events.on('place_die', (data) => {
+            if(data.has_coin_diff) {
+                const coinUpdate = {
+                    type: 'resource',
+                    resources: {
+                        coin: data.coin_diff
+                    }
+                };
+                //TODO emit event to player function for gaining resource
+                console.log(`coin: ${data.coin_diff}`)
+            }
+            
+            if(data.has_lantern_trigger) {
+                //TODO emit event to player function for lantern trigger here (should have influence track daimyo pay logic)
+                console.log('lantern trigger')
+            }
+            
+            this.addActionToStack(data);
         });
         
-        this.scene.events.on('trigger_lantern', () => {
-            console.log('lantern!');
-            // emit event for player function for lantern trigger here (should have influence track daimyo pay logic)
+        this.scene.events.on('gain_resources', (data) => {
+            //TODO emit event to player function for gaining resources here
             // also socket emit for opponent data updates
-            
-            // push lantern resources, etc to the action stack
+            this.addActionToStack(data);
         });
         
         this.scene.events.on('add_actions', (actions) => {
-            const barW = this.scene.scale.width * 0.6;
-            const barH  = 100;
+            if(typeof(this.action_bar) === 'undefined') {
+                this.createActionBar();
+            } else {
+                this.action_bar.setAlpha(0); 
+                this.action_bar.setVisible(true); 
+            }
+            this.action_bar_fade_in.play();
             
-            const actionBar = new ActionBar({
-                scene: this.scene,
-                x: (this.scene.scale.width - barW) / 2,
-                y: this.scene.scale.height - barH - 20,
-                w: barW,
-                h: barH,
-                actions: actions
-            });
-            this.scene.add.existing(actionBar);
+            this.action_bar.setActions(actions);
         });
+    }
+    
+    createActionBar() {
+        const barW = this.scene.scale.width * 0.6;
+        const barH = 100;
+
+        const actionBar = new ActionBar({
+            scene: this.scene,
+            x: (this.scene.scale.width - barW) / 2,
+            y: this.scene.scale.height - barH - 20,
+            w: barW,
+            h: barH
+        });
+        this.scene.add.existing(actionBar);
+        this.action_bar = actionBar;
+        
+        this.action_bar_fade_in = this.scene.tweens.add({
+            targets: this.action_bar,
+            alpha: { from: 0, to: 0.9 },
+            duration: 1000,
+            ease: 'Power1',
+            persist: true
+        });
+    }
+    
+    createActionUndoBtn() {
+        const buttonW = 100;
+        const buttonH = 50;
+        
+        const btn = new Button({
+            scene: this.scene,
+            x: this.scene.scale.width - buttonW - 10,
+            y: this.scene.scale.height - buttonH - 10,
+            w: buttonW,
+            h: buttonH,
+            fontColor: '#000',
+            bgColor: '#e9e9e9',
+            fontSize: 14,
+            text: 'UNDO',
+            centerAlign: false,
+            onClick: () => {
+                this.undoAction();
+            }
+        });
+        
+        btn.button.setOrigin(0);
+        btn.button_text.x = (buttonW - btn.button_text.displayWidth) / 2;
+        btn.button_text.y = (buttonH - btn.button_text.displayHeight) / 2;
+        btn.setVisible(false);
+        
+        this.action_undo_btn = btn;
+    }
+    
+    addActionToStack(data) {
+        this.action_stack.push(data);
+        this.action_undo_btn.setVisible(true);
+        
+        console.log(this.action_stack)
+    }
+    
+    undoAction() {
+        const toUndo = this.action_stack.pop();
+        
+        switch(toUndo.type) {
+            case 'die_placement':
+                this.undoDiePlacement(toUndo);
+                break;
+        }
+    }
+    
+    undoDiePlacement(data) {
+        const die = data.die;
+        const bridge = this.scene.board.bridges[die.color];
+        const dieSpace = this.scene.board.die_spaces[data.space_index];
+        const dir = data.has_lantern_trigger ? 'left' : 'right';
+        
+        dieSpace.removeDie();
+        bridge.returnDie(data.die_index, die, dir);
+        
+        this.action_bar.clearActions();
+        this.action_bar.setVisible(false);
+        
+        //TODO continue here: undo die placement on other players
     }
 }

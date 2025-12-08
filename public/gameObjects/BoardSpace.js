@@ -49,6 +49,7 @@ export class BoardSpace extends Phaser.GameObjects.Container {
             });
             this.add(space);
             this.die_space = space;
+            this.die_space_dice = [];
         }
         
         if(typeof(gfx) !== 'undefined') {
@@ -94,7 +95,9 @@ export class BoardSpace extends Phaser.GameObjects.Container {
     {
         let dieSpace = this.die_space;
         
-        if (dieSpace.dice.length > 0 && dieSpace.max_count == Number.POSITIVE_INFINITY) {
+        this.clearDieDisplay();
+        
+        if(dieSpace.dice.length > 0 && dieSpace.max_count == Number.POSITIVE_INFINITY) {
             const dieDisplay = this.die_display;
             
             let xPos = 0;
@@ -106,8 +109,16 @@ export class BoardSpace extends Phaser.GameObjects.Container {
                 dieIcon.setTint(dieSpace.getColor(die.color));
                 dieDisplay.add(dieIcon);
                 
+                this.die_space_dice.push(dieIcon);
+                
                 xPos += 24;
             }
+        }
+    }
+    
+    clearDieDisplay() {
+        for(const die of this.die_space_dice) {
+            die.destroy();
         }
     }
     

@@ -47,14 +47,8 @@ export class DieSpace extends Phaser.GameObjects.Container {
             
             const selected = this.board.selected_die;
             
-            if(selected.value != this.value) {
-                this.scene.events.emit('gain_resources', {
-                    type: 'resource',
-                    resources: {
-                        coin: selected.value - this.value
-                    }
-                });
-            }
+            const hasCoinDiff = selected.value != this.value;
+            const coinDiff = selected.value - this.value;
             
             const placeIndex = this.board.die_spaces.indexOf(this);
             const dieData = {
@@ -62,7 +56,6 @@ export class DieSpace extends Phaser.GameObjects.Container {
                 value: selected.value
             };
             this.placeDie(dieData);
-            this.scene.events.emit('place_die', { die: dieData, index: placeIndex, space_id: this.space_id });
             
             const bridge = selected.bridge;
             const removeAt = bridge.dice.indexOf(selected);
@@ -70,11 +63,16 @@ export class DieSpace extends Phaser.GameObjects.Container {
             if (bridge.dice.length == 1) lanternTrigger = bridge.dice_data.indexOf(selected.value) == 0;
 
             bridge.removeDie(removeAt, selected);
-            this.scene.events.emit('remove_die', { color: selected.color, index: removeAt });
             
-            if(lanternTrigger) {
-                this.scene.events.emit('trigger_lantern');
-            }
+            this.scene.events.emit('place_die', {
+                type: 'die_placement',
+                die: dieData,
+                die_index: removeAt,
+                space_index: placeIndex,
+                has_coin_diff: hasCoinDiff,
+                coin_diff: coinDiff,
+                has_lantern_trigger: lanternTrigger
+            });
             
             let actions = [];
             if(this.color_restrictions.length == 0) {
@@ -123,5 +121,36 @@ export class DieSpace extends Phaser.GameObjects.Container {
         
         this.board.clearDieSpaceHighlights();
         this.board.clearDiceHighlights();
+    }
+    
+    removeDie() {
+        this.dice.pop();
+        
+        let dieData = {};
+        
+        if(this.dice.length > 0) {
+            const currDie = this.dice[this.dice.length - 1];
+            dieData = {
+                color: currDie.color,
+                value: currDie.value,
+                alpha: 1
+            };
+        } else {
+            dieData = {
+                color: 'gray',
+                value: this.init_value,
+                alpha: 0.55
+            };
+        }
+        
+        if(!this.always_show) {
+            this.color = dieData.color;
+            this.value = dieData.value;
+            this.die.setTexture(`dice${this.value}`);
+            this.die.tint = this.getColor(this.color);
+            this.die.setAlpha(dieData.alpha);
+        } else {
+            this.board_space.updateDieDisplay();
+        }
     }
 }

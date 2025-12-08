@@ -38,8 +38,14 @@ export class Castle extends Phaser.GameObjects.Container {
     
     addWell(tiles) {
         const wellActions = [
-            tiles[0].action,
-            tiles[1].action
+            [{
+                type: 'resource',
+                resources: {
+                    daimyo: 1
+                }
+            }],
+            [tiles[0].action],
+            [tiles[1].action]
         ];
         const well = new BoardSpace({
             scene: this.scene,

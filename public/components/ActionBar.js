@@ -2,14 +2,14 @@ import { Button } from "./Button.js";
 
 export class ActionBar extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, w, h, actions } = config;
+        const { scene, x, y, w, h } = config;
         
         super(scene, x, y);
         
         this.w = w;
         this.h = h;
         this.color = 0x464646;
-        this.actions = actions;
+        this.actions = [];
         
         // for blocking other interactive objects behind UI
         const zone = new Phaser.GameObjects.Zone(scene, 0, 0, this.w, this.h);
@@ -23,29 +23,18 @@ export class ActionBar extends Phaser.GameObjects.Container {
         this.setAlpha(0);
         
         this.setDepth(10);
-        
-        this.scene.tweens.add({
-            targets: this,
-            alpha: 0.9,
-            duration: 1000,
-            ease: 'Power1',
-            onComplete: () => {
-                
-            }
-        });
-        
-        this.setActions();
     }
     
-    setActions() {
+    setActions(actions) {
         const buttonW = 200;
         const buttonH = 50;
         
         let xPos = 0;
         
         // TODO update for other action sources (ie well, outside wall)
+        console.log(actions)
         // currently only supports castle rooms
-        for(const actionSet of this.actions) {
+        for(const actionSet of actions) {
             for(const action of actionSet) {
                 let content = "";
                 if(action.type == 'action' || action.type == 'select_resource') {
@@ -55,7 +44,6 @@ export class ActionBar extends Phaser.GameObjects.Container {
                 } else {
                     content = JSON.stringify(action.resources)
                 }
-                console.log(content)
                 
                 const btn = new Button({
                     scene: this.scene,
@@ -78,7 +66,15 @@ export class ActionBar extends Phaser.GameObjects.Container {
                 btn.button_text.y = (buttonH - btn.button_text.displayHeight) / 2;
                 
                 xPos += 250;
+                
+                this.actions.push(btn);
             }
+        }
+    }
+    
+    clearActions() {
+        for(const action of this.actions) {
+            action.destroy();
         }
     }
 }

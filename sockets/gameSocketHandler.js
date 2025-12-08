@@ -44,12 +44,13 @@ function registerGameSocketHandler(io, game) {
             io.emit('update_unit_display');
         });
         
-        socket.on('remove_die', (die) => {
-            game.board.removeDie(die);
-            socket.broadcast.emit('remote_remove_die', die);
-        });
-        
         socket.on('place_die', (data) => {
+            const die = {
+                color: data.die.color,
+                index: data.die_index
+            };
+            
+            game.board.removeDie(die);
             socket.broadcast.emit('remote_place_die', data);
         });
     });
