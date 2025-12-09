@@ -12,6 +12,7 @@ const config = {
     height: 720,
     backgroundColor: '#90e0bf',
     pixelArt: false,
+    disableContextMenu: true,
     scene: [
         Boot,
         Preloader,
@@ -21,7 +22,7 @@ const config = {
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
-    },
+    }
 }
 
 new Phaser.Game(config);

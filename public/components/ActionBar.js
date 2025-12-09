@@ -1,4 +1,5 @@
 import { Button } from "./Button.js";
+import { SelectPopup } from "./SelectPopup.js";
 
 export class ActionBar extends Phaser.GameObjects.Container {
     constructor(config) {
@@ -34,7 +35,7 @@ export class ActionBar extends Phaser.GameObjects.Container {
         for(const actionSet of actions) {
             for(const action of actionSet) {
                 let content = "";
-                if(action.type == 'action' || action.type == 'action_select' || action.type == 'select_resource') {
+                if (action.type == 'action' || action.type == 'select_action' || action.type == 'select_resource') {
                     content = action.name
                 } else if(action.type == 'paid_action') {
                     content = `${JSON.stringify(action.cost)} -> ${action.name}`;
@@ -88,16 +89,37 @@ export class ActionBar extends Phaser.GameObjects.Container {
                 this.updateActions();
                 break;
             case 'select_resource':
+                this.createSelectPopup(action);
                 break;
             case 'action':
+                // TODO
                 break;
             case 'select_action':
+                // TODO
                 break;
             case 'paid_action':
+                // TODO
                 break;
             default:
+                // TODO ??
                 break;
         }
+    }
+    
+    createSelectPopup(action) {
+        console.log(action)
+        const popup = new SelectPopup({
+            scene: this.scene,
+            x: 0,
+            y: 0,
+            w: 400,
+            h: 200,
+            action: action
+        });
+        
+        this.scene.add.existing(popup);
+        
+        popup.fade_in.play();
     }
     
     removeAction(btn) {

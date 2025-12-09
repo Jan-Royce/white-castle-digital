@@ -29,6 +29,7 @@ export class ActionManager {
                 console.log('lantern trigger')
             }
             
+            this.scene.board.disableBridges();
             this.addActionToStack(data);
         });
         
@@ -122,6 +123,7 @@ export class ActionManager {
                 // other player side
                 break;
             default:
+                // TODO ??
                 break;
         }
     }
@@ -154,6 +156,8 @@ export class ActionManager {
         
         this.action_bar.clearActions();
         this.action_bar.setVisible(false);
+        
+        this.scene.board.enableBridges();
         
         this.scene.events.emit('undo_place_die', data);
     }

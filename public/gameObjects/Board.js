@@ -162,7 +162,7 @@ export class Board extends Phaser.GameObjects.Container {
                     board: this,
                     actions: [
                         [{
-                            type: 'action_select',
+                            type: 'select_action',
                             name: ids[i]
                         }]
                     ]
@@ -177,6 +177,18 @@ export class Board extends Phaser.GameObjects.Container {
         
         this.add(outside);
         this.outside_walls = outside;
+    }
+    
+    enableBridges() {
+        for(const [color, bridge] of Object.entries(this.bridges)) {
+            bridge.zone.disableInteractive();
+        }
+    }
+    
+    disableBridges() {
+        for(const [color, bridge] of Object.entries(this.bridges)) {
+            bridge.zone.setInteractive();
+        }
     }
     
     setUpGarden(gardenData) {

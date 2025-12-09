@@ -71,6 +71,14 @@ export class Bridge extends Phaser.GameObjects.Container {
             
             xPos += offsetGrowth;
         }
+        
+        const zone = new Phaser.GameObjects.Zone(scene, 0, 0, this.bridge_width, this.bridge_height);
+        zone.setOrigin(0);
+        zone.setInteractive();
+        this.add(zone);
+        this.zone = zone;
+        
+        zone.disableInteractive();
     }
     
     formatDiceData(data, end='left') {
