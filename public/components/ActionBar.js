@@ -31,13 +31,10 @@ export class ActionBar extends Phaser.GameObjects.Container {
         
         let xPos = 0;
         
-        // TODO update for other action sources (ie well, outside wall)
-        console.log(actions)
-        // currently only supports castle rooms
         for(const actionSet of actions) {
             for(const action of actionSet) {
                 let content = "";
-                if(action.type == 'action' || action.type == 'select_resource') {
+                if(action.type == 'action' || action.type == 'action_select' || action.type == 'select_resource') {
                     content = action.name
                 } else if(action.type == 'paid_action') {
                     content = `${JSON.stringify(action.cost)} -> ${action.name}`;
@@ -56,8 +53,8 @@ export class ActionBar extends Phaser.GameObjects.Container {
                     text: content,
                     parent: this,
                     centerAlign: false,
-                    onClick: () => {
-                        console.log(content)
+                    onClick: (btn) => {
+                        this.clickAction(action, btn);
                     }
                 });
                 
@@ -70,6 +67,43 @@ export class ActionBar extends Phaser.GameObjects.Container {
                 this.actions.push(btn);
             }
         }
+    }
+    
+    updateActions() {
+        let xPos = 0;
+        
+        for(const action of this.actions) {
+            action.x = xPos;
+            
+            xPos += 250;
+        }
+    }
+    
+    clickAction(action, btn) {
+        action.source = 'action_bar';
+        switch(action.type) {
+            case 'resource':
+                this.scene.events.emit('gain_resources', action);
+                this.removeAction(btn);
+                this.updateActions();
+                break;
+            case 'select_resource':
+                break;
+            case 'action':
+                break;
+            case 'select_action':
+                break;
+            case 'paid_action':
+                break;
+            default:
+                break;
+        }
+    }
+    
+    removeAction(btn) {
+        let index = this.actions.indexOf(btn);
+        this.actions.splice(index, 1);
+        btn.destroy();
     }
     
     clearActions() {

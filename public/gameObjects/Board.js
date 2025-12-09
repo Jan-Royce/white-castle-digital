@@ -162,7 +162,7 @@ export class Board extends Phaser.GameObjects.Container {
                     board: this,
                     actions: [
                         [{
-                            type: 'action',
+                            type: 'action_select',
                             name: ids[i]
                         }]
                     ]

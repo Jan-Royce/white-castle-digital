@@ -45,13 +45,12 @@ function registerGameSocketHandler(io, game) {
         });
         
         socket.on('place_die', (data) => {
-            const die = {
-                color: data.die.color,
-                index: data.die_index
-            };
-            
-            game.board.removeDie(die);
             socket.broadcast.emit('remote_place_die', data);
+        });
+        
+        socket.on('undo_place_die', (data) => {
+            data.player = socket.id;
+            socket.broadcast.emit('remote_undo_place_die', data);
         });
     });
 

@@ -116,10 +116,34 @@ export class ActionManager {
             case 'die_placement':
                 this.undoDiePlacement(toUndo);
                 break;
+            case 'gain_resource':
+                //TODO undo gain resource
+                // 1 player side
+                // other player side
+                break;
+            default:
+                break;
         }
     }
     
     undoDiePlacement(data) {
+        if(data.has_coin_diff) {
+            const coinDiff = data.coin_diff * -1;
+            const coinUpdate = {
+                type: 'resource',
+                resources: {
+                    coin: coinDiff
+                }
+            };
+            //TODO emit event to player function for gaining resource
+            console.log(`coin: ${coinDiff}`)
+        }
+        
+        if(data.has_lantern_trigger) {
+            //TODO emit event to player function for lantern trigger here (should have influence track daimyo pay logic)
+            console.log('revert lantern trigger')
+        }
+        
         const die = data.die;
         const bridge = this.scene.board.bridges[die.color];
         const dieSpace = this.scene.board.die_spaces[data.space_index];
@@ -131,6 +155,6 @@ export class ActionManager {
         this.action_bar.clearActions();
         this.action_bar.setVisible(false);
         
-        //TODO continue here: undo die placement on other players
+        this.scene.events.emit('undo_place_die', data);
     }
 }
