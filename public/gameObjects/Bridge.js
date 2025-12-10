@@ -115,7 +115,7 @@ export class Bridge extends Phaser.GameObjects.Container {
         diceData.splice(index, 1);
         this.dice_data = this.formatDiceData(diceData, index == 0 ? 'left' : 'right');
         this.dice.splice(index, 1);
-        die.destroy();
+        die.destroy(true);
         
         this.updateDice();
     }

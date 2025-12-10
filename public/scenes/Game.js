@@ -51,7 +51,7 @@ export class Game extends Phaser.Scene
             key1: 'start_red',
             key2: 'start_red_pressed',
             onClick: (btn) => {
-                btn.destroy();
+                btn.destroy(true);
                 socket.emit('start_game');
             }
         });
@@ -79,11 +79,11 @@ export class Game extends Phaser.Scene
         });
         
         socket.on('start_game', () => {
-            startBtn.destroy();
+            startBtn.destroy(true);
         });
         
         socket.on('board_setup', (board) => {
-            if(typeof(this.board) !== 'undefined') this.board.destroy();
+            if(typeof(this.board) !== 'undefined') this.board.destroy(true);
             this.board = new Board({
                 scene: this, 
                 x: 0,
@@ -129,7 +129,7 @@ export class Game extends Phaser.Scene
                     text: "Reset",
                     parent: devTools,
                     onClick: (resetBtn) => {
-                        resetBtn.destroy();
+                        resetBtn.destroy(true);
                         socket.emit('start_game');
                     }
                 });
@@ -138,12 +138,12 @@ export class Game extends Phaser.Scene
                     for(const item of this.board.castle.levels) {
                         if(item.space_id == "castle_gate") {
                             item.units = board.castle.levels[0].courtiers;
-                            item.unit_space.destroy();
+                            item.unit_space.destroy(true);
                             item.createUnitSpace();
                             item.updateUnitDisplay();
                         } else if(item.space_id == "castle_top") {
                             item.units = board.castle.levels[3].courtiers;
-                            item.unit_space.destroy();
+                            item.unit_space.destroy(true);
                             item.createUnitSpace();
                             item.updateUnitDisplay();
                             
@@ -151,7 +151,7 @@ export class Game extends Phaser.Scene
                             for(const bonus of item.list) {
                                 if(typeof (bonus.space_id) !== 'undefined') {
                                     bonus.units = board.castle.levels[3].bonus[bonusIndex].courtiers;
-                                    bonus.unit_space.destroy();
+                                    bonus.unit_space.destroy(true);
                                     bonus.createUnitSpace();
                                     bonus.updateUnitDisplay();
                                     bonusIndex++;
@@ -161,7 +161,7 @@ export class Game extends Phaser.Scene
                             for(const room of item.list) {
                                 if(typeof(room.space_id) !== 'undefined') {
                                     room.units = board.castle.levels[room.floor_id].rooms[room.room_id].courtiers;
-                                    room.unit_space.destroy();
+                                    room.unit_space.destroy(true);
                                     room.createUnitSpace();
                                     room.updateUnitDisplay();
                                 }
@@ -172,7 +172,7 @@ export class Game extends Phaser.Scene
                     let i=0;
                     for(const item of this.board.yard.levels) {
                         item.units = board.yard[i].warriors;
-                        item.unit_space.destroy();
+                        item.unit_space.destroy(true);
                         item.createUnitSpace();
                         item.updateUnitDisplay();
                         i++;
@@ -183,12 +183,12 @@ export class Game extends Phaser.Scene
                         const plots = this.board.garden.garden_plots[color];
                         
                         plots[0].units = board.garden[color][0].gardeners;
-                        plots[0].unit_space.destroy();
+                        plots[0].unit_space.destroy(true);
                         plots[0].createUnitSpace();
                         plots[0].updateUnitDisplay();
                         
                         plots[1].units = board.garden[color][1].gardeners;
-                        plots[1].unit_space.destroy();
+                        plots[1].unit_space.destroy(true);
                         plots[1].createUnitSpace();
                         plots[1].updateUnitDisplay();
                     }

@@ -118,7 +118,7 @@ export class BoardSpace extends Phaser.GameObjects.Container {
     
     clearDieDisplay() {
         for(const die of this.die_space_dice) {
-            die.destroy();
+            die.destroy(true);
         }
     }
     

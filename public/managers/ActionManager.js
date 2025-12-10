@@ -108,6 +108,7 @@ export class ActionManager {
         this.action_undo_btn.setVisible(true);
         
         console.log(this.action_stack)
+        // TODO handle empty action bar
     }
     
     undoAction() {
@@ -117,11 +118,13 @@ export class ActionManager {
             case 'die_placement':
                 this.undoDiePlacement(toUndo);
                 break;
-            case 'gain_resource':
-                //TODO undo gain resource
-                // 1 player side
-                // other player side
+            case 'resource':
+            case 'select_resource':
+                this.undoGainResource(toUndo);
                 break;
+            // action
+            // paid_action
+            // select_action
             default:
                 // TODO ??
                 break;
@@ -160,5 +163,12 @@ export class ActionManager {
         this.scene.board.enableBridges();
         
         this.scene.events.emit('undo_place_die', data);
+    }
+    
+    undoGainResource(data) {
+        //TODO emit event to player function for reverting resources here
+        // also socket emit for opponent data updates
+        this.action_bar.addBackAction(data);
+        this.action_bar.updateActions();
     }
 }

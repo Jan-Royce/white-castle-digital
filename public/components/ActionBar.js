@@ -12,6 +12,9 @@ export class ActionBar extends Phaser.GameObjects.Container {
         this.color = 0x464646;
         this.actions = [];
         
+        this.button_w = 200;
+        this.button_h = 50;
+        
         // for blocking other interactive objects behind UI
         const zone = new Phaser.GameObjects.Zone(scene, 0, 0, this.w, this.h);
         zone.setOrigin(0);
@@ -24,53 +27,25 @@ export class ActionBar extends Phaser.GameObjects.Container {
         this.setAlpha(0);
         
         this.setDepth(10);
+        
+        this.bindEvents();
     }
     
     setActions(actions) {
-        const buttonW = 200;
-        const buttonH = 50;
-        
         let xPos = 0;
         
         for(const actionSet of actions) {
             for(const action of actionSet) {
-                let content = "";
-                if (action.type == 'action' || action.type == 'select_action' || action.type == 'select_resource') {
-                    content = action.name
-                } else if(action.type == 'paid_action') {
-                    content = `${JSON.stringify(action.cost)} -> ${action.name}`;
-                } else {
-                    content = JSON.stringify(action.resources)
-                }
-                
-                const btn = new Button({
-                    scene: this.scene,
-                    x: xPos,
-                    y: (this.h - buttonH) / 2,
-                    w: buttonW,
-                    h: buttonH,
-                    fontColor: '#000',
-                    fontSize: 14,
-                    text: content,
-                    parent: this,
-                    centerAlign: false,
-                    onClick: (btn) => {
-                        this.clickAction(action, btn);
-                    }
-                });
-                
-                btn.button.setOrigin(0);
-                btn.button_text.x = (buttonW - btn.button_text.displayWidth) / 2;
-                btn.button_text.y = (buttonH - btn.button_text.displayHeight) / 2;
+                const btn = this.addAction(action, xPos);
+                this.actions.push(btn);
                 
                 xPos += 250;
-                
-                this.actions.push(btn);
             }
         }
     }
     
     updateActions() {
+        console.log(this.actions)
         let xPos = 0;
         
         for(const action of this.actions) {
@@ -80,16 +55,19 @@ export class ActionBar extends Phaser.GameObjects.Container {
         }
     }
     
+    bindEvents() {
+        this.scene.events.on('submit_popup_selection', (data, btn) => {
+            this.gainResource(data, btn);
+        });
+    }
+    
     clickAction(action, btn) {
-        action.source = 'action_bar';
         switch(action.type) {
             case 'resource':
-                this.scene.events.emit('gain_resources', action);
-                this.removeAction(btn);
-                this.updateActions();
+                this.gainResource(action, btn);
                 break;
             case 'select_resource':
-                this.createSelectPopup(action);
+                this.createSelectPopup(action, btn);
                 break;
             case 'action':
                 // TODO
@@ -106,15 +84,22 @@ export class ActionBar extends Phaser.GameObjects.Container {
         }
     }
     
-    createSelectPopup(action) {
-        console.log(action)
+    gainResource(action, btn) {
+        action.button_index = this.actions.indexOf(btn);
+        this.scene.events.emit('gain_resources', action);
+        this.removeAction(btn);
+        this.updateActions();
+    }
+    
+    createSelectPopup(action, btn) {
         const popup = new SelectPopup({
             scene: this.scene,
             x: 0,
             y: 0,
             w: 400,
             h: 200,
-            action: action
+            action: action,
+            btn: btn
         });
         
         this.scene.add.existing(popup);
@@ -122,15 +107,54 @@ export class ActionBar extends Phaser.GameObjects.Container {
         popup.fade_in.play();
     }
     
+    addAction(action, xPos=0) {
+        let content = "";
+        if (action.type == 'action' || action.type == 'select_action' || action.type == 'select_resource') {
+            content = action.name
+        } else if (action.type == 'paid_action') {
+            content = `${JSON.stringify(action.cost)} -> ${action.name}`;
+        } else {
+            content = JSON.stringify(action.resources)
+        }
+        
+        const btn = new Button({
+            scene: this.scene,
+            x: xPos,
+            y: (this.h - this.button_h) / 2,
+            w: this.button_w,
+            h: this.button_h,
+            fontColor: '#000',
+            fontSize: 14,
+            text: content,
+            parent: this,
+            centerAlign: false,
+            onClick: (btn) => {
+                this.clickAction(action, btn);
+            }
+        });
+        
+        btn.button.setOrigin(0);
+        btn.button_text.x = (this.button_w - btn.button_text.displayWidth) / 2;
+        btn.button_text.y = (this.button_h - btn.button_text.displayHeight) / 2;
+        
+        return btn;
+    }
+    
+    addBackAction(action) {
+        let index = action.button_index;
+        const btn = this.addAction(action);
+        this.actions.splice(index, 0, btn);
+    }
+    
     removeAction(btn) {
         let index = this.actions.indexOf(btn);
         this.actions.splice(index, 1);
-        btn.destroy();
+        btn.destroy(true);
     }
     
     clearActions() {
         for(const action of this.actions) {
-            action.destroy();
+            action.destroy(true);
         }
     }
 }

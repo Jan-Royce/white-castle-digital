@@ -3,7 +3,7 @@ import { ClickableNumberInput } from "./ClickableNumberInput.js";
 
 export class SelectPopup extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, w, h, action } = config;
+        const { scene, x, y, w, h, action, btn } = config;
         
         super(scene, x, y);
         
@@ -11,7 +11,8 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         this.h = h;
         this.color = 0x464646;
         this.action = action;
-        this.options = [];
+        this.action_btn = btn;
+        this.selectors = [];
         
         const zone = new Phaser.GameObjects.Zone(scene, 0, 0, scene.scale.width, scene.scale.height);
         zone.setOrigin(0);
@@ -71,12 +72,13 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             onClick: () => {
                 switch(this.action.type) {
                     case 'select_resource':
-                        if (this.action.amount > 1) {
-                            // TODO continue here, do not let submission if amount is less than max
-                            this.getResourceSelections();
-                        } else {
-                            this.getResource();
+                        if (this.value < this.max) {
+                            this.error_text.setText("Not enough resource(s) selected.");
+                            this.error_text.x = (this.w - this.error_text.displayWidth) / 2;
+                            this.error_text.setVisible(true);
+                            return;
                         }
+                        this.getResourceSelections();
                         break;
                     case 'select_action':
                         // TODO
@@ -114,8 +116,6 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         closeBtn.button_text.x = (buttonW - closeBtn.button_text.displayWidth) / 2;
         closeBtn.button_text.y = (buttonH - closeBtn.button_text.displayHeight) / 2;
         
-        console.log(buttonWrap.displayWidth)
-        console.log(buttonWrap.displayHeight)
         buttonWrap.x = this.w - (buttonW * 2) - buttonGap - 8;
         buttonWrap.y = this.h - buttonH - 8;
     }
@@ -128,7 +128,7 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             ease: 'Power3',
             onComplete: () => {
                 this.setVisible(false);
-                this.destroy();
+                this.destroy(true);
             }
         });
     }
@@ -140,11 +140,7 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             case 'select_resource':
                 this.max = this.action.amount;
                 this.value = 0;
-                if(this.action.amount > 1) {
-                    this.createMultipleResourceSelectors();
-                } else {
-                    this.createResourceSelector();
-                }
+                this.createResourceSelector();
                 break;
             case 'select_action':
                 // TODO
@@ -156,15 +152,7 @@ export class SelectPopup extends Phaser.GameObjects.Container {
     }
     
     createResourceSelector() {
-        // TODO
-    }
-    
-    getResource() {
-        // TODO
-    }
-    
-    createMultipleResourceSelectors() {
-        let textContent = `Select ${this.max} resources in any combination`;
+        let textContent = `Select ${this.max} resources in any combination\n(left click: +, right click: -)`;
         
         const text = new Phaser.GameObjects.Text(this.scene, 4, 8, textContent, {
             fontSize: '16px',
@@ -186,8 +174,6 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         const resources = ['food', 'iron', 'pearl'];
         const xPosList = [98, 224, 352];
         
-        this.selectors = [];
-        
         let i = 0;
         for(const resource of resources) {
             const selector = new ClickableNumberInput({
@@ -206,6 +192,18 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             i++;
         }
         
+        const errorTextY = ui.y + ui.displayHeight - 16;
+        const errorText = new Phaser.GameObjects.Text(this.scene, 4, errorTextY, "", {
+            fontSize: '16px',
+            fontStyle: 'bold',
+            color: '#e43838'
+        });
+        errorText.setStroke('#000', 2);
+        errorText.setOrigin(0);
+        errorText.setVisible(false);
+        this.popup.add(errorText);
+        this.error_text = errorText;
+        
         this.scene.events.on('change_selector_input', () => {
             this.getCurrentSelectorValue();
             
@@ -219,12 +217,6 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         });
     }
     
-    // TODO continue here
-    /**
-     * after getting selected resources, create needed (gain_resources) events
-     * must be able to determine popup source if action bar or board space
-     * if action bar, must remove action and update action bar
-     */
     getResourceSelections() {
         let resources = {};
         for(const selector of this.selectors) {
@@ -232,13 +224,13 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         }
         
         const data = {
-            type: 'resource',
+            type: 'select_resource',
+            name: `select_resource_${this.max}`,
             resources: resources,
-            source: 'select_resource',
             amount: this.max
         };
         
-        console.log(data)
+        this.scene.events.emit('submit_popup_selection', data, this.action_btn);
     }
     
     getCurrentSelectorValue() {
