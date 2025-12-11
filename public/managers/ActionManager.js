@@ -36,7 +36,16 @@ export class ActionManager {
         this.scene.events.on('gain_resources', (data) => {
             //TODO emit event to player function for gaining resources here
             // also socket emit for opponent data updates
-            this.addActionToStack(data);
+            const resourceActions = ['well', 'lantern'];
+            if(typeof(data.source) !== 'undefined' && resourceActions.includes(data.source)) {
+                this.addActionToStack({
+                    type: 'action',
+                    name: data.source,
+                    button_index: data.button_index
+                });
+            } else {
+                this.addActionToStack(data);
+            }
         });
         
         this.scene.events.on('add_actions', (actions) => {
@@ -141,7 +150,9 @@ export class ActionManager {
             case 'select_resource':
                 this.undoGainResource(toUndo);
                 break;
-            // action
+            case 'action':
+                this.undoPerformAction(toUndo);
+                break;
             // paid_action
             // select_action
             default:
@@ -191,6 +202,15 @@ export class ActionManager {
     undoGainResource(data) {
         //TODO emit event to player function for reverting resources here
         // also socket emit for opponent data updates
+        this.action_bar.addBackAction(data);
+        this.action_bar.updateActions();
+    }
+    
+    undoPerformAction(data) {
+        // TODO continue here
+        // switch case to actualy revert different action types
+        // switch(data.type) {}
+        
         this.action_bar.addBackAction(data);
         this.action_bar.updateActions();
     }

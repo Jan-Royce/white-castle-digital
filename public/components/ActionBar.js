@@ -108,6 +108,24 @@ export class ActionBar extends Phaser.GameObjects.Container {
         popup.fade_in.play();
     }
     
+    createWellSelectPopup(selectAction, resources, btn) {
+        const popup = new SelectPopup({
+            scene: this.scene,
+            x: 0,
+            y: 0,
+            w: 400,
+            h: 200,
+            action: selectAction,
+            resources: resources,
+            sourceType: 'well',
+            btn: btn
+        });
+
+        this.scene.add.existing(popup);
+
+        popup.fade_in.play();
+    }
+    
     performAction(action, btn) {
         // TODO CONTINUE HERE
         switch(action.name) {
@@ -117,7 +135,17 @@ export class ActionBar extends Phaser.GameObjects.Container {
                 this.removeActionAndRefresh(btn);
                 break;
             case 'well':
-                //TODO CONTINUE HERE
+                // TODO work on undoing well action
+                const wellActions = this.scene.board.castle.well_actions.flat();
+                const selectResourceAction = wellActions.filter((action) => action.type == 'select_resource');
+                const resourceAction = wellActions.filter((action) => action.type == 'resource');
+                
+                if(selectResourceAction.length > 0) {
+                    this.createWellSelectPopup(selectResourceAction[0], resourceAction[0].resources, btn);
+                } else {
+                    resourceAction[0].source = 'well';
+                    this.gainResource(resourceAction[0], btn);
+                }
                 break;
             case 'white_scroll':
                 break;
@@ -143,11 +171,11 @@ export class ActionBar extends Phaser.GameObjects.Container {
     addAction(action, xPos=0) {
         let content = "";
         if (action.type == 'action' || action.type == 'select_action' || action.type == 'select_resource') {
-            content = action.name
+            content = action.name;
         } else if (action.type == 'paid_action') {
             content = `${JSON.stringify(action.cost)} -> ${action.name}`;
         } else {
-            content = JSON.stringify(action.resources)
+            content = JSON.stringify(action.resources);
         }
         
         const btn = new Button({
@@ -189,7 +217,7 @@ export class ActionBar extends Phaser.GameObjects.Container {
     
     removeActionAndRefresh(btn) {
         this.removeAction(btn);
-        if (this.actions.length == 0) this.updateActions();
+        if (this.actions.length > 0) this.updateActions();
     }
     
     clearActions() {

@@ -53,7 +53,10 @@ export class Castle extends Phaser.GameObjects.Container {
                 max_die_count: Number.POSITIVE_INFINITY,
                 always_show: true,
                 board: this.board,
-                actions: wellActions
+                actions: [[{
+                    type: 'action',
+                    name: 'well'
+                }]]
             }
         });
         this.add(well);
@@ -67,6 +70,7 @@ export class Castle extends Phaser.GameObjects.Container {
         let resources = {
             daimyo: 1
         };
+        let resourceSelect = 0;
         
         for(const tile of tiles) {
             if(tile.action.type == 'resource') {
@@ -74,10 +78,10 @@ export class Castle extends Phaser.GameObjects.Container {
                     if(typeof(resources[key]) == 'undefined') {
                         resources[key] = 0;
                     }
-                    resources[key] = val;
+                    resources[key] += val;
                 }
-            } else {
-                actions.push([tile.action])
+            } else if(tile.action.type == 'select_resource') {
+                resourceSelect++;
             }
         }
         
@@ -85,6 +89,14 @@ export class Castle extends Phaser.GameObjects.Container {
             type: 'resource',
             resources: resources
         }]);
+        
+        if(resourceSelect > 0) {
+            actions.push([{
+                type: 'select_resource',
+                name: `select_resource_${resourceSelect}`,
+                amount: resourceSelect
+            }]);
+        }
         
         return actions;
     }

@@ -3,7 +3,7 @@ import { ClickableNumberInput } from "./ClickableNumberInput.js";
 
 export class SelectPopup extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, w, h, action, btn } = config;
+        const { scene, x, y, w, h, action, resources, sourceType, btn } = config;
         
         super(scene, x, y);
         
@@ -13,6 +13,8 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         this.action = action;
         this.action_btn = btn;
         this.selectors = [];
+        this.resources = resources;
+        this.source_type = sourceType;
         
         const zone = new Phaser.GameObjects.Zone(scene, 0, 0, scene.scale.width, scene.scale.height);
         zone.setOrigin(0);
@@ -34,6 +36,11 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         popupBg.setOrigin(0);
         popupBg.setAlpha(0.95);
         popup.add(popupBg);
+        
+        if(typeof(this.source_type) !== 'undefined') {
+            this.createSelectAdditions();
+            this.select_additions.y = popup.y - this.h / 4 - 8;
+        }
         
         this.setAlpha(0);
         this.setDepth(20);
@@ -140,6 +147,31 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         this.fade_out.play();
     }
     
+    createSelectAdditions() {
+        const wrap = new Phaser.GameObjects.Container(this.scene, 0, 0);
+        wrap.x = (this.scene.scale.width - this.w) / 2;
+        wrap.y = (this.scene.scale.height - this.h) / 2;
+        this.add(wrap);
+        
+        const wrapBg = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, this.w, this.h/4, this.color);
+        wrapBg.setOrigin(0);
+        wrapBg.setAlpha(0.95);
+        wrap.add(wrapBg);
+        
+        let content = `[${this.source_type}] ${JSON.stringify(this.resources)} +`;
+        
+        const additions = new Phaser.GameObjects.Text(this.scene, 4, 4, content, {
+            fontSize: '16px',
+            fontStyle: 'bold',
+            color: '#fff'
+        });
+        additions.setStroke('#000', 2);
+        additions.setOrigin(0);
+        wrap.add(additions);
+        
+        this.select_additions = wrap;
+    }
+    
     // TODO continue here
     createSelection() {
         // console.log(this.action)
@@ -236,6 +268,16 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             resources: resources,
             amount: this.max
         };
+        if(typeof(this.source_type) !== 'undefined') {
+            data.source = 'well';
+            
+            for(const [key, val] of Object.entries(this.resources)) {
+                if(typeof(data.resources[key]) == 'undefined') {
+                    data.resources[key] = 0;
+                }
+                data.resources[key] += val;
+            }
+        }
         
         this.scene.events.emit('submit_popup_selection', data, this.action_btn);
     }
