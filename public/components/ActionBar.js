@@ -45,7 +45,6 @@ export class ActionBar extends Phaser.GameObjects.Container {
     }
     
     updateActions() {
-        console.log(this.actions)
         let xPos = 0;
         
         for(const action of this.actions) {
@@ -70,9 +69,12 @@ export class ActionBar extends Phaser.GameObjects.Container {
                 this.createSelectPopup(action, btn);
                 break;
             case 'action':
-                // TODO
+                this.performAction(action, btn);
                 break;
             case 'select_action':
+                //wild die
+                //domain select
+                //castle/garden/yard or castle/garden or castle/yard
                 // TODO
                 break;
             case 'paid_action':
@@ -87,8 +89,7 @@ export class ActionBar extends Phaser.GameObjects.Container {
     gainResource(action, btn) {
         action.button_index = this.actions.indexOf(btn);
         this.scene.events.emit('gain_resources', action);
-        this.removeAction(btn);
-        this.updateActions();
+        this.removeActionAndRefresh(btn);
     }
     
     createSelectPopup(action, btn) {
@@ -105,6 +106,38 @@ export class ActionBar extends Phaser.GameObjects.Container {
         this.scene.add.existing(popup);
         
         popup.fade_in.play();
+    }
+    
+    performAction(action, btn) {
+        // TODO CONTINUE HERE
+        switch(action.name) {
+            case 'lantern':
+                //TODO emit event to player function for lantern trigger here (should have influence track daimyo pay logic)
+                console.log('lantern trigger')
+                this.removeActionAndRefresh(btn);
+                break;
+            case 'well':
+                //TODO CONTINUE HERE
+                break;
+            case 'white_scroll':
+                break;
+            case 'black_scroll':
+                break;
+            case 'red_die_tile':
+                break;
+            case 'black_die_tile':
+                break;
+            case 'white_die_tile':
+                break;
+            case 'garden':
+                break;
+            case 'castle':
+                break;
+            case 'yard':
+                break;
+            default:
+                break;
+        }
     }
     
     addAction(action, xPos=0) {
@@ -150,11 +183,19 @@ export class ActionBar extends Phaser.GameObjects.Container {
         let index = this.actions.indexOf(btn);
         this.actions.splice(index, 1);
         btn.destroy(true);
+        
+        if(this.actions.length == 0) this.scene.events.emit('hide_action_bar');
+    }
+    
+    removeActionAndRefresh(btn) {
+        this.removeAction(btn);
+        if (this.actions.length == 0) this.updateActions();
     }
     
     clearActions() {
         for(const action of this.actions) {
             action.destroy(true);
         }
+        this.actions = [];
     }
 }

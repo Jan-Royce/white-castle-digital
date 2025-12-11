@@ -82,6 +82,12 @@ export class DieSpace extends Phaser.GameObjects.Container {
             }
             this.scene.events.emit('add_actions', actions);
         });
+        
+        const zone = new Phaser.GameObjects.Zone(scene, 0, 0, die.displayWidth, die.displayHeight);
+        zone.setOrigin(0);
+        zone.setInteractive();
+        this.add(zone);
+        this.zone = zone;
     }
     
     getColor(colorString) {
@@ -99,11 +105,13 @@ export class DieSpace extends Phaser.GameObjects.Container {
     addHighlight() {
         this.bg.setAlpha(1);
         this.can_place = true;
+        this.zone.disableInteractive();
     }
     
     removeHighlight() {
         this.bg.setAlpha(0);
         this.can_place = false;
+        this.zone.setInteractive();
     }
     
     placeDie(die) {

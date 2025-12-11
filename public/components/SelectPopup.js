@@ -41,14 +41,28 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         this.addButtons();
         this.createSelection();
         
-        console.log(this.selectors)
-        
         this.fade_in = this.scene.tweens.add({
             targets: this,
             alpha: { from: 0, to: 1 },
             duration: 500,
             ease: 'Power3',
             persist: true
+        });
+        
+        this.fade_out = this.scene.tweens.add({
+            targets: this,
+            alpha: { from: 1, to: 0 },
+            duration: 500,
+            ease: 'Power3',
+            paused: true,
+            onComplete: () => {
+                this.setVisible(false);
+
+                if(this.fade_in) this.fade_in.destroy();
+                this.scene.events.off('change_selector_input');
+
+                this.destroy(true);
+            }
         });
     }
     
@@ -123,20 +137,7 @@ export class SelectPopup extends Phaser.GameObjects.Container {
     }
     
     closePopup() {
-        this.scene.tweens.add({
-            targets: this,
-            alpha: { from: 1, to: 0 },
-            duration: 500,
-            ease: 'Power3',
-            onComplete: () => {
-                this.setVisible(false);
-                
-                if(this.fade_in) this.fade_in.destroy();
-                this.scene.events.off('change_selector_input');
-                
-                this.destroy(true);
-            }
-        });
+        this.fade_out.play();
     }
     
     // TODO continue here

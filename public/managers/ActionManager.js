@@ -8,10 +8,10 @@ export class ActionManager {
         
         this.createActionUndoBtn();
         
-        this.bindEvents();
+        this.bindActionEvents();
     }
     
-    bindEvents() {
+    bindActionEvents() {
         this.scene.events.on('place_die', (data) => {
             if(data.has_coin_diff) {
                 const coinUpdate = {
@@ -42,11 +42,9 @@ export class ActionManager {
         this.scene.events.on('add_actions', (actions) => {
             if(typeof(this.action_bar) === 'undefined') {
                 this.createActionBar();
-            } else {
-                this.action_bar.setAlpha(0); 
-                this.action_bar.setVisible(true); 
             }
-            this.action_bar_fade_in.play();
+            
+            this.scene.events.emit('show_action_bar');
             
             this.action_bar.setActions(actions);
         });
@@ -72,6 +70,28 @@ export class ActionManager {
             duration: 1000,
             ease: 'Power1',
             persist: true
+        });
+        
+        this.action_bar_fade_out = this.scene.tweens.add({
+            targets: this.action_bar,
+            alpha: { from: 0.9, to: 0 },
+            duration: 500,
+            ease: 'Power1',
+            persist: true,
+            paused: true,
+            onComplete: () => {
+                this.action_bar.setVisible(false);
+            }
+        });
+        
+        this.scene.events.on('show_action_bar', () => {
+            this.action_bar.setAlpha(0);
+            this.action_bar.setVisible(true);
+            this.action_bar_fade_in.play();
+        });
+        
+        this.scene.events.on('hide_action_bar', () => {
+            this.action_bar_fade_out.play();
         });
     }
     
@@ -108,7 +128,6 @@ export class ActionManager {
         this.action_undo_btn.setVisible(true);
         
         console.log(this.action_stack)
-        // TODO handle empty action bar
     }
     
     undoAction() {
@@ -128,6 +147,10 @@ export class ActionManager {
             default:
                 // TODO ??
                 break;
+        }
+        
+        if(!this.action_bar.visible) {
+            this.scene.events.emit('show_action_bar');
         }
     }
     
@@ -158,7 +181,7 @@ export class ActionManager {
         bridge.returnDie(data.die_index, die, dir);
         
         this.action_bar.clearActions();
-        this.action_bar.setVisible(false);
+        this.action_bar_fade_out.play();
         
         this.scene.board.enableBridges();
         

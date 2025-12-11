@@ -25,6 +25,12 @@ export class BoardSpace extends Phaser.GameObjects.Container {
             console.log(this.space_id)
         });
         
+        const zone = new Phaser.GameObjects.Zone(scene, 0, 0, this.width, this.height);
+        zone.setOrigin(0);
+        zone.setInteractive();
+        this.add(zone);
+        this.zone = zone;
+        
         if(typeof(dieSpace) !== 'undefined') {
             if(dieSpace.always_show) {
                 const dieDisplay = new Phaser.GameObjects.Container(this.scene, 0, 0);

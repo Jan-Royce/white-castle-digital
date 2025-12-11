@@ -37,16 +37,7 @@ export class Castle extends Phaser.GameObjects.Container {
     }
     
     addWell(tiles) {
-        const wellActions = [
-            [{
-                type: 'resource',
-                resources: {
-                    daimyo: 1
-                }
-            }],
-            [tiles[0].action],
-            [tiles[1].action]
-        ];
+        const wellActions = this.getWellResources(tiles);
         const well = new BoardSpace({
             scene: this.scene,
             x: 20,
@@ -69,6 +60,33 @@ export class Castle extends Phaser.GameObjects.Container {
         this.well = well;
         this.well_actions = wellActions;
         this.well.die_space.board_space = well;
+    }
+    
+    getWellResources(tiles) {
+        let actions = [];
+        let resources = {
+            daimyo: 1
+        };
+        
+        for(const tile of tiles) {
+            if(tile.action.type == 'resource') {
+                for(const [key, val] of Object.entries(tile.action.resources)) {
+                    if(typeof(resources[key]) == 'undefined') {
+                        resources[key] = 0;
+                    }
+                    resources[key] = val;
+                }
+            } else {
+                actions.push([tile.action])
+            }
+        }
+        
+        actions.push([{
+            type: 'resource',
+            resources: resources
+        }]);
+        
+        return actions;
     }
     
     createWellGfx(tiles) {
