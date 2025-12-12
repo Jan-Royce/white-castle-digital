@@ -22,7 +22,6 @@ class Game {
     }
     
     addPlayer(socketId, playerData) {
-        playerData.color = this.assignColor();
         this.players[socketId] = playerData;
     }
     

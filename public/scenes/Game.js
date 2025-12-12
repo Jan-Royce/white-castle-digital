@@ -1,6 +1,9 @@
 import { NetworkManager } from '../managers/NetworkManager.js';
 import { Button } from '../components/Button.js';
 import { Board } from '../gameObjects/Board.js';
+import { Player } from '../gameObjects/Player.js';
+import { RivalResourceBoard } from '../gameObjects/RivalResourceBoard.js';
+
 import { EventManager } from '../managers/EventManager.js';
 import { ActionManager } from '../managers/ActionManager.js';
 
@@ -41,7 +44,7 @@ export class Game extends Phaser.Scene
         let playerCountTxt = this.make.text(textConfig);
         playerCountTxt.setText("Players (0)");
         
-        let playerNames = [];
+        // let playerNames = [];
         
         const startBtn = new Button({
             scene: this,
@@ -55,40 +58,66 @@ export class Game extends Phaser.Scene
                 socket.emit('start_game');
             }
         });
-        
-        socket.on('update_players', (playerData) => {
-            this.players = playerData;
-            
-            playerCountTxt.setText(`Players (${Object.entries(this.players).length})`);
-            
-            for(let _playerName of playerNames) {
-                _playerName.destroy();
-            }
-            
-            let listY = 50;
-            for (const [id, player] of Object.entries(this.players)) {
-                let playerName = this.make.text(textConfig);
-                playerNames.push(playerName);
-                
-                playerName.setText(id);
-                playerName.setColor(player.color);
-                playerName.y = listY;
-                
-                listY+=30;
-            }
+
+        socket.on('create_player', (player) => {
+            this.player = new Player({
+                scene: this,
+                x: 0,
+                y: 0,
+                player: player
+            });
+            // console.log(this.player.id)
         });
+        
+        // socket.on('update_players', (playerData) => {
+        //     this.players = playerData;
+        //     playerCountTxt.setText(`Players (${Object.entries(this.players).length})`);
+            
+        //     for(let _playerName of playerNames) {
+        //         _playerName.destroy();
+        //     }
+            
+        //     let listY = 50;
+        //     for (const [id, player] of Object.entries(this.players)) {
+        //         let playerName = this.make.text(textConfig);
+        //         playerNames.push(playerName);
+                
+        //         playerName.setText(id);
+        //         playerName.setColor(player.color);
+        //         playerName.y = listY;
+                
+        //         listY+=30;
+        //     }
+        // });
         
         socket.on('start_game', () => {
             startBtn.destroy(true);
         });
         
-        socket.on('board_setup', (board) => {
+        socket.on('board_setup', (board, players) => {
             if(typeof(this.board) !== 'undefined') this.board.destroy(true);
+            this.player.resource_board.visible = true;
+            
             this.board = new Board({
                 scene: this, 
                 x: 0,
                 y: 0,
                 boardData: board
+            });
+
+            let gap = 0;
+            Object.entries(players).forEach(([id, value]) => {
+                // Handle the player leaving
+                if(this.player.id != id){
+                    this.rivalPlayers = new RivalResourceBoard({
+                        scene: this, 
+                        x: 0, 
+                        y: 0, 
+                        spacing: gap,
+                        player: value
+                    });
+                    gap+=100;
+                }
             });
             
             if(board.dev_mode) {

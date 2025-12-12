@@ -10,9 +10,12 @@ function registerGameSocketHandler(io, game) {
             socket.disconnect();
             return;
         }
-           
+        // Add game color
+        player.color = game.assignColor();
+        
         game.addPlayer(socket.id, player);
         updatePlayers(game.players);
+        io.to(socket.id).emit('create_player', player);
 
         socket.on('disconnect', () => {
             console.log(`user ${socket.id} disconnected`);
@@ -28,7 +31,7 @@ function registerGameSocketHandler(io, game) {
             game.started = true;
             const board = game.board;
             
-            io.emit('board_setup', board);
+            io.emit('board_setup', board, game.players);
         });
         
         if(game.dev_mode) {
