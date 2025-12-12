@@ -15,11 +15,19 @@ export class NetworkManager {
         this.scene.events.on('undo_place_die', (data) => {
             this.socket.emit('undo_place_die', data);
         });
+        
+        this.scene.events.on('player_update_resource', (data) => {
+            this.socket.emit('player_update_resource', data);
+        });
     }
     
     bindSocketEvents() {
         this.socket.on('remote_place_die', (data) => {
             this.scene.events.emit('remote_place_die', data);
+        });
+        
+        this.socket.on('remote_player_update_resource', (data) => {
+            this.scene.events.emit('remote_player_update_resource', data);
         });
         
         this.socket.on('remote_undo_place_die', (data) => {

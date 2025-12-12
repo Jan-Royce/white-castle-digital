@@ -12,7 +12,7 @@ class Player {
         // this.chasen = 0;
         
         //states/position
-        this.clan_points = 0;
+        this.clan_point = 0;
         this.active_player = false;
         this.influence = [0, 0];
         this.domain_courtier = 0;
@@ -59,11 +59,11 @@ class Player {
     countResourceClanPoints(){
         const RESOUREVALUES = [this.food, this.iron, this.pearl];
 
-        this.clan_points += Math.floor((this.coin + this.daimyo) / 5);
+        this.clan_point += Math.floor((this.coin + this.daimyo) / 5);
 
         RESOUREVALUES.forEach(value =>{
-            if(value >= 3) this.clan_points++;
-            if(value == 7) this.clan_points++;
+            if(value >= 3) this.clan_point++;
+            if(value == 7) this.clan_point++;
         });
     }
 
@@ -96,7 +96,7 @@ class Player {
                 this.addLanternReward('influence');
                 break;
             case 2:
-                this.addLanternReward('clan_points');
+                this.addLanternReward('clan_point');
                 break;
             case 3:
                 this.addLanternReward('coin');

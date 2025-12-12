@@ -11,7 +11,11 @@ export class Game extends Phaser.Scene
 {
     constructor() {
         super('Game');
-        this.players = {};
+        this.rivals = {};
+        this.rivals_list = null;
+        this.game_started = false;
+        this.player_board_depth = 2;
+        this.main_board_depth = 1;
     }
     
     create() {
@@ -56,6 +60,7 @@ export class Game extends Phaser.Scene
             onClick: (btn) => {
                 btn.destroy(true);
                 socket.emit('start_game');
+                this.game_started = true;
             }
         });
 
@@ -66,32 +71,19 @@ export class Game extends Phaser.Scene
                 y: 0,
                 player: player
             });
-            // console.log(this.player.id)
+            this.player.setDepth(this.player_board_depth);
         });
         
-        // socket.on('update_players', (playerData) => {
-        //     this.players = playerData;
-        //     playerCountTxt.setText(`Players (${Object.entries(this.players).length})`);
-            
-        //     for(let _playerName of playerNames) {
-        //         _playerName.destroy();
-        //     }
-            
-        //     let listY = 50;
-        //     for (const [id, player] of Object.entries(this.players)) {
-        //         let playerName = this.make.text(textConfig);
-        //         playerNames.push(playerName);
-                
-        //         playerName.setText(id);
-        //         playerName.setColor(player.color);
-        //         playerName.y = listY;
-                
-        //         listY+=30;
-        //     }
-        // });
+        socket.on('update_players', (playerData) => {
+            playerCountTxt.setText(`Players (${Object.entries(playerData).length})`);
+            if(this.game_started) {
+                this.updateRivals(playerData);
+            }
+        });
         
         socket.on('start_game', () => {
             startBtn.destroy(true);
+            this.game_started = true;
         });
         
         socket.on('board_setup', (board, players) => {
@@ -104,21 +96,9 @@ export class Game extends Phaser.Scene
                 y: 0,
                 boardData: board
             });
+            this.player.setDepth(this.main_board_depth);
 
-            let gap = 0;
-            Object.entries(players).forEach(([id, value]) => {
-                // Handle the player leaving
-                if(this.player.id != id){
-                    this.rivalPlayers = new RivalResourceBoard({
-                        scene: this, 
-                        x: 0, 
-                        y: 0, 
-                        spacing: gap,
-                        player: value
-                    });
-                    gap+=100;
-                }
-            });
+            this.addRivals(players);
             
             if(board.dev_mode) {
                 const devTools = new Phaser.GameObjects.Container(this, 0, 0);
@@ -233,6 +213,66 @@ export class Game extends Phaser.Scene
     
     update() {
         
+    }
+    
+    addRivals(players) {
+        const rivalsWrap = new Phaser.GameObjects.Container(this, 0, 40);
+        
+        let yPos = 0;
+        Object.entries(players).forEach(([id, player]) => {
+            if(this.player.id != id) {
+                const rival = new Player({
+                    scene: this,
+                    x: 0,
+                    y: yPos,
+                    player: player,
+                    isRival: true
+                });
+                
+                rival.resource_board.visible = true;
+                this.rivals[id] = rival;
+                rivalsWrap.add(rival);
+                
+                yPos += 100;
+            }
+        });
+        
+        this.rivals_list = rivalsWrap;
+        this.add.existing(rivalsWrap);
+    }
+    
+    updateRivals(playerData) {
+        const currentRivals = Object.keys(this.rivals);
+        const newRivals = Object.keys(playerData).filter((id) => id != this.player.id);
+        
+        const toRemove = currentRivals.filter((id) => !newRivals.includes(id));
+        const toAdd = newRivals.filter((id) => !currentRivals.includes(id));
+        
+        for(const id of toRemove) {
+            const rival = this.rivals[id];
+            delete this.rivals[id];
+            rival.destroy(true);
+        }
+        
+        for(const id of toAdd) {
+            const rival = new Player({
+                scene: this,
+                x: 0,
+                y: 0,
+                player: playerData[id],
+                isRival: true
+            });
+            
+            rival.resource_board.visible = true;
+            this.rivals[id] = rival;
+            this.rivals_list.add(rival);
+        }
+        
+        let yPos = 0;
+        for(const [id, rival] of Object.entries(this.rivals)) {
+            rival.y = yPos;
+            yPos += 100;
+        }
     }
     
     updateUnitDisplays() {

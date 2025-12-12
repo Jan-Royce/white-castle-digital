@@ -14,14 +14,11 @@ export class ActionManager {
     bindActionEvents() {
         this.scene.events.on('place_die', (data) => {
             if(data.has_coin_diff) {
-                const coinUpdate = {
-                    type: 'resource',
-                    resources: {
-                        coin: data.coin_diff
-                    }
-                };
-                //TODO emit event to player function for gaining resource
-                console.log(`coin: ${data.coin_diff}`)
+                this.scene.player.updateResources({
+                    resources: { coin: data.coin_diff },
+                    source: null, // die placement?
+                    revert: false
+                });
             }
             
             if(data.has_lantern_trigger) {
@@ -34,8 +31,6 @@ export class ActionManager {
         });
         
         this.scene.events.on('gain_resources', (data) => {
-            //TODO emit event to player function for gaining resources here
-            // also socket emit for opponent data updates
             const resourceActions = ['well', 'lantern'];
             if(typeof(data.source) !== 'undefined' && resourceActions.includes(data.source)) {
                 this.addActionToStack({
@@ -47,6 +42,12 @@ export class ActionManager {
             } else {
                 this.addActionToStack(data);
             }
+            
+            this.scene.player.updateResources({
+                resources: data.resources,
+                source: data.source,
+                revert: false
+            });
         });
         
         this.scene.events.on('add_actions', (actions) => {
@@ -63,10 +64,11 @@ export class ActionManager {
     createActionBar() {
         const barW = this.scene.scale.width * 0.6;
         const barH = 100;
+        const gapFromPlayerUI = 60;
 
         const actionBar = new ActionBar({
             scene: this.scene,
-            x: (this.scene.scale.width - barW) / 2,
+            x: (this.scene.scale.width - barW) / 2 + gapFromPlayerUI,
             y: this.scene.scale.height - barH - 20,
             w: barW,
             h: barH
@@ -170,15 +172,11 @@ export class ActionManager {
     
     undoDiePlacement(data) {
         if(data.has_coin_diff) {
-            const coinDiff = data.coin_diff * -1;
-            const coinUpdate = {
-                type: 'resource',
-                resources: {
-                    coin: coinDiff
-                }
-            };
-            //TODO emit event to player function for gaining resource
-            console.log(`coin: ${coinDiff}`)
+            this.scene.player.updateResources({
+                resources: { coin: data.coin_diff },
+                source: null, // die placement?
+                revert: true
+            });
         }
         
         if(data.has_lantern_trigger) {
@@ -203,8 +201,12 @@ export class ActionManager {
     }
     
     undoGainResource(data) {
-        //TODO emit event to player function for reverting resources here
-        // also socket emit for opponent data updates
+        this.scene.player.updateResources({
+            resources: data.resources,
+            source: data.source,
+            revert: true
+        });
+        
         this.action_bar.addBackAction(data);
         this.action_bar.updateActions();
     }
@@ -220,10 +222,11 @@ export class ActionManager {
                 console.log('revert lantern trigger')
                 break;
             case 'well':
-                //TODO emit event to player function for lantern revert
-                // data.resources
-                // consider influence track daimyo payment if any
-                console.log('revert well')
+                this.scene.player.updateResources({
+                    resources: data.resources,
+                    source: data.source,
+                    revert: true
+                });
                 break;
             default:
                 break;

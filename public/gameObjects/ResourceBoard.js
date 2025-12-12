@@ -1,10 +1,9 @@
 
-export class ResourceBoard extends Phaser.GameObjects.Container{
-    constructor(config){
-        const { scene, x, y, player} = config;
+export class ResourceBoard extends Phaser.GameObjects.Container {
+    constructor(config) {
+        const { scene, x, y, player } = config;
         super(scene, x, y);
         this.player = player;
-        this.scene.add.existing(this);
         this.resources_amount= {};
 
         this.board_width = 300;
@@ -12,35 +11,31 @@ export class ResourceBoard extends Phaser.GameObjects.Container{
         const height = this.scene.scale.height;
 
         this.lantern_icon_gap = 0;
-
-        this.player_resouce_board = new Phaser.GameObjects.Container(this.scene, 0, height - this.board_height);
+        this.y = height - this.board_height;
         
         this.displayPlayerResourceIcons();
         this.displayGfxIcon();
-        
-        this.add(this.player_resouce_board);
     }
     
-    updatePlayerResource(){
-        this.resources_amount.food.text = `${this.player.coin}/7`
-        this.resources_amount.iron.text = `${this.player.coin}/7`
-        this.resources_amount.pearl.text = `${this.player.coin}/7`
-        this.resources_amount.daimyo.text = `${this.player.coin}/7`
-        this.resources_amount.coin.text = `${this.player.coin}/7`
+    updatePlayerResource() {
+        this.resources_amount.food.text = `${this.player.food}/7`;
+        this.resources_amount.iron.text = `${this.player.iron}/7`;
+        this.resources_amount.pearl.text = `${this.player.pearl}/7`;
+        this.resources_amount.daimyo.text = `${this.player.daimyo}/5`;
+        this.resources_amount.coin.text = `${this.player.coin}`;
     }
 
-    addLanternTrigger(icon){ // TODO: function to change this 
+    addLanternTrigger(icon) { // TODO: function to change this 
         const lanternResourceContainer = new Phaser.GameObjects.Container(this.scene, 50,  (this.board_height / 2) - 30);
-        const lanterResourceIcon = new Phaser.GameObjects.Sprite(this.scene, this.lantern_icon_gap, 0, `icon_${icon}`)
-        .setDisplaySize(30,30).setOrigin(0);
+        const lanterResourceIcon = new Phaser.GameObjects.Sprite(this.scene, this.lantern_icon_gap, 0, `icon_${icon}`).setDisplaySize(30,30).setOrigin(0);
         lanternResourceContainer.add(lanterResourceIcon);
-        this.player_resouce_board.add(lanternResourceContainer)
+        this.add(lanternResourceContainer)
         this.lantern_icon_gap += 20;
     }
 
-    displayGfxIcon(){
+    displayGfxIcon() {
         const gfxIconNames = ["daimyo_convert_coin", "daimyo_convert_resource", "lantern"]
-        const convertionContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
+        const conversionContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
         let width = 85, height = 35;
         gfxIconNames.forEach( icon =>{
             const gfxIcon = new Phaser.GameObjects.Sprite(this.scene, 
@@ -49,15 +44,15 @@ export class ResourceBoard extends Phaser.GameObjects.Container{
             if(icon === "lantern"){width = 45, height = 30;}
             gfxIcon.setDisplaySize(width, height);
             gfxIcon.setOrigin(0);
-            convertionContainer.add(gfxIcon)
+            conversionContainer.add(gfxIcon)
         });
-        this.player_resouce_board.add(convertionContainer);
+        this.add(conversionContainer);
     }
 
-    displayPlayerResourceIcons(){
+    displayPlayerResourceIcons() {
         const resourceIconNames = ["food", "iron", "pearl", "daimyo", "coin"];
         const resourceBoard = new Phaser.GameObjects.Container(this.scene, 10, this.board_height / 2); 
-        const resourceBackground = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, this.board_width, this.board_height, 0x9a9ed4).setOrigin(0);
+        const resourceBackground = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, this.board_width, this.board_height, this.player.int_color).setOrigin(0);
         let iconGap = 0;
         resourceIconNames.forEach( icon => {
             const resourceContainer = new Phaser.GameObjects.Container(this.scene, iconGap, 0);
@@ -78,15 +73,14 @@ export class ResourceBoard extends Phaser.GameObjects.Container{
             resourceBoard.add(resourceContainer)
             iconGap+=60;
         });
-        this.player_resouce_board.add(resourceBackground);
-        this.player_resouce_board.add(resourceBoard);
-        // this.resources.pearl.text = "2/7";
+        this.add(resourceBackground);
+        this.add(resourceBoard);
     }
 
-    setText(config){
+    setText(config) {
         const {container, iconName, x, y} = config;
         let setText = `0`;
-        if(iconName != "coin"){setText = (iconName != "daimyo") ? `0/7`: `0/5`;}
+        if(iconName != "coin") setText = (iconName != "daimyo") ? `0/7`: `0/5`;
         const resourceText = new Phaser.GameObjects.Text(this.scene, x, y, setText, {
             fontSize: '20px',
             fontStyle: 'bold',
@@ -97,7 +91,7 @@ export class ResourceBoard extends Phaser.GameObjects.Container{
         container.add(resourceText);
     }
 
-    setResourceIcon(config){
+    setResourceIcon(config) {
         const {container, iconName, width, height, x, y} = config;
         const icon = new Phaser.GameObjects.Sprite(this.scene, x, y, `icon_${iconName}`);
         icon.setDisplaySize(width, height);

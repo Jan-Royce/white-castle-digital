@@ -51,6 +51,11 @@ function registerGameSocketHandler(io, game) {
             socket.broadcast.emit('remote_place_die', data);
         });
         
+        socket.on('player_update_resource', (data) => {
+            data.player_id = socket.id;
+            socket.broadcast.emit('remote_player_update_resource', data);
+        });
+        
         socket.on('undo_place_die', (data) => {
             data.player = socket.id;
             socket.broadcast.emit('remote_undo_place_die', data);

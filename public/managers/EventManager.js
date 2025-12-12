@@ -16,6 +16,11 @@ export class EventManager {
             dieSpace.placeDie(die);
         });
         
+        this.scene.events.on('remote_player_update_resource', (data) => {
+            const id = data.player_id;
+            this.scene.rivals[id].updateResources(data);
+        });
+        
         this.scene.events.on('remote_undo_place_die', (data) => {
             // TODO use data.player to determine which player would get the coin and/or lantern changes
             
