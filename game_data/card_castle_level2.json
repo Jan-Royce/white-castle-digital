@@ -2,6 +2,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
+        "scrolls": [0, 1],
         "image": "castle_lvl2_07",
         "sections": [
             [
@@ -21,6 +22,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
+        "scrolls": [1, 0],
         "image": "castle_lvl2_12",
         "sections": [
             [
@@ -44,6 +46,7 @@
     {
         "player_min_count": 2,
         "sizes": [2, 1],
+        "scrolls": [0, 1],
         "image": "castle_lvl2_03",
         "sections": [
             [
@@ -67,6 +70,7 @@
     {
         "player_min_count": 2,
         "sizes": [2, 1],
+        "scrolls": [0, 1],
         "image": "castle_lvl2_04",
         "sections": [
             [
@@ -90,6 +94,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
+        "scrolls": [1, 0],
         "image": "castle_lvl2_11",
         "sections": [
             [
@@ -109,6 +114,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
+        "scrolls": [1, 0],
         "image": "castle_lvl2_05",
         "sections": [
             [
@@ -128,6 +134,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
+        "scrolls": [0, 1],
         "image": "castle_lvl2_01",
         "sections": [
             [
@@ -151,6 +158,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
+        "scrolls": [1, 0],
         "image": "castle_lvl2_09",
         "sections": [
             [
@@ -171,6 +179,7 @@
     {
         "player_min_count": 2,
         "sizes": [1, 2],
+        "scrolls": [1, 0],
         "image": "castle_lvl2_02",
         "sections": [
             [
@@ -194,6 +203,7 @@
     {
         "player_min_count": 3,
         "sizes": [2, 1],
+        "scrolls": [0, 1],
         "image": "castle_lvl2_10",
         "sections": [
             [
@@ -217,6 +227,7 @@
     {
         "player_min_count": 3,
         "sizes": [1, 2],
+        "scrolls": [1, 0],
         "image": "castle_lvl2_08",
         "sections": [
             [
@@ -237,6 +248,7 @@
     {
         "player_min_count": 3,
         "sizes": [2, 1],
+        "scrolls": [0, 1],
         "image": "castle_lvl2_06",
         "sections": [
             [

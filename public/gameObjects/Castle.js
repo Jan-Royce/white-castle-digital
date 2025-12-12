@@ -1,5 +1,6 @@
 import { BoardSpace } from './BoardSpace.js';
 import { DieTile } from './DieTile.js';
+import { FloorCard } from './FloorCard.js';
 
 export class Castle extends Phaser.GameObjects.Container {
     constructor(config) {
@@ -194,6 +195,18 @@ export class Castle extends Phaser.GameObjects.Container {
         const spaceBetween = (spaceTotal - (2 * roomSideOffset)) / (roomCount - 1);
         const roomXOffsetGrowth = roomWidth + spaceBetween;
         
+        const cardWidth = 54;
+        const cardHeight = 90;
+        const cardXOffset = 6;
+        const cardYOffset = 6;
+        
+        const cardTransform = {
+            x: roomWidth - cardWidth - cardXOffset,
+            y: roomHeight - cardHeight - cardYOffset,
+            w: cardWidth,
+            h: cardHeight
+        };
+        
         for(const [roomId, roomData] of Object.entries(data.rooms)) {
             const room = new BoardSpace({
                 scene: this.scene,
@@ -206,7 +219,7 @@ export class Castle extends Phaser.GameObjects.Container {
                 height: roomHeight,
                 color: roomColor,
                 scoreGfx: this.createCastleScoreGfx(150, data.level),
-                gfx: this.createRoomGfx(roomData, roomWidth, roomHeight),
+                gfx: this.createRoomGfx(roomData, cardTransform),
                 unitType: 'courtier',
                 unitPos: { x: 0, y: 0, wrap_per: 2 },
                 unitSize: 24,
@@ -242,7 +255,21 @@ export class Castle extends Phaser.GameObjects.Container {
                 cardIndex++;
                 
                 room.add(tile);
+                this.board.die_tiles.push(tile);
             }
+            
+            const floorCard = new FloorCard({
+                scene: this.scene,
+                x: cardTransform.x,
+                y: cardTransform.y,
+                w: cardTransform.w,
+                h: cardTransform.h,
+                card: roomData.card
+            });
+            room.floor_card = floorCard;
+            room.add(floorCard);
+            
+            this.board.scrolls = this.board.scrolls.concat(floorCard.sections);
             
             floor.add(room);
             
@@ -254,19 +281,13 @@ export class Castle extends Phaser.GameObjects.Container {
     }
     
     // TODO/NOTE alternative to just rendering cards directly, maybe do pngs for icon sets
-    createRoomGfx(room, roomWidth, roomHeight) {
-        const cardW = 54;
-        const cardH = 90;
-        
-        const cardXOffset = 6;
-        const cardYOffset = 6;
-        
+    createRoomGfx(room, cardData) {
         const gfx = new Phaser.GameObjects.Container(this.scene, 0, 0);
-        gfx.x = roomWidth - cardW - cardXOffset;
-        gfx.y = roomHeight - cardH - cardYOffset;
+        gfx.x = cardData.x;
+        gfx.y = cardData.y;
         
         const card = new Phaser.GameObjects.Sprite(this.scene, 0, 0, room.card.image);
-        card.setDisplaySize(cardW, cardH);
+        card.setDisplaySize(cardData.w, cardData.h);
         card.setOrigin(0);
         gfx.add(card);
         

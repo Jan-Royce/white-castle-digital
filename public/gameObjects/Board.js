@@ -16,6 +16,8 @@ export class Board extends Phaser.GameObjects.Container {
         this.dice = [];
         this.selected_die = null;
         this.well = [];
+        this.die_tiles = [];
+        this.scrolls = [];
         
         const width = this.scene.scale.width;
         const height = this.scene.scale.height;
