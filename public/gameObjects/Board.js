@@ -13,7 +13,6 @@ export class Board extends Phaser.GameObjects.Container {
         this.color_map = boardData.color_map;
         this.bridges = {};
         this.die_spaces = [];
-        this.dice = [];
         this.selected_die = null;
         this.well = [];
         this.die_tiles = [];
@@ -215,9 +214,11 @@ export class Board extends Phaser.GameObjects.Container {
     }
     
     clearDiceHighlights() {
-        for(const die of this.dice) {
-            die.removeHighlight();
-            die.selected_die = null;
+        for(const [key, bridge] of Object.entries(this.bridges)) {
+            for(const die of bridge.dice) {
+                die.removeHighlight();
+                die.selected_die = null;
+            }
         }
     }
 }

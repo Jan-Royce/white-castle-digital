@@ -67,7 +67,6 @@ export class Bridge extends Phaser.GameObjects.Container {
             
             this.dice.push(die);
             this.add(die);
-            this.board.dice.push(die);
             
             xPos += offsetGrowth;
         }

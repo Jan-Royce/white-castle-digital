@@ -104,6 +104,8 @@ export class ActionManager {
         
         this.scene.events.on('hide_action_bar', () => {
             this.action_bar_fade_out.play();
+            
+            // TODO fix die highlight/interaction bug after undo
         });
     }
     
