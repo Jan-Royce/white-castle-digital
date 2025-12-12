@@ -226,8 +226,10 @@ class Board {
     setRoomCard(room, card) {
         room.card = card;
         for (let i = 0; i < room.colors.length; i++) {
+            const section = card.sections[i];
             room.actions[room.colors[i]].push(card.sections[i]);
         }
+        room.card_sections = card.sections;
     }
     
     setYard() {

@@ -1,4 +1,5 @@
 import { BoardSpace } from './BoardSpace.js';
+import { DieTile } from './DieTile.js';
 
 export class Castle extends Phaser.GameObjects.Container {
     constructor(config) {
@@ -224,11 +225,21 @@ export class Castle extends Phaser.GameObjects.Container {
             roomXOffset += roomXOffsetGrowth;
             
             let tileYpos = 32;
+            let cardIndex = 0;
+            
             for(const tileColor of roomData.colors) {
-                const tile = new Phaser.GameObjects.Sprite(this.scene, roomWidth/3, tileYpos, `tile_${tileColor}`);
-                tile.setDisplaySize(24, 24);
-                tile.setOrigin(0);
+                const tile = new DieTile({
+                   scene: this.scene,
+                   x: roomWidth / 3,
+                   y: tileYpos,
+                   w: 24,
+                   h: 24,
+                   color: tileColor,
+                   action: roomData.card_sections[cardIndex]
+                });
+                
                 tileYpos += roomData.colors.length == 3 ? 28 : 56;
+                cardIndex++;
                 
                 room.add(tile);
             }
