@@ -41,7 +41,8 @@ export class ActionManager {
                 this.addActionToStack({
                     type: 'action',
                     name: data.source,
-                    button_index: data.button_index
+                    button_index: data.button_index,
+                    resources: data.resources
                 });
             } else {
                 this.addActionToStack(data);
@@ -160,8 +161,10 @@ export class ActionManager {
                 break;
         }
         
-        if(!this.action_bar.visible) {
+        if(this.action_stack.length > 0 && !this.action_bar.visible) {
             this.scene.events.emit('show_action_bar');
+        } else if(this.action_stack.length == 0) {
+            this.action_undo_btn.setVisible(false);
         }
     }
     
@@ -209,7 +212,22 @@ export class ActionManager {
     undoPerformAction(data) {
         // TODO continue here
         // switch case to actualy revert different action types
-        // switch(data.type) {}
+        switch(data.name) {
+            case 'lantern':
+                //TODO emit event to player function for lantern revert
+                // data.resources
+                // consider influence track daimyo payment if any
+                console.log('revert lantern trigger')
+                break;
+            case 'well':
+                //TODO emit event to player function for lantern revert
+                // data.resources
+                // consider influence track daimyo payment if any
+                console.log('revert well')
+                break;
+            default:
+                break;
+        }
         
         this.action_bar.addBackAction(data);
         this.action_bar.updateActions();

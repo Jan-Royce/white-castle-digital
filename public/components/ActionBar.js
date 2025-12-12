@@ -135,7 +135,6 @@ export class ActionBar extends Phaser.GameObjects.Container {
                 this.removeActionAndRefresh(btn);
                 break;
             case 'well':
-                // TODO work on undoing well action
                 const wellActions = this.scene.board.castle.well_actions.flat();
                 const selectResourceAction = wellActions.filter((action) => action.type == 'select_resource');
                 const resourceAction = wellActions.filter((action) => action.type == 'resource');
