@@ -3,8 +3,8 @@ export class ResourceBoard extends Phaser.GameObjects.Container{
     constructor(config){
         const { scene, x, y, player} = config;
         super(scene, x, y);
+
         this.player = player;
-        this.scene.add.existing(this);
         this.resources_amount= {};
 
         this.board_width = 300;
@@ -22,11 +22,11 @@ export class ResourceBoard extends Phaser.GameObjects.Container{
     }
     
     updatePlayerResource(){
-        this.resources_amount.food.text = `${this.player.coin}/7`
-        this.resources_amount.iron.text = `${this.player.coin}/7`
-        this.resources_amount.pearl.text = `${this.player.coin}/7`
-        this.resources_amount.daimyo.text = `${this.player.coin}/7`
-        this.resources_amount.coin.text = `${this.player.coin}/7`
+        this.resources_amount.food.text = `${this.player.coin}/7`;
+        this.resources_amount.iron.text = `${this.player.coin}/7`;
+        this.resources_amount.pearl.text = `${this.player.coin}/7`;
+        this.resources_amount.daimyo.text = `${this.player.coin}/7`;
+        this.resources_amount.coin.text = `${this.player.coin}/7`;
     }
 
     addLanternTrigger(icon){ // TODO: function to change this 

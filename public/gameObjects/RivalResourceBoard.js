@@ -1,6 +1,7 @@
 
 
 export class RivalResourceBoard extends Phaser.GameObjects.Container{
+    //container
     constructor(config){
         const { scene, x, y, spacing, player} = config;
         super(scene, x, y);
@@ -18,11 +19,11 @@ export class RivalResourceBoard extends Phaser.GameObjects.Container{
     }
     
     updateRivalResource(){
-        this.resources_amount.food.text = `${this.player.coin}/7`
-        this.resources_amount.iron.text = `${this.player.coin}/7`
-        this.resources_amount.pearl.text = `${this.player.coin}/7`
-        this.resources_amount.daimyo.text = `${this.player.coin}/7`
-        this.resources_amount.coin.text = `${this.player.coin}/7`
+        this.resources_amount.food.text = `${this.player.coin}/7`;
+        this.resources_amount.iron.text = `${this.player.coin}/7`;
+        this.resources_amount.pearl.text = `${this.player.coin}/7`;
+        this.resources_amount.daimyo.text = `${this.player.coin}/7`;
+        this.resources_amount.coin.text = `${this.player.coin}/7`;
     }
     displayPlayerId(){
         const playerId = new Phaser.GameObjects.Text(this.scene, 5, -20, this.player_id, {

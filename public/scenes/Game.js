@@ -57,6 +57,7 @@ export class Game extends Phaser.Scene
                 y: 0,
                 player: player
             });
+            this.player.setDepth(1);
             // console.log(this.player.id)
         });
         
@@ -87,14 +88,14 @@ export class Game extends Phaser.Scene
         
         socket.on('board_setup', (board, players) => {
             this.player.resource_board.visible = true;
+            this.player.domain_board.visible = true;
             
-            // this.board = new Board({
-            //     scene: this, 
-            //     x: 0,
-            //     y: 0,
-            //     boardData: board
-            // });
-
+            this.board = new Board({
+                scene: this, 
+                x: 0,
+                y: 0,
+                boardData: board
+            });
             let gap = 0;
             Object.entries(players).forEach(([id, value]) => {
                 // Handle the player leaving
