@@ -1,5 +1,6 @@
 export class Button extends Phaser.GameObjects.Container {
     constructor(config) {
+        // TODO add transparent image support
         const { scene, x, y, w, h, fontSize, fontColor, bgColor, centerAlign, key1, key2, text, onClick, parent } = config;
         
         super(scene, x, y);

@@ -4,7 +4,14 @@ export class ResourceBoard extends Phaser.GameObjects.Container {
         const { scene, x, y, player } = config;
         super(scene, x, y);
         this.player = player;
-        this.resources_amount= {};
+        
+        this.resources_amount = {};
+        
+        this.food = 0;
+        this.iron = 0;
+        this.pearl = 0;
+        this.daimyo = 0;
+        this.coin = 0;
 
         this.board_width = 300;
         this.board_height = 100;
@@ -18,11 +25,30 @@ export class ResourceBoard extends Phaser.GameObjects.Container {
     }
     
     updatePlayerResource() {
-        this.resources_amount.food.text = `${this.player.food}/7`;
-        this.resources_amount.iron.text = `${this.player.iron}/7`;
-        this.resources_amount.pearl.text = `${this.player.pearl}/7`;
-        this.resources_amount.daimyo.text = `${this.player.daimyo}/5`;
-        this.resources_amount.coin.text = `${this.player.coin}`;
+        const resources = ['food', 'iron', 'pearl', 'daimyo', 'coin'];
+        const limits = {
+            food: 7,
+            iron: 7,
+            pearl: 7,
+            daimyo: 5,
+            coin: null
+        };
+        
+        for(const resource of resources) {
+            const limitText = limits[resource] ? `/${limits[resource]}` : ``;
+            this.scene.tweens.add({
+                targets: { val: this[resource] },
+                val: this.player[resource],
+                duration: 300,
+                ease: 'Linear',
+                onUpdate: (tween) => {
+                    this.resources_amount[resource].text = `${Math.floor(tween.getValue())}${limitText}`;
+                },
+                onComplete: () => {
+                    this[resource] = this.player[resource];
+                }
+            });
+        }
     }
 
     addLanternTrigger(icon) { // TODO: function to change this 

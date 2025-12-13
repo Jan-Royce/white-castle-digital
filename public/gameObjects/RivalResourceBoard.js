@@ -10,16 +10,33 @@ export class RivalResourceBoard extends Phaser.GameObjects.Container{
 
         this.resources_amount = {};
         
+        this.food = 0;
+        this.iron = 0;
+        this.pearl = 0;
+        this.daimyo = 0;
+        this.coin = 0;
+        
         this.displayPlayerId();
         this.setPlayerResourceIcons();
     }
     
     updatePlayerResource() {
-        this.resources_amount.food.text = `${this.player.food}`;
-        this.resources_amount.iron.text = `${this.player.iron}`;
-        this.resources_amount.pearl.text = `${this.player.pearl}`;
-        this.resources_amount.daimyo.text = `${this.player.daimyo}`;
-        this.resources_amount.coin.text = `${this.player.coin}`;
+        const resources = ['food', 'iron', 'pearl', 'daimyo', 'coin'];
+
+        for (const resource of resources) {
+            this.scene.tweens.add({
+                targets: { val: this[resource] },
+                val: this.player[resource],
+                duration: 300,
+                ease: 'Linear',
+                onUpdate: (tween) => {
+                    this.resources_amount[resource].text = Math.floor(tween.getValue());
+                },
+                onComplete: () => {
+                    this[resource] = this.player[resource];
+                }
+            });
+        }
     }
     
     displayPlayerId() {

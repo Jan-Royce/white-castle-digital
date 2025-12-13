@@ -48,8 +48,6 @@ export class Game extends Phaser.Scene
         let playerCountTxt = this.make.text(textConfig);
         playerCountTxt.setText("Players (0)");
         
-        // let playerNames = [];
-        
         const startBtn = new Button({
             scene: this,
             x: this.scale.width / 4,
