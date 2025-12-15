@@ -79,4 +79,24 @@ export class Player extends Phaser.GameObjects.Container {
     updateResourceDisplay() {
         this.resource_board.updatePlayerResource();
     }
+
+    addLanternReward(resource) {
+        this.lantern.push(resource);
+        this.resource_board.addLanternReward(resource);
+    }
+    
+    // TODO implement passage of time daimyo payment
+    getLanternResources() {
+        let resources = {};
+
+        for (const resource of this.lantern) {
+            if (typeof (resources[resource]) === 'undefined') {
+                resources[resource] = 0;
+            }
+
+            resources[resource]++;
+        }
+        
+        return resources;
+    }
 }

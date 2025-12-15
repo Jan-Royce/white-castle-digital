@@ -35,6 +35,18 @@ class Board {
         
         this.setYard();
         this.setGarden();
+        
+        if(devMode) {
+            let starting = require('.././game_data/card_starting_resource.json');
+            if(!this.matcha_expansion) {
+                starting = starting.filter((card) => card.tag != 'matcha');
+            }
+            starting = this.shuffle(starting);
+            
+            const card = starting.pop();
+            
+            this.starting_lantern = card.lantern;
+        }
     }
     
     setBridges() {

@@ -200,6 +200,10 @@ export class Game extends Phaser.Scene
                         plots[1].updateUnitDisplay();
                     }
                 });
+                
+                for(const resource of board.starting_lantern) {
+                    this.player.addLanternReward(resource);
+                }
             }
         });
         

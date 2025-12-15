@@ -130,9 +130,8 @@ export class ActionBar extends Phaser.GameObjects.Container {
         // TODO CONTINUE HERE
         switch(action.name) {
             case 'lantern':
-                //TODO emit event to player function for lantern trigger here (should have influence track daimyo pay logic)
-                console.log('lantern trigger')
-                this.removeActionAndRefresh(btn);
+                this.gainResource({ source: 'lantern', resources: this.scene.player.getLanternResources() }, btn);
+                
                 break;
             case 'well':
                 const wellActions = this.scene.board.castle.well_actions.flat();

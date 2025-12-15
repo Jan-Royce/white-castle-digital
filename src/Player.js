@@ -22,10 +22,9 @@ class Player {
         
         this.domain_card_section = {};
         this.domain_card_size = null;
-        this.lantern = {
-            type: 'resource',
-            resources: []
-        }
+        this.lantern = [];
+        
+        // TODO : delete all functions not needed for back-end here
     }
     // Convert Method // Check if daimyo enough
     convertDaimyo(isCoin){

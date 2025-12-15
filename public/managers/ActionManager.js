@@ -22,8 +22,11 @@ export class ActionManager {
             }
             
             if(data.has_lantern_trigger) {
-                //TODO emit event to player function for lantern trigger here (should have influence track daimyo pay logic)
-                console.log('lantern trigger')
+                this.scene.player.updateResources({
+                    resources: this.scene.player.getLanternResources(),
+                    source: 'lantern',
+                    revert: false
+                });
             }
             
             this.scene.board.disableBridges();
@@ -182,8 +185,11 @@ export class ActionManager {
         }
         
         if(data.has_lantern_trigger) {
-            //TODO emit event to player function for lantern trigger here (should have influence track daimyo pay logic)
-            console.log('revert lantern trigger')
+            this.scene.player.updateResources({
+                resources: this.scene.player.getLanternResources(),
+                source: 'lantern',
+                revert: true
+            });
         }
         
         const die = data.die;
@@ -218,10 +224,11 @@ export class ActionManager {
         // switch case to actualy revert different action types
         switch(data.name) {
             case 'lantern':
-                //TODO emit event to player function for lantern revert
-                // data.resources
-                // consider influence track daimyo payment if any
-                console.log('revert lantern trigger')
+                this.scene.player.updateResources({
+                    resources: this.scene.player.getLanternResources(),
+                    source: 'lantern',
+                    revert: true
+                });
                 break;
             case 'well':
                 this.scene.player.updateResources({

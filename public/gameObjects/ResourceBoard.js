@@ -20,8 +20,8 @@ export class ResourceBoard extends Phaser.GameObjects.Container {
         this.lantern_icon_gap = 0;
         this.y = height - this.board_height;
         
-        this.displayPlayerResourceIcons();
-        this.displayGfxIcon();
+        this.createResourceGfx();
+        this.createBoardGfx();
     }
     
     updatePlayerResource() {
@@ -51,31 +51,46 @@ export class ResourceBoard extends Phaser.GameObjects.Container {
         }
     }
 
-    addLanternTrigger(icon) { // TODO: function to change this 
-        const lanternResourceContainer = new Phaser.GameObjects.Container(this.scene, 50,  (this.board_height / 2) - 30);
+    addLanternReward(icon) {
         const lanterResourceIcon = new Phaser.GameObjects.Sprite(this.scene, this.lantern_icon_gap, 0, `icon_${icon}`).setDisplaySize(30,30).setOrigin(0);
-        lanternResourceContainer.add(lanterResourceIcon);
-        this.add(lanternResourceContainer)
+        this.lantern_display.add(lanterResourceIcon);
         this.lantern_icon_gap += 20;
     }
-
-    displayGfxIcon() {
-        const gfxIconNames = ["daimyo_convert_coin", "daimyo_convert_resource", "lantern"]
+    
+    createBoardGfx() {
+        const convertSprites = ['gfx_daimyo_convert_coin', 'gfx_daimyo_convert_resource'];
         const conversionContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
-        let width = 85, height = 35;
-        gfxIconNames.forEach( icon =>{
-            const gfxIcon = new Phaser.GameObjects.Sprite(this.scene, 
-                (icon != "lantern" && icon == "daimyo_convert_coin") ? width + 5: 0, 
-                (icon == "lantern") ? (this.height/2) + 20: (this.height/2) - 20, `gfx_${icon}`);
-            if(icon === "lantern"){width = 45, height = 30;}
-            gfxIcon.setDisplaySize(width, height);
-            gfxIcon.setOrigin(0);
-            conversionContainer.add(gfxIcon)
-        });
+        const sprWidth = 85;
+        const sprHeight = 35;
+        
+        conversionContainer.y = -18;
+        
+        // TODO change to buttons
+        let xPos = 0;
+        for(const spr of convertSprites) {
+            const sprite = new Phaser.GameObjects.Sprite(this.scene, xPos, 0, spr);
+            sprite.setDisplaySize(sprWidth, sprHeight);
+            sprite.setOrigin(0);
+            conversionContainer.add(sprite);
+            
+            xPos += sprWidth;
+        }
         this.add(conversionContainer);
+        
+        const lanternYpos = 20;
+        
+        const lanternIcon = new Phaser.GameObjects.Sprite(this.scene, 0, lanternYpos, 'gfx_lantern');
+        lanternIcon.setScale(0.36);
+        lanternIcon.setOrigin(0);
+        this.add(lanternIcon);
+        
+        const lanternXpos = lanternIcon.displayWidth;
+        const lanternContainer = new Phaser.GameObjects.Container(this.scene, lanternXpos, lanternYpos);
+        this.add(lanternContainer);
+        this.lantern_display = lanternContainer;
     }
 
-    displayPlayerResourceIcons() {
+    createResourceGfx() {
         const resourceIconNames = ["food", "iron", "pearl", "daimyo", "coin"];
         const resourceBoard = new Phaser.GameObjects.Container(this.scene, 10, this.board_height / 2); 
         const resourceBackground = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, this.board_width, this.board_height, this.player.int_color).setOrigin(0);
