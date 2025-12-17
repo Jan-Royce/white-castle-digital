@@ -72,6 +72,16 @@ export class ActionBar extends Phaser.GameObjects.Container {
                 this.performAction(action, btn);
                 break;
             case 'select_action':
+                // TODO CONTINUE HERE
+                switch(action.name) {
+                    case 'main_actions':
+                        this.createSelectPopup(action, btn);
+                        break;
+                    default:
+                        break;
+                }
+                //scroll
+                //die tile
                 //wild die
                 //domain select
                 //castle/garden/yard or castle/garden or castle/yard
@@ -186,13 +196,12 @@ export class ActionBar extends Phaser.GameObjects.Container {
             fontSize: 14,
             text: content,
             parent: this,
-            centerAlign: false,
             onClick: (btn) => {
                 this.clickAction(action, btn);
             }
         });
         
-        btn.button.setOrigin(0);
+        btn.zone.setOrigin(0);
         btn.button_text.x = (this.button_w - btn.button_text.displayWidth) / 2;
         btn.button_text.y = (this.button_h - btn.button_text.displayHeight) / 2;
         

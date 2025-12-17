@@ -50,17 +50,20 @@ export class Game extends Phaser.Scene
         
         const startBtn = new Button({
             scene: this,
-            x: this.scale.width / 4,
-            y: 100,
+            x: 0,
+            y: 0,
             fontColor: '#fff',
             key1: 'start_red',
             key2: 'start_red_pressed',
+            showBgColor: false,
             onClick: (btn) => {
                 btn.destroy(true);
                 socket.emit('start_game');
                 this.game_started = true;
             }
         });
+        startBtn.x = (this.scale.width - startBtn.zone.displayWidth) / 2;
+        startBtn.y = (this.scale.height - startBtn.zone.displayHeight) / 2;
 
         socket.on('create_player', (player) => {
             this.player = new Player({
@@ -106,11 +109,9 @@ export class Game extends Phaser.Scene
                 devTools.setAlpha(0.75);
                 this.add.existing(devTools);
                 
-                const devButtonsX = 80;
-                
-                const AddTestUnits = new Button({
+                const addTestUnits = new Button({
                     scene: this,
-                    x: devButtonsX,
+                    x: 0,
                     y: 40,
                     w: 140,
                     h: 40,
@@ -123,10 +124,11 @@ export class Game extends Phaser.Scene
                          socket.emit('display_test_units');
                     }
                 });
+                addTestUnits.x = (background.displayWidth - addTestUnits.zone.displayWidth) / 2;
                 
                 const resetBtn = new Button({
                     scene: this,
-                    x: devButtonsX,
+                    x: 0,
                     y: 100,
                     w: 60,
                     h: 40,
@@ -140,6 +142,7 @@ export class Game extends Phaser.Scene
                         socket.emit('start_game');
                     }
                 });
+                resetBtn.x = (background.displayWidth - resetBtn.zone.displayWidth) / 2;
                 
                 socket.on('update_test_units', (board) => {
                     for(const item of this.board.castle.levels) {

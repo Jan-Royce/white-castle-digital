@@ -126,13 +126,12 @@ export class ActionManager {
             bgColor: '#e9e9e9',
             fontSize: 14,
             text: 'UNDO',
-            centerAlign: false,
             onClick: () => {
                 this.undoAction();
             }
         });
         
-        btn.button.setOrigin(0);
+        btn.zone.setOrigin(0);
         btn.button_text.x = (buttonW - btn.button_text.displayWidth) / 2;
         btn.button_text.y = (buttonH - btn.button_text.displayHeight) / 2;
         btn.setVisible(false);

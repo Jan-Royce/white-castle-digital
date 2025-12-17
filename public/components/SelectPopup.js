@@ -1,5 +1,6 @@
 import { Button } from "./Button.js";
 import { ClickableNumberInput } from "./ClickableNumberInput.js";
+import { SelectableInput } from "./SelectableInput.js";
 
 export class SelectPopup extends Phaser.GameObjects.Container {
     constructor(config) {
@@ -91,7 +92,6 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             fontSize: 16,
             text: 'Submit',
             parent: buttonWrap,
-            centerAlign: false,
             onClick: () => {
                 switch(this.action.type) {
                     case 'select_resource':
@@ -115,7 +115,7 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             }
         });
         
-        submitBtn.button.setOrigin(0);
+        submitBtn.zone.setOrigin(0);
         submitBtn.button_text.x = (buttonW - submitBtn.button_text.displayWidth) / 2;
         submitBtn.button_text.y = (buttonH - submitBtn.button_text.displayHeight) / 2;
         
@@ -129,13 +129,12 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             fontSize: 16,
             text: 'Close',
             parent: buttonWrap,
-            centerAlign: false,
             onClick: () => {
                 this.closePopup();
             }
         });
         
-        closeBtn.button.setOrigin(0);
+        closeBtn.zone.setOrigin(0);
         closeBtn.button_text.x = (buttonW - closeBtn.button_text.displayWidth) / 2;
         closeBtn.button_text.y = (buttonH - closeBtn.button_text.displayHeight) / 2;
         
@@ -182,7 +181,7 @@ export class SelectPopup extends Phaser.GameObjects.Container {
                 this.createResourceSelector();
                 break;
             case 'select_action':
-                // TODO
+                this.createActionSelector(this.action.options);
                 break;
             default:
                 // TODO ??
@@ -203,6 +202,7 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         text.setOrigin(0);
         this.popup.add(text);
         
+        // TODO maybe make this clickable instead of the number to be more intuitive
         const ui = new Phaser.GameObjects.Sprite(this.scene, 0, 0, 'ui_resource_selector');
         ui.setOrigin(0);
         ui.setScale(0.35);
@@ -254,6 +254,42 @@ export class SelectPopup extends Phaser.GameObjects.Container {
                 selector.setNewMaximum(newMax);
             }
         });
+    }
+    
+    createActionSelector(options) {
+        const text = new Phaser.GameObjects.Text(this.scene, 4, 8, "Select one", {
+            fontSize: '16px',
+            fontStyle: 'bold',
+            color: '#fff'
+        });
+        text.x = (this.w - text.displayWidth) / 2;
+        text.setStroke('#000', 2);
+        text.setOrigin(0);
+        this.popup.add(text);
+        
+        const gapSize = 36;
+        const btnSize = 72;
+        const totalSpace = this.w - (btnSize * options.length) - (gapSize * (options.length-1));
+        let xPos = totalSpace / 2;
+        
+        for(const option of options) {
+            const opt = new SelectableInput({
+                scene: this.scene,
+                x: 0,
+                y: 0,
+                w: btnSize,
+                h: btnSize,
+                spr: `icon_${option}`,
+                imgScale: 0.36,
+                action: option
+            });
+            this.popup.add(opt);
+            
+            opt.x = xPos;
+            opt.y = (this.h - opt.bg.displayHeight) / 2;
+            
+            xPos += gapSize + btnSize;
+        }
     }
     
     getResourceSelections() {

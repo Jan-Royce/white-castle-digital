@@ -141,7 +141,7 @@ export class Board extends Phaser.GameObjects.Container {
         outside.x = boardDimensions.w - width - 20;
         outside.y = boardDimensions.h - height - 10;
         
-        const ids = ['garden_or_castle', 'castle_or_yard'];
+        const options = [['garden', 'castle'], ['castle', 'yard']];
         const dieSize = 36;
         
         let xPos = 0;
@@ -150,7 +150,7 @@ export class Board extends Phaser.GameObjects.Container {
                 scene: this.scene,
                 x: xPos,
                 y: 0,
-                spaceId: ids[i],
+                spaceId: `outside_wall_${i}`,
                 width: width / 2,
                 height: height,
                 noBackground: true,
@@ -164,7 +164,8 @@ export class Board extends Phaser.GameObjects.Container {
                     actions: [
                         [{
                             type: 'select_action',
-                            name: ids[i]
+                            name: 'main_actions',
+                            options: options[i]
                         }]
                     ]
                 }
