@@ -82,7 +82,7 @@ export class Yard extends Phaser.GameObjects.Container {
         let tileSprSize = 40;
         
         let name = tile.name;
-        if(tile.type == 'action') {
+        if(tile.type == 'action' || tile.type == 'select_action') {
             const icon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `icon_${name}`);
             
             icon.setDisplaySize(tileSprSize, tileSprSize);

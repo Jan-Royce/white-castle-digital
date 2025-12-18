@@ -53,6 +53,11 @@ export class ActionManager {
             });
         });
         
+        this.scene.events.on('enter_main_action_mode', (data) => {
+            //TODO CONTINUE HERE
+            this.addActionToStack(data);
+        });
+        
         this.scene.events.on('add_actions', (actions) => {
             if(typeof(this.action_bar) === 'undefined') {
                 this.createActionBar();
@@ -160,6 +165,9 @@ export class ActionManager {
             case 'action':
                 this.undoPerformAction(toUndo);
                 break;
+            case 'select_action':
+                this.undoSelectAction(toUndo);
+                break;
             // paid_action
             // select_action
             default:
@@ -240,6 +248,11 @@ export class ActionManager {
                 break;
         }
         
+        this.action_bar.addBackAction(data);
+        this.action_bar.updateActions();
+    }
+    
+    undoSelectAction(data) {
         this.action_bar.addBackAction(data);
         this.action_bar.updateActions();
     }

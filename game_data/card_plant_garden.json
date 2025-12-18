@@ -30,10 +30,10 @@
             {
                 "type": "paid_action",
                 "cost": { "coin": 4 },
-                "name": "castle_or_yard_or_garden"
+                "name": "main_actions"
             }
         ],
-        "image": "plant_castle_or_yard_or_garden"
+        "image": "plant_main_actions"
     },
     {
         "cost": 4,

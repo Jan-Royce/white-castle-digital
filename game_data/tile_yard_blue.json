@@ -18,8 +18,9 @@
         "color": "blue"
     },
     {
-        "type": "action",
-        "name": "castle_or_yard_or_garden",
+        "type": "select_action",
+        "name": "main_actions",
+        "options": ["garden", "castle", "yard"],
         "image": "",
         "color": "blue"
     },

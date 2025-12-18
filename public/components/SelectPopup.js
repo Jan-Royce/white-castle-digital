@@ -101,10 +101,22 @@ export class SelectPopup extends Phaser.GameObjects.Container {
                             this.error_text.setVisible(true);
                             return;
                         }
+                        
                         this.getResourceSelections();
+                        
                         break;
                     case 'select_action':
-                        // TODO
+                        const selected = this.selectors.filter((selector) => selector.selected);
+                        
+                        if(selected.length == 0) {
+                            this.error_text.setText("Not action selected.");
+                            this.error_text.x = (this.w - this.error_text.displayWidth) / 2;
+                            this.error_text.setVisible(true);
+                            return;
+                        }
+                        
+                        this.getActionSelection(selected);
+                        
                         break;
                     default:
                         // TODO ??
@@ -281,9 +293,11 @@ export class SelectPopup extends Phaser.GameObjects.Container {
                 h: btnSize,
                 spr: `icon_${option}`,
                 imgScale: 0.36,
-                action: option
+                action: option,
+                popup: this
             });
             this.popup.add(opt);
+            this.selectors.push(opt);
             
             opt.x = xPos;
             opt.y = (this.h - opt.bg.displayHeight) / 2;
@@ -304,6 +318,7 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             resources: resources,
             amount: this.max
         };
+        
         if(typeof(this.source_type) !== 'undefined') {
             data.source = 'well';
             
@@ -315,7 +330,15 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             }
         }
         
-        this.scene.events.emit('submit_popup_selection', data, this.action_btn);
+        this.scene.events.emit('submit_popup_resource_selection', data, this.action_btn);
+    }
+    
+    getActionSelection(selected) {
+        const data = {
+            action: selected[0].action,
+            options: this.action.options
+        };
+        this.scene.events.emit('submit_popup_main_act_selection', data, this.action_btn);
     }
     
     getCurrentSelectorValue() {

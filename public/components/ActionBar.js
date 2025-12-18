@@ -55,8 +55,19 @@ export class ActionBar extends Phaser.GameObjects.Container {
     }
     
     bindEvents() {
-        this.scene.events.on('submit_popup_selection', (data, btn) => {
+        this.scene.events.on('submit_popup_resource_selection', (data, btn) => {
             this.gainResource(data, btn);
+        });
+        
+        this.scene.events.on('submit_popup_main_act_selection', (data, btn) => {
+            this.scene.events.emit('enter_main_action_mode', {
+                type: 'select_action',
+                name: 'main_actions',
+                action: data.action,
+                options: data.options,
+                button_index: this.actions.indexOf(btn)
+            });
+            this.removeActionAndRefresh(btn);
         });
     }
     
@@ -166,10 +177,15 @@ export class ActionBar extends Phaser.GameObjects.Container {
             case 'white_die_tile':
                 break;
             case 'garden':
-                break;
             case 'castle':
-                break;
             case 'yard':
+                this.scene.events.emit('enter_main_action_mode', {
+                    type: 'action',
+                    name: action.name,
+                    action: action.name,
+                    button_index: this.actions.indexOf(btn)
+                });
+                this.removeActionAndRefresh(btn);
                 break;
             default:
                 break;
