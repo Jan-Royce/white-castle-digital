@@ -1,5 +1,5 @@
 import { Button } from "./Button.js";
-import { ClickableNumberInput } from "./ClickableNumberInput.js";
+import { ClickableCounter } from "./ClickableCounter.js";
 import { SelectableInput } from "./SelectableInput.js";
 
 export class SelectPopup extends Phaser.GameObjects.Container {
@@ -214,36 +214,32 @@ export class SelectPopup extends Phaser.GameObjects.Container {
         text.setOrigin(0);
         this.popup.add(text);
         
-        // TODO maybe make this clickable instead of the number to be more intuitive
-        const ui = new Phaser.GameObjects.Sprite(this.scene, 0, 0, 'ui_resource_selector');
-        ui.setOrigin(0);
-        ui.setScale(0.35);
-        ui.x = (this.w - ui.displayWidth) / 2;
-        ui.y = (this.h - ui.displayHeight) / 2;
-        this.popup.add(ui);
-        
         const resources = ['food', 'iron', 'pearl'];
-        const xPosList = [98, 224, 352];
+        const selectorSize = 70;
+        const gapSize = 36;
+        const totalSpace = this.w - (selectorSize * resources.length) - (gapSize * (resources.length-1));
+        let xPos = totalSpace / 2;
         
-        let i = 0;
         for(const resource of resources) {
-            const selector = new ClickableNumberInput({
+            const selector = new ClickableCounter({
                 scene: this.scene,
-                x: xPosList[i],
-                y: 0,
+                x: xPos,
+                y: (this.h - selectorSize) / 2,
+                w: selectorSize,
+                h: selectorSize,
                 max: this.max,
-                fontSize: 36,
-                name: resource
+                fontSize: 40,
+                name: resource,
+                sprite: `icon_${resource}`
             });
-            selector.y = (this.h - selector.counter.displayHeight) / 2;
             this.popup.add(selector);
             
             this.selectors.push(selector);
             
-            i++;
+            xPos += selectorSize + gapSize;
         }
         
-        const errorTextY = ui.y + ui.displayHeight - 16;
+        const errorTextY = this.selectors[0].y + this.selectors[0].bg.displayHeight + 4;
         const errorText = new Phaser.GameObjects.Text(this.scene, 4, errorTextY, "", {
             fontSize: '16px',
             fontStyle: 'bold',
