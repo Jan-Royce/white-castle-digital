@@ -67,7 +67,8 @@ export class ActionBar extends Phaser.GameObjects.Container {
                 options: data.options,
                 button_index: this.actions.indexOf(btn)
             });
-            this.removeActionAndRefresh(btn);
+            
+            this.removeActionAndRefresh(btn, data.action == 'castle');
         });
     }
     
@@ -185,23 +186,29 @@ export class ActionBar extends Phaser.GameObjects.Container {
                     action: action.name,
                     button_index: this.actions.indexOf(btn)
                 });
-                this.removeActionAndRefresh(btn);
+                
+                this.removeActionAndRefresh(btn, action.name == 'castle');
                 break;
             default:
                 break;
         }
     }
     
+    // TODO update content to icons/images
     addAction(action, xPos=0) {
         let content = "";
-        if (action.type == 'action' || action.type == 'select_action' || action.type == 'select_resource') {
+        if(action.type == 'action' || action.type == 'select_action' || action.type == 'select_resource') {
             content = action.name;
-        } else if (action.type == 'paid_action') {
+        } else if(action.type == 'paid_action') {
             content = `${JSON.stringify(action.cost)} -> ${action.name}`;
-        } else {
+        } else if (action.type == 'resource') {
             content = JSON.stringify(action.resources);
+        } else {
+            content = action.button_content;
         }
         
+        // TODO enabled state listeners
+        // resource / other buttons
         const btn = new Button({
             scene: this.scene,
             x: xPos,
@@ -212,6 +219,8 @@ export class ActionBar extends Phaser.GameObjects.Container {
             fontSize: 14,
             text: content,
             parent: this,
+            enabled: action.enabled ?? true,
+            optional: action.optional ?? false,
             onClick: (btn) => {
                 this.clickAction(action, btn);
             }
@@ -224,23 +233,30 @@ export class ActionBar extends Phaser.GameObjects.Container {
         return btn;
     }
     
+    pushAction(action) {
+        const btn = this.addAction(action);
+        this.actions.push(btn);
+        
+        return btn;
+    }
+    
     addBackAction(action) {
         let index = action.button_index;
         const btn = this.addAction(action);
         this.actions.splice(index, 0, btn);
     }
     
-    removeAction(btn) {
+    removeAction(btn, dontHide=false) {
         let index = this.actions.indexOf(btn);
         this.actions.splice(index, 1);
         btn.destroy(true);
         
-        if(this.actions.length == 0) this.scene.events.emit('hide_action_bar');
+        if(this.actions.length == 0 && !dontHide) this.scene.events.emit('hide_action_bar');
     }
     
-    removeActionAndRefresh(btn) {
-        this.removeAction(btn);
-        if (this.actions.length > 0) this.updateActions();
+    removeActionAndRefresh(btn, dontHide=false) {
+        this.removeAction(btn, dontHide);
+        if(this.actions.length > 0) this.updateActions();
     }
     
     clearActions() {

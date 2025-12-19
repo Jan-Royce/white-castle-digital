@@ -56,6 +56,17 @@ export class ActionManager {
         this.scene.events.on('enter_main_action_mode', (data) => {
             //TODO CONTINUE HERE
             this.addActionToStack(data);
+            switch(data.action) {
+                case 'castle':
+                    this.performCastleAction();
+                    break;
+                case 'garden':
+                    console.log('garden');
+                    break;
+                case 'yard':
+                    console.log('yard');
+                    break;
+            }
         });
         
         this.scene.events.on('add_actions', (actions) => {
@@ -151,6 +162,47 @@ export class ActionManager {
         console.log(this.action_stack)
     }
     
+    performCastleAction() {
+        console.log(`coin: ${this.scene.player.coin}`)
+        console.log(`daimyo: ${this.scene.player.daimyo}`)
+        
+        // TODO CONTINUE HERE
+        // TODO handle option courtier sending
+        const sendCourtierBtn = this.action_bar.pushAction({
+            type: 'send_courtier',
+            button_content: '{"coin": 2} -> courtier to gate',
+            enabled: this.scene.player.coin >= 2,
+            resource_listener: 'coin',
+            optional: true
+        });
+        
+        const moveCourtierBtn1 = this.action_bar.pushAction({
+            type: 'move_courtier',
+            button_content: '{"pearl": 2} -> move 1',
+            enabled: false,
+            // TODO only enable if a courtier is available to move
+            // TODO should be unavailable if the other is executed
+            resource_listener: 'pearl'
+        });
+        
+        const moveCourtierBtn2 = this.action_bar.pushAction({
+            type: 'move_courtier',
+            button_content: '{"pearl": 5} -> move 2',
+            enabled: false,
+            // TODO only enable if a courtier is available to move
+            // TODO should be unavailable if the other is executed
+            resource_listener: 'pearl'
+        });
+        
+        this.action_bar.updateActions();
+        
+        // TODO for undo
+        this.action_stack.push({
+            type: 'add_buttons',
+            buttons: [sendCourtierBtn, moveCourtierBtn1, moveCourtierBtn2]
+        });
+    }
+    
     undoAction() {
         const toUndo = this.action_stack.pop();
         
@@ -167,6 +219,9 @@ export class ActionManager {
                 break;
             case 'select_action':
                 this.undoSelectAction(toUndo);
+                break;
+            case 'add_buttons':
+                console.log('undo buttons')
                 break;
             // paid_action
             // select_action

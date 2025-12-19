@@ -18,7 +18,7 @@ class Player {
         this.domain_courtier = 0;
         this.domain_gardener = 0;
         this.domain_warrior = 0;
-        // this.domain_geysha = -1;
+        // this.domain_geysha = 0;
         
         this.domain_card_section = {};
         this.domain_card_size = null;

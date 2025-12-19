@@ -1,25 +1,26 @@
 export class Button extends Phaser.GameObjects.Container {
     constructor(config) {
-        // TODO add transparent image support
-        const { scene, x, y, w, h, fontSize, fontColor, bgColor, key1, key2, imgScale, showBgColor, text, onClick, parent } = config;
+        const { scene, x, y, w, h, fontSize, fontColor, bgColor, key1, key2, imgScale, showBgColor, text, onClick, parent, enabled, optional } = config;
         
         super(scene, x, y);
         
         this.font_color = fontColor ?? "#000";
         this.font_size = fontSize ?? 28;
         this.bg_color = bgColor ?? "#c7c7c7";
+        this.int_bg_color = parseInt(this.bg_color.replace(/^#/, ''), 16);
         this.gfx = null;
         this.show_bg_color = typeof(showBgColor) === 'undefined' || showBgColor == true;
         this.w = w ?? 100;
         this.h = h ?? 50;
         this.img_scale = imgScale ?? 1;
+        this.enabled = typeof(enabled) === 'undefined' || enabled;
+        this.optional = typeof(optional) === 'undefined' || optional;
         
-        const buttonZone = new Phaser.GameObjects.Zone(scene, 0, 0, this.w, this.h);
-        buttonZone.setOrigin(0);
+        const clickZone = new Phaser.GameObjects.Zone(scene, 0, 0, this.w, this.h);
+        clickZone.setOrigin(0);
         
         if(this.show_bg_color) {
-            const color = parseInt(this.bg_color.replace(/^#/, ''), 16);
-            const buttonBg = new Phaser.GameObjects.Rectangle(scene, 0, 0, buttonZone.width, buttonZone.height, color);
+            const buttonBg = new Phaser.GameObjects.Rectangle(scene, 0, 0, clickZone.width, clickZone.height, this.int_bg_color);
             buttonBg.setOrigin(0);
             this.add(buttonBg);
             this.button_bg = buttonBg;
@@ -36,30 +37,30 @@ export class Button extends Phaser.GameObjects.Container {
             gfx.y = (this.h - gfx.displayHeight) / 2;
             
             if(this.show_bg_color) {
-                this.button_bg.width = buttonZone.width;
-                this.button_bg.height = buttonZone.height;
+                this.button_bg.width = clickZone.width;
+                this.button_bg.height = clickZone.height;
             }
         }
         
         const buttonText = this.scene.add.text(0, 0, text ?? '', {
             fontSize: `${this.font_size}px`, color: this.font_color
         });
-        buttonText.x = (buttonZone.displayWidth - buttonText.displayWidth) / 2;
-        buttonText.y = (buttonZone.displayHeight - buttonText.displayHeight) / 2;
+        buttonText.x = (clickZone.displayWidth - buttonText.displayWidth) / 2;
+        buttonText.y = (clickZone.displayHeight - buttonText.displayHeight) / 2;
         
-        this.add(buttonZone);
-        buttonZone.setInteractive({ useHandCursor: true });
+        this.add(clickZone);
+        clickZone.setInteractive({ useHandCursor: true });
         
         this.add(buttonText);
         
-        this.zone = buttonZone;
+        this.click_zone = clickZone;
         this.button_text = buttonText;
         
-        buttonZone.on('pointerdown', () => {            
+        clickZone.on('pointerdown', () => {            
             if (typeof(key2) !== 'undefined') this.gfx.setTexture(key2);
         });
         
-        buttonZone.on('pointerup', () => {
+        clickZone.on('pointerup', () => {
             if(typeof(key1) !== 'undefined') this.gfx.setTexture(key1);
             
             if(onClick) onClick(this);
@@ -70,5 +71,34 @@ export class Button extends Phaser.GameObjects.Container {
         } else {
             this.scene.add.existing(this);
         }
+        
+        const zone = new Phaser.GameObjects.Zone(scene, 0, 0, this.w, this.h);
+        zone.setOrigin(0);
+        this.add(zone);
+        this.zone = zone;
+        
+        if(!this.enabled) {
+            this.setDisabled();
+        }
+    }
+    
+    setEnabled() {
+        this.zone.disableInteractive();
+        
+        this.button_text.setColor(this.font_color);
+        if(this.button_bg) {
+            this.button_bg.setFillStyle(this.int_bg_color);
+        }
+        this.setAlpha(1);
+    }
+    
+    setDisabled() {
+        this.zone.setInteractive();
+        
+        this.button_text.setColor('#fff');
+        if(this.button_bg) {
+            this.button_bg.setFillStyle(0x000);
+        }
+        this.setAlpha(0.5);
     }
 }

@@ -16,6 +16,7 @@ export class Dice extends Phaser.GameObjects.Container {
         this.bridge = bridge;
         this.value = value;
         this.color = color;
+        this.size = size;
         this.can_take = false;
         
         const bg = new Phaser.GameObjects.Rectangle(scene, 0, 0, size, size, 0x1acaff);
