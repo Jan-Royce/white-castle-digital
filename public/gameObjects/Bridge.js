@@ -109,6 +109,7 @@ export class Bridge extends Phaser.GameObjects.Container {
     }
     
     removeDie(index, die) {
+        // TODO add moving animation
         const diceData = this.dice_data.filter(val => val > 0);
         
         diceData.splice(index, 1);
@@ -120,6 +121,7 @@ export class Bridge extends Phaser.GameObjects.Container {
     }
     
     returnDie(index, die, dir) {
+        // TODO add moving animation
         let diceData = this.dice_data.filter(val => val > 0);
         
         if(index == 0) {
