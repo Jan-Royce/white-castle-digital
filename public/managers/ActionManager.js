@@ -2,11 +2,6 @@ import { ActionBar } from "../components/ActionBar.js";
 import { Button } from "../components/Button.js";
 
 export class ActionManager {
-    // TODO CONTIUE HERE
-    /** bug on die placement undo
-     *  when undoing, the new Die instance goes on top of the zone
-     *  which makes it clickable despite the zone being active
-     */
     constructor(scene) {
         this.scene = scene;
         this.action_stack = [];

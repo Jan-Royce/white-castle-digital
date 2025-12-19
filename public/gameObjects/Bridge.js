@@ -143,6 +143,7 @@ export class Bridge extends Phaser.GameObjects.Container {
         
         this.dice.splice(index, 0, returningDice);
         this.updateDice();
+        this.bringToTop(this.zone);
     }
     
     updateDice() {
