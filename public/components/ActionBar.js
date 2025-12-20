@@ -223,7 +223,8 @@ export class ActionBar extends Phaser.GameObjects.Container {
             optional: action.optional ?? false,
             onClick: (btn) => {
                 this.clickAction(action, btn);
-            }
+            },
+            resourceListener: action.resource_listener
         });
         
         btn.zone.setOrigin(0);

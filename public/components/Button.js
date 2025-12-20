@@ -1,6 +1,6 @@
 export class Button extends Phaser.GameObjects.Container {
     constructor(config) {
-        const { scene, x, y, w, h, fontSize, fontColor, bgColor, key1, key2, imgScale, showBgColor, text, onClick, parent, enabled, optional } = config;
+        const { scene, x, y, w, h, fontSize, fontColor, bgColor, key1, key2, imgScale, showBgColor, text, onClick, resourceListener, parent, enabled, optional } = config;
         
         super(scene, x, y);
         
@@ -15,6 +15,7 @@ export class Button extends Phaser.GameObjects.Container {
         this.img_scale = imgScale ?? 1;
         this.enabled = typeof(enabled) === 'undefined' || enabled;
         this.optional = typeof(optional) === 'undefined' || optional;
+        this.resource_listener = resourceListener;
         
         const clickZone = new Phaser.GameObjects.Zone(scene, 0, 0, this.w, this.h);
         clickZone.setOrigin(0);
@@ -60,10 +61,10 @@ export class Button extends Phaser.GameObjects.Container {
             if (typeof(key2) !== 'undefined') this.gfx.setTexture(key2);
         });
         
-        clickZone.on('pointerup', () => {
+        clickZone.on('pointerup', (pointer) => {
             if(typeof(key1) !== 'undefined') this.gfx.setTexture(key1);
             
-            if(onClick) onClick(this);
+            if(onClick) onClick(this, pointer);
         });
         
         if(typeof(parent) !== 'undefined') {
@@ -76,6 +77,10 @@ export class Button extends Phaser.GameObjects.Container {
         zone.setOrigin(0);
         this.add(zone);
         this.zone = zone;
+        
+        if(typeof(this.resource_listener) !== 'undefined') {
+            this.addResourceListener();
+        }
         
         if(!this.enabled) {
             this.setDisabled();
@@ -100,5 +105,17 @@ export class Button extends Phaser.GameObjects.Container {
             this.button_bg.setFillStyle(0x000);
         }
         this.setAlpha(0.5);
+    }
+    
+    addResourceListener() {
+        const { resource, amount } = this.resource_listener;
+        
+        this.scene.events.on(`update_resource_${resource}`, (updatedAmount) => {
+            if(updatedAmount >= amount) {
+                this.setEnabled();
+            } else {
+                this.setDisabled();
+            }
+        });
     }
 }

@@ -74,6 +74,8 @@ export class Player extends Phaser.GameObjects.Container {
                 this[type] = Math.max(this[type] + amount, 0);
                 break;
         }
+        
+        this.scene.events.emit(`update_resource_${type}`, this[type]);
     }
     
     updateResourceDisplay() {

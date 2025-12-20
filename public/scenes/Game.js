@@ -102,11 +102,33 @@ export class Game extends Phaser.Scene
             this.addRivals(players);
             
             if(board.dev_mode) {
+                const devToolsW = 200;
+                const devToolsH = 200;
                 const devTools = new Phaser.GameObjects.Container(this, 0, 0);
-                const background = new Phaser.GameObjects.Rectangle(this, 0, 0, 160, 160, 0xd3d3d3);
+                const background = new Phaser.GameObjects.Rectangle(this, 0, 0, devToolsW, devToolsH, 0xd3d3d3);
+                
+                devTools.setAlpha(0.75);
+                background.setInteractive({ useHandCursor: true });
                 background.setOrigin(0);
                 devTools.add(background);
-                devTools.setAlpha(0.75);
+                
+                this.input.setDraggable(background);
+                
+                let dragOffsetX = 0;
+                let dragOffsetY = 0;
+                
+                background.on('dragstart', (pointer) => {
+                    dragOffsetX = pointer.worldX - devTools.x;
+                    dragOffsetY = pointer.worldY - devTools.y;
+                });
+                
+                background.on('drag', (pointer) => {
+                    devTools.setPosition(
+                        pointer.worldX - dragOffsetX,
+                        pointer.worldY - dragOffsetY
+                    );
+                });
+                
                 this.add.existing(devTools);
                 
                 const addTestUnits = new Button({
@@ -143,6 +165,26 @@ export class Game extends Phaser.Scene
                     }
                 });
                 resetBtn.x = (background.displayWidth - resetBtn.zone.displayWidth) / 2;
+                
+                const coinsBtn = new Button({
+                    scene: this,
+                    x: 0,
+                    y: 150,
+                    w: 100,
+                    h: 40,
+                    fontSize: 16,
+                    fontColor: '#000',
+                    bgColor: '#cecc78',
+                    text: "+- Coin",
+                    parent: devTools,
+                    onClick: (btn, pointer) => {
+                        let coin = pointer.leftButtonReleased() ? 1 : -1;
+                        this.player.updateResources({
+                            resources: { coin: coin }
+                        });
+                    }
+                });
+                coinsBtn.x = (background.displayWidth - coinsBtn.zone.displayWidth) / 2;
                 
                 socket.on('update_test_units', (board) => {
                     for(const item of this.board.castle.levels) {

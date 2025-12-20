@@ -168,11 +168,17 @@ export class ActionManager {
         
         // TODO CONTINUE HERE
         // TODO handle option courtier sending
+        /**
+         * popup confirmation if player wants to send courtier?
+         */
         const sendCourtierBtn = this.action_bar.pushAction({
             type: 'send_courtier',
             button_content: '{"coin": 2} -> courtier to gate',
             enabled: this.scene.player.coin >= 2,
-            resource_listener: 'coin',
+            resource_listener: {
+                resource: 'coin',
+                amount: 2
+            },
             optional: true
         });
         
@@ -182,7 +188,10 @@ export class ActionManager {
             enabled: false,
             // TODO only enable if a courtier is available to move
             // TODO should be unavailable if the other is executed
-            resource_listener: 'pearl'
+            resource_listener: {
+                resource: 'pearl',
+                amount: 2
+            }
         });
         
         const moveCourtierBtn2 = this.action_bar.pushAction({
@@ -191,14 +200,17 @@ export class ActionManager {
             enabled: false,
             // TODO only enable if a courtier is available to move
             // TODO should be unavailable if the other is executed
-            resource_listener: 'pearl'
+            resource_listener: {
+                resource: 'pearl',
+                amount: 5
+            }
         });
         
         this.action_bar.updateActions();
         
         // TODO for undo
         this.action_stack.push({
-            type: 'add_buttons',
+            type: 'add_courtier_buttons',
             buttons: [sendCourtierBtn, moveCourtierBtn1, moveCourtierBtn2]
         });
     }
