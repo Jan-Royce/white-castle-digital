@@ -29,10 +29,16 @@ export class Castle extends Phaser.GameObjects.Container {
             if(level.level == 0) {
                 const gate = this.addCastleGate(level);
                 this.add(gate);
+                this.gate = gate;
                 this.levels.push(gate);
             } else {
                 const floor = level.level < 3 ? this.addCastleFloor(level) : this.addCastleTopFloor(level);
                 this.add(floor);
+                if(level.level < 3) {
+                    this[`level_${level.level}`] = floor;
+                } else {
+                    this.castle_top = floor;
+                }
                 this.levels.push(floor);
             }
         }
@@ -380,5 +386,15 @@ export class Castle extends Phaser.GameObjects.Container {
         gfx.add(bonuses);
 
         return gfx;
+    }
+    
+    sendCourtier(player) {
+        const gate = this.gate;
+        
+        if(typeof(gate.units[player]) === 'undefined') {
+            gate.units[player] = 0;
+        }
+        gate.units[player]++;
+        gate.updateUnitDisplay();
     }
 }

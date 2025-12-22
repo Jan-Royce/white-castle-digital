@@ -1,4 +1,5 @@
 import { Button } from "./Button.js";
+import { ConfirmPopup } from "./ConfirmPopup.js";
 import { SelectPopup } from "./SelectPopup.js";
 
 export class ActionBar extends Phaser.GameObjects.Container {
@@ -70,6 +71,16 @@ export class ActionBar extends Phaser.GameObjects.Container {
             
             this.removeActionAndRefresh(btn, data.action == 'castle');
         });
+        
+        this.scene.events.on('confirm_send_courtier', (data, btn) => {
+            this.scene.events.emit('send_courtier', {
+                type: 'send_courtier',
+                name: 'send_courtier',
+                sent_courtier: data.sent_courtier,
+                button_index: this.actions.indexOf(btn)
+            });
+            this.removeActionAndRefresh(btn);
+        });
     }
     
     clickAction(action, btn) {
@@ -101,6 +112,9 @@ export class ActionBar extends Phaser.GameObjects.Container {
                 break;
             case 'paid_action':
                 // TODO
+                break;
+            case 'send_courtier':
+                this.sendCourtier(action, btn);
                 break;
             default:
                 // TODO ??
@@ -192,6 +206,22 @@ export class ActionBar extends Phaser.GameObjects.Container {
             default:
                 break;
         }
+    }
+    
+    sendCourtier(action, btn) {
+        const popup = new ConfirmPopup({
+            scene: this.scene,
+            x: 0,
+            y: 0,
+            w: 440,
+            h: 100,
+            action: action,
+            btn: btn
+        });
+
+        this.scene.add.existing(popup);
+
+        popup.fade_in.play();
     }
     
     // TODO update content to icons/images

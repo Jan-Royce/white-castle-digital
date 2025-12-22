@@ -60,6 +60,11 @@ function registerGameSocketHandler(io, game) {
             data.player = socket.id;
             socket.broadcast.emit('remote_undo_place_die', data);
         });
+        
+        socket.on('player_send_courtier', (data) => {
+            data.player = socket.id;
+            socket.broadcast.emit('remote_player_send_courtier', data);
+        });
     });
 
     function updatePlayers(players) {

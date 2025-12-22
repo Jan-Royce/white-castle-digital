@@ -69,6 +69,22 @@ export class ActionManager {
             }
         });
         
+        this.scene.events.on('send_courtier', (data) => {
+            this.addActionToStack(data);
+            
+            if(data.sent_courtier) {
+                this.scene.events.emit('player_send_courtier', data);
+                
+                this.scene.player.updateResources({
+                    resources: { coin: -2 },
+                    source: 'send_courtier',
+                    revert: false
+                });
+                
+                this.scene.board.castle.sendCourtier(this.scene.player.id);
+            }
+        });
+        
         this.scene.events.on('add_actions', (actions) => {
             if(typeof(this.action_bar) === 'undefined') {
                 this.createActionBar();
@@ -166,11 +182,6 @@ export class ActionManager {
         console.log(`coin: ${this.scene.player.coin}`)
         console.log(`daimyo: ${this.scene.player.daimyo}`)
         
-        // TODO CONTINUE HERE
-        // TODO handle option courtier sending
-        /**
-         * popup confirmation if player wants to send courtier?
-         */
         const sendCourtierBtn = this.action_bar.pushAction({
             type: 'send_courtier',
             button_content: '{"coin": 2} -> courtier to gate',
@@ -233,7 +244,11 @@ export class ActionManager {
                 this.undoSelectAction(toUndo);
                 break;
             case 'add_buttons':
+                // TODO CONTINUE HERE
                 console.log('undo buttons')
+                break;
+            case 'send_courtier':
+                // TODO CONTINUE HERE
                 break;
             // paid_action
             // select_action

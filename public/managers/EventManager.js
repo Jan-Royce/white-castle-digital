@@ -48,5 +48,11 @@ export class EventManager {
             dieSpace.removeDie();
             bridge.returnDie(data.die_index, die, dir);
         });
+        
+        this.scene.events.on('remote_player_send_courtier', (data) => {
+            const player = data.player;
+            
+            this.scene.board.castle.sendCourtier(player);
+        });
     }
 }

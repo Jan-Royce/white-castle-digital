@@ -109,7 +109,7 @@ export class SelectPopup extends Phaser.GameObjects.Container {
                         const selected = this.selectors.filter((selector) => selector.selected);
                         
                         if(selected.length == 0) {
-                            this.error_text.setText("Not action selected.");
+                            this.error_text.setText("No action selected.");
                             this.error_text.x = (this.w - this.error_text.displayWidth) / 2;
                             this.error_text.setVisible(true);
                             return;
@@ -127,7 +127,6 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             }
         });
         
-        submitBtn.zone.setOrigin(0);
         submitBtn.button_text.x = (buttonW - submitBtn.button_text.displayWidth) / 2;
         submitBtn.button_text.y = (buttonH - submitBtn.button_text.displayHeight) / 2;
         
@@ -146,7 +145,6 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             }
         });
         
-        closeBtn.zone.setOrigin(0);
         closeBtn.button_text.x = (buttonW - closeBtn.button_text.displayWidth) / 2;
         closeBtn.button_text.y = (buttonH - closeBtn.button_text.displayHeight) / 2;
         
@@ -300,6 +298,18 @@ export class SelectPopup extends Phaser.GameObjects.Container {
             
             xPos += gapSize + btnSize;
         }
+        
+        const errorTextY = this.selectors[0].y + this.selectors[0].bg.displayHeight + 4;
+        const errorText = new Phaser.GameObjects.Text(this.scene, 4, errorTextY, "", {
+            fontSize: '16px',
+            fontStyle: 'bold',
+            color: '#e43838'
+        });
+        errorText.setStroke('#000', 2);
+        errorText.setOrigin(0);
+        errorText.setVisible(false);
+        this.popup.add(errorText);
+        this.error_text = errorText;
     }
     
     getResourceSelections() {
