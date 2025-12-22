@@ -248,7 +248,7 @@ export class ActionManager {
                 console.log('undo buttons')
                 break;
             case 'send_courtier':
-                // TODO CONTINUE HERE
+                this.undoSendCourtier(toUndo);
                 break;
             // paid_action
             // select_action
@@ -335,6 +335,33 @@ export class ActionManager {
     }
     
     undoSelectAction(data) {
+        this.action_bar.addBackAction(data);
+        this.action_bar.updateActions();
+    }
+    
+    undoSendCourtier(data) {
+        if(data.sent_courtier) {
+            // TODO continue here
+            // courtier send undo on rival-sides
+            this.scene.events.emit('player_unsend_courtier', data);
+            
+            this.scene.player.updateResources({
+                resources: { coin: -2 },
+                source: 'send_courtier',
+                revert: true
+            });
+            
+            this.scene.board.castle.unsendCourtier(this.scene.player.id);
+        }
+        
+        data.button_content = '{"coin": 2} -> courtier to gate';
+        data.enabled = this.scene.player.coin >= 2;
+        data.resource_listener = {
+            resource: 'coin',
+            amount: 2
+        };
+        data.optional = true;
+        
         this.action_bar.addBackAction(data);
         this.action_bar.updateActions();
     }

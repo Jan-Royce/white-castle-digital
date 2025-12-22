@@ -128,7 +128,11 @@ export class BoardSpace extends Phaser.GameObjects.Container {
         }
     }
     
+    // TODO CONTINUE HERE update unit to object for interaction
     updateUnitDisplay() {
+        this.unit_space.destroy(true);
+        this.createUnitSpace();
+        
         const unitSpace = this.unit_space;
         
         let xPos = 0;

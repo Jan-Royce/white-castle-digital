@@ -107,10 +107,12 @@ export class Button extends Phaser.GameObjects.Container {
         this.setAlpha(0.5);
     }
     
+    // TODO continue here, find out how this affects the courtier move buttons with the same listener key
     addResourceListener() {
         const { resource, amount } = this.resource_listener;
         
-        this.scene.events.on(`update_resource_${resource}`, (updatedAmount) => {
+        this.listener_key = `update_resource_${resource}`;
+        this.scene.events.on(this.listener_key, (updatedAmount) => {
             if(updatedAmount >= amount) {
                 this.setEnabled();
             } else {

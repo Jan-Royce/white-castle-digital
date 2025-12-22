@@ -397,4 +397,11 @@ export class Castle extends Phaser.GameObjects.Container {
         gate.units[player]++;
         gate.updateUnitDisplay();
     }
+    
+    unsendCourtier(player) {
+        const gate = this.gate;
+        
+        gate.units[player]--;
+        gate.updateUnitDisplay();
+    }
 }

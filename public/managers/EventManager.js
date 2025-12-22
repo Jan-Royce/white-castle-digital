@@ -50,9 +50,11 @@ export class EventManager {
         });
         
         this.scene.events.on('remote_player_send_courtier', (data) => {
-            const player = data.player;
-            
-            this.scene.board.castle.sendCourtier(player);
+            this.scene.board.castle.sendCourtier(data.player);
+        });
+        
+        this.scene.events.on('remote_player_unsend_courtier', (data) => {
+            this.scene.board.castle.unsendCourtier(data.player);
         });
     }
 }

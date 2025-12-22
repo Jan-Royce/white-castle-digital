@@ -56,7 +56,7 @@ export class ConfirmPopup extends Phaser.GameObjects.Container {
                 this.setVisible(false);
 
                 if(this.fade_in) this.fade_in.destroy();
-                // this.scene.events.off('change_selector_input');
+                this.scene.events.off(this.action_btn.listener_key);
 
                 this.destroy(true);
             }
