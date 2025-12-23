@@ -1,4 +1,5 @@
 import { DieSpace } from './DieSpace.js';
+import { Unit } from './Unit.js';
 
 export class BoardSpace extends Phaser.GameObjects.Container {
     constructor(config) {
@@ -128,6 +129,7 @@ export class BoardSpace extends Phaser.GameObjects.Container {
         }
     }
     
+    // !!!
     // TODO CONTINUE HERE update unit to object for interaction
     updateUnitDisplay() {
         this.unit_space.destroy(true);
@@ -142,24 +144,17 @@ export class BoardSpace extends Phaser.GameObjects.Container {
         for(const [key, count] of Object.entries(this.units)) {
             if(count == 0) continue;
             
-            const unit = new Phaser.GameObjects.Container(this.scene, xPos, yPos);
-            
-            const unitIcon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, `unit_${this.unit_type}`);
-            unitIcon.setDisplaySize(this.unit_size, this.unit_size);
-            unitIcon.setTint(this.color_map[key]);
-            unitIcon.setOrigin(0);
-            unit.add(unitIcon);
-            
-            if (this.unit_count_show) {
-                const unitCount = new Phaser.GameObjects.Text(this.scene, this.unit_size/4+2, this.unit_size/4, count, {
-                    fontSize: `${this.unit_size / 2}px`,
-                    fontStyle: 'bold',
-                    color: '#000'
-                });
-                unitCount.setStroke('#fff', 4);
-                unitCount.setOrigin(0);
-                unit.add(unitCount);
-            }
+            const unit = new Unit({
+                scene: this.scene,
+                x: xPos,
+                y: yPos,
+                size: this.unit_size,
+                color: this.color_map[key],
+                type: this.unit_type,
+                count: count,
+                showCount: this.unit_count_show,
+                boardSpace: this
+            });
             
             unitSpace.add(unit);
             
