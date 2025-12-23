@@ -193,6 +193,8 @@ export class ActionManager {
             optional: true
         });
         
+        // TODO CONTINUE HERE - move courtier buttons logic
+        
         const moveCourtierBtn1 = this.action_bar.pushAction({
             type: 'move_courtier',
             button_content: '{"pearl": 2} -> move 1',
@@ -341,8 +343,6 @@ export class ActionManager {
     
     undoSendCourtier(data) {
         if(data.sent_courtier) {
-            // TODO continue here
-            // courtier send undo on rival-sides
             this.scene.events.emit('player_unsend_courtier', data);
             
             this.scene.player.updateResources({

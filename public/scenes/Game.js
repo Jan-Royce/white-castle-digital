@@ -103,7 +103,7 @@ export class Game extends Phaser.Scene
             
             if(board.dev_mode) {
                 const devToolsW = 200;
-                const devToolsH = 200;
+                const devToolsH = 260;
                 const devTools = new Phaser.GameObjects.Container(this, 0, 0);
                 const background = new Phaser.GameObjects.Rectangle(this, 0, 0, devToolsW, devToolsH, 0xd3d3d3);
                 
@@ -166,25 +166,49 @@ export class Game extends Phaser.Scene
                 });
                 resetBtn.x = (background.displayWidth - resetBtn.zone.displayWidth) / 2;
                 
-                const coinsBtn = new Button({
-                    scene: this,
-                    x: 0,
-                    y: 150,
-                    w: 100,
-                    h: 40,
-                    fontSize: 16,
-                    fontColor: '#000',
-                    bgColor: '#cecc78',
-                    text: "+- Coin",
-                    parent: devTools,
-                    onClick: (btn, pointer) => {
-                        let coin = pointer.leftButtonReleased() ? 1 : -1;
-                        this.player.updateResources({
-                            resources: { coin: coin }
-                        });
-                    }
-                });
-                coinsBtn.x = (background.displayWidth - coinsBtn.zone.displayWidth) / 2;
+                const resources = [
+                    'food',
+                    'iron',
+                    'pearl',
+                    'coin',
+                    'daimyo'
+                ];
+                
+                const resourcePos = {
+                    food: { x: 10, y: 150 },
+                    iron: { x: 70, y: 150 },
+                    pearl: { x: 130, y: 150 },
+                    coin: { x: 10, y: 204 },
+                    daimyo: { x: 70, y: 204 }
+                };
+                
+                const btnW = 50;
+                const btnH = 50;
+                
+                for(const resource of resources) {
+                    const resourceBtn = new Button({
+                        scene: this,
+                        x: resourcePos[resource].x,
+                        y: resourcePos[resource].y,
+                        w: btnW,
+                        h: btnH,
+                        fontSize: 16,
+                        fontColor: '#000',
+                        bgColor: '#cecc78',
+                        key1: `icon_${resource}`,
+                        imgScale: 0.225,
+                        parent: devTools,
+                        onClick: (btn, pointer) => {
+                            let update = pointer.leftButtonReleased() ? 1 : -1;
+                            const _resource = {};
+                            _resource[resource] = update;
+                            
+                            this.player.updateResources({
+                                resources: _resource
+                            });
+                        }
+                    });
+                }
                 
                 socket.on('update_test_units', (board) => {
                     for(const item of this.board.castle.levels) {
