@@ -72,6 +72,8 @@ export class ActionManager {
         this.scene.events.on('send_courtier', (data) => {
             this.addActionToStack(data);
             
+            const playerId = this.scene.player.id;
+            
             if(data.sent_courtier) {
                 this.scene.events.emit('player_send_courtier', data);
                 
@@ -81,7 +83,11 @@ export class ActionManager {
                     revert: false
                 });
                 
-                this.scene.board.castle.sendCourtier(this.scene.player.id);
+                this.scene.board.castle.sendCourtier(playerId);
+            }
+            
+            if(this.checkForMovableCourtier(playerId)) {
+                this.addMoveCourtierBtns();
             }
         });
         
@@ -179,6 +185,8 @@ export class ActionManager {
     }
     
     performCastleAction() {
+        // TODO add check for remaining courtiers
+        // skip send courtier if no more courtiers on domain board
         console.log(`coin: ${this.scene.player.coin}`)
         console.log(`daimyo: ${this.scene.player.daimyo}`)
         
@@ -193,8 +201,37 @@ export class ActionManager {
             optional: true
         });
         
-        // TODO CONTINUE HERE - move courtier buttons logic
+        this.action_bar.updateActions();
         
+        // TODO for undo
+        this.action_stack.push({
+            type: 'start_courtier_action',
+            button: sendCourtierBtn
+        });
+    }
+    
+    checkForMovableCourtier(playerId) {
+        const rooms = this.scene.board.castle.getMovableCourtiers();
+        let hasMovableCourtiers = false;
+        
+        for(const [i, room] of Object.entries(rooms)) {
+            const players = Object.keys(room);
+            
+            if(players.length == 0) continue;
+            
+            if(players.includes(playerId) && room[playerId] > 0) {
+                hasMovableCourtiers = true;
+                break;
+            }
+        }
+        
+        return hasMovableCourtiers;
+    }
+    
+    addMoveCourtierBtns() {
+        // TODO CONTINUE HERE - move courtier buttons logic
+        // move adding move courtier buttons to after send courtier button has been used
+
         const moveCourtierBtn1 = this.action_bar.pushAction({
             type: 'move_courtier',
             button_content: '{"pearl": 2} -> move 1',
@@ -206,7 +243,7 @@ export class ActionManager {
                 amount: 2
             }
         });
-        
+
         const moveCourtierBtn2 = this.action_bar.pushAction({
             type: 'move_courtier',
             button_content: '{"pearl": 5} -> move 2',
@@ -220,12 +257,6 @@ export class ActionManager {
         });
         
         this.action_bar.updateActions();
-        
-        // TODO for undo
-        this.action_stack.push({
-            type: 'add_courtier_buttons',
-            buttons: [sendCourtierBtn, moveCourtierBtn1, moveCourtierBtn2]
-        });
     }
     
     undoAction() {
@@ -361,6 +392,8 @@ export class ActionManager {
             amount: 2
         };
         data.optional = true;
+        
+        this.action_bar.clearActions();
         
         this.action_bar.addBackAction(data);
         this.action_bar.updateActions();

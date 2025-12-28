@@ -213,6 +213,8 @@ export class Castle extends Phaser.GameObjects.Container {
             h: cardHeight
         };
         
+        this[`level_${data.level}_rooms`] = [];
+        
         for(const [roomId, roomData] of Object.entries(data.rooms)) {
             const room = new BoardSpace({
                 scene: this.scene,
@@ -242,6 +244,7 @@ export class Castle extends Phaser.GameObjects.Container {
             });
             
             roomXOffset += roomXOffsetGrowth;
+            this[`level_${data.level}_rooms`].push(room);
             
             let tileYpos = 32;
             let cardIndex = 0;
@@ -403,5 +406,21 @@ export class Castle extends Phaser.GameObjects.Container {
         
         gate.units[player]--;
         gate.updateUnitDisplay();
+    }
+    
+    getMovableCourtiers() {
+        let courtiers = [];
+        
+        courtiers.push(this.gate.units);
+        
+        for(const room of this.level_1_rooms) {
+            courtiers.push(room.units);
+        }
+        
+        for(const room of this.level_2_rooms) {
+            courtiers.push(room.units);
+        }
+        
+        return courtiers;
     }
 }
